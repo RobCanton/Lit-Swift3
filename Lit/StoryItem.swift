@@ -155,41 +155,41 @@ class StoryItem: NSObject, NSCoding {
     }
     
     func needsDownload() -> Bool{
-//        if contentType == .image {
-//            if let cachedImage = imageCache.objectForKey(downloadUrl.absoluteString) as? UIImage {
-//                image = cachedImage
-//                return false
-//            }
-//        }
-//        
-//        if contentType == .video {
-//            if let _ = loadVideoFromCache(key) {
-//                return false
-//            }
-//        }  
+        if contentType == .image {
+            if let cachedImage = imageCache.object(forKey: downloadUrl.absoluteString as NSString) {
+                image = cachedImage
+                return false
+            }
+        }
+        
+        if contentType == .video {
+            if let _ = loadVideoFromCache(key: key) {
+                return false
+            }
+        }  
         return true
     }
     
     func download() {
-//            
-//        loadImageUsingCacheWithURL(downloadUrl.absoluteString, completion: { image, fromCache in
-//            self.image = image
-//
-//            if self.contentType == .Video {
-//                
-//                if let _ = loadVideoFromCache(self.key) {
-//                    self.delegate?.itemDownloaded()
-//                } else {
-//                    downloadVideoWithKey(self.key, author: self.authorId, completion: { data in
-//                        saveVideoInCache(self.key, data: data)
-//                        self.delegate?.itemDownloaded()
-//                    })
-//                }
-//                
-//            } else {
-//                self.delegate?.itemDownloaded()
-//            }
-//        })
+            
+        loadImageUsingCacheWithURL(downloadUrl.absoluteString, completion: { image, fromCache in
+            self.image = image
+
+            if self.contentType == .video {
+                
+                if let _ = loadVideoFromCache(key: self.key) {
+                    self.delegate?.itemDownloaded()
+                } else {
+                    downloadVideoWithKey(key: self.key, author: self.authorId, completion: { data in
+                        saveVideoInCache(key: self.key, data: data)
+                        self.delegate?.itemDownloaded()
+                    })
+                }
+                
+            } else {
+                self.delegate?.itemDownloaded()
+            }
+        })
     }
     
     func hasViewed() -> Bool{

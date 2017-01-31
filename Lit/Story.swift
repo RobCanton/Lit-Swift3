@@ -86,24 +86,24 @@ class UserStory: ItemDelegate {
 
     */
     func downloadItems() {
-//        if state == .notLoaded {
-//            state = .loadingItemInfo
-//            FirebaseService.downloadStory(postKeys, completionHandler: { items in
-//                
-//                self.items = items.sort({
-//                    return $0 < $1
-//                })
-//                self.state = .ItemInfoLoaded
-//                if !self.needsDownload() {
-//                    self.state = .ContentLoaded
-//                }
-//
-//            })
-//        } else if items != nil {
-//            if !self.needsDownload() {
-//                self.state = .contentLoaded
-//            }
-//        }
+        if state == .notLoaded {
+            state = .loadingItemInfo
+            UploadService.downloadStory(postKeys: postKeys, completion: { items in
+                
+                self.items = items.sorted(by: {
+                    return $0 < $1
+                })
+                self.state = .itemInfoLoaded
+                if !self.needsDownload() {
+                    self.state = .contentLoaded
+                }
+
+            })
+        } else if items != nil {
+            if !self.needsDownload() {
+                self.state = .contentLoaded
+            }
+        }
     }
     
     func needsDownload() -> Bool {

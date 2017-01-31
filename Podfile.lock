@@ -67,6 +67,7 @@ PODS:
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - ReSwift (3.0.0)
+  - View2ViewTransition (1.0.0)
 
 DEPENDENCIES:
   - Bolts (= 1.8.4)
@@ -77,6 +78,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - JSQMessagesViewController
   - ReSwift (= 3.0.0)
+  - View2ViewTransition
 
 SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
@@ -95,7 +97,8 @@ SPEC CHECKSUMS:
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   ReSwift: f0255f4b4f2dacd12c5d97d34d13fc5dad6d6371
+  View2ViewTransition: 010ea80e451e42427988102527b0216b8534a741
 
-PODFILE CHECKSUM: a2e9b3879bb47ac3f5ddfe2ffb0a6562c782454c
+PODFILE CHECKSUM: ec4df305fc3515f047637ec7e1e45056779fb77e
 
 COCOAPODS: 1.2.0.beta.1

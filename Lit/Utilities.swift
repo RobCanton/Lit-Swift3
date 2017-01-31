@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 
 let imageCache = NSCache<NSString, UIImage>()
@@ -47,6 +48,36 @@ func downloadImageWithURLString(_ _url:String, completion: @escaping (_ image:UI
             
     }).resume()
 }
+
+
+let videoCache = NSCache<NSString, AnyObject>()
+
+
+func loadVideoFromCache(key:String) -> NSData? {
+    if let cachedData = videoCache.object(forKey: key as NSString) as? NSData {
+        return cachedData
+    }
+    return nil
+}
+
+func saveVideoInCache(key:String, data:NSData) {
+    videoCache.setObject(data, forKey: key as NSString)
+}
+
+func downloadVideoWithKey(key:String, author:String, completion: @escaping (_ data:NSData)->()) {
+    let videoRef = FIRStorage.storage().reference().child("user_uploads/videos/\(author)/\(key)")
+    
+    // Download in memory with a maximum allowed size of 2MB (2 * 1024 * 1024 bytes)
+    videoRef.data(withMaxSize: 2 * 1024 * 1024) { (data, error) -> Void in
+        if (error != nil) {
+            print("Error - \(error!.localizedDescription)")
+        } else {
+            return completion(data! as NSData)
+        }
+    }
+}
+
+
 
 func createDirectory(_ dirName:String) {
     let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

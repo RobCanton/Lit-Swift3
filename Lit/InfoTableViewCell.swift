@@ -9,12 +9,12 @@
 import UIKit
 
 enum InfoType {
-    case FullAddress, Phone, Email, Website, None
+    case fullAddress, phone, email, website, none
 }
 
 class InfoTableViewCell: UITableViewCell {
 
-    var type:InfoType = .None
+    var type:InfoType = .none
     
     @IBOutlet weak var label: UILabel!
     

@@ -10,9 +10,10 @@ import Foundation
 import Firebase
 import FBSDKLoginKit
 
+
+let dataCache = NSCache<NSString, AnyObject>()
+
 class UserService {
-    
-    static let dataCache = NSCache<NSString, AnyObject>()
     
     static let ref = FIRDatabase.database().reference()
     

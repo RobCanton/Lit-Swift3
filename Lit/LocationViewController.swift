@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Firebase
+import View2ViewTransition
 
 class LocationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -24,6 +25,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView:UITableView!
     
     var headerView:UIImageView!
+    
+     var returningCell:UserStoryTableViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,8 +62,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         let infoNib = UINib(nibName: "InfoTableViewCell", bundle: nil)
         tableView.register(infoNib, forCellReuseIdentifier: "infoCell")
         
-//        let nib = UINib(nibName: "UserStoryTableViewCell", bundle: nil)
-//        tableView!.register(nib, forCellReuseIdentifier: "UserStoryCell")
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -210,20 +211,106 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! InfoTableViewCell
             if indexPath.row == 0 {
-                cell.type = .FullAddress
+                cell.type = .fullAddress
                 cell.label.text = location.getAddress()
             } else if indexPath.row == 1 {
-                cell.type = .Phone
+                cell.type = .phone
                 cell.label.text = location.phone
             } else if indexPath.row == 2 {
-                cell.type = .Email
+                cell.type = .email
                 cell.label.text = location.email
             }  else if indexPath.row == 3 {
-                cell.type = .Website
+                cell.type = .website
                 cell.label.text = location.website
             }
             return cell
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            let story = userStories[indexPath.item]
+            if story.state == .contentLoaded {
+                presentStory(indexPath)
+            } else {
+                story.downloadStory()
+            }
+        } else if indexPath.section == 1 {
+            let cell = tableView.cellForRow(at: indexPath) as! InfoTableViewCell
+            switch cell.type {
+            case .fullAddress:
+                //showMap()
+                break
+            case .phone:
+                //promptPhoneCall()
+                break
+            case .email:
+                //promptEmail()
+                break
+            case .website:
+                //promptWebsite()
+                break
+            default:
+                break
+            }
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func presentStory(_ indexPath:IndexPath) {
+        print("PRESENT STORY")
+    }
+    
+   
+    
+}
 
+extension LocationViewController: View2ViewTransitionPresenting {
+    
+    func initialFrame(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> CGRect {
+        
+        guard let indexPath: IndexPath = userInfo?["initialIndexPath"] as? IndexPath else {
+            return CGRect.zero
+        }
+        
+        let i =  IndexPath(row: indexPath.item, section: 1)
+        let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: i)! as! UserStoryTableViewCell
+        let image_frame = cell.contentImageView.frame
+        let image_height = image_frame.height
+        let x = cell.frame.origin.x + 20
+        
+        let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
+        
+        let y = cell.frame.origin.y + 12 + navHeight
+        
+        let rect = CGRect(x: x, y: y, width: image_height, height: image_height)// CGRectMake(x,y,image_height, image_height)
+        return self.tableView.convert(rect, to: self.tableView.superview)
+    }
+    
+    func initialView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
+        
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+        let i = IndexPath(row: indexPath.item, section: 1)
+        let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: i)! as! UserStoryTableViewCell
+        
+        return cell.contentImageView
+    }
+    
+    func prepareInitialView(_ userInfo: [String : AnyObject]?, isPresenting: Bool) {
+        
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+        let i = IndexPath(row: indexPath.item, section: 1)
+        if !isPresenting {
+            if let cell = tableView?.cellForRow(at: i) as? UserStoryTableViewCell {
+                returningCell?.activate(false)
+                returningCell = cell
+                returningCell!.deactivate()
+            }
+        }
+        if !isPresenting && !self.tableView!.indexPathsForVisibleRows!.contains(i) {
+            self.tableView!.reloadData()
+            self.tableView!.scrollToRow(at: i, at: .middle, animated: false)
+            self.tableView!.layoutIfNeeded()
+        }
+    }
 }

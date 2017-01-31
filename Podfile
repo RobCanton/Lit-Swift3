@@ -13,6 +13,7 @@ pod 'Firebase/Storage'
 pod 'Firebase/Messaging'
 pod 'JSQMessagesViewController'
 pod 'ReSwift', '3.0.0'
+pod 'View2ViewTransition'
 
 
 
