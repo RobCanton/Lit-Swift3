@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import View2ViewTransition
 
-class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate {
     
     var tabBarRef:MasterTabBarController!
     var userStories = [UserStory]()
@@ -57,12 +57,29 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        tabBarRef.setTabBarVisible(_visible: false, animated: true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        automaticallyAdjustsScrollViewInsets = false
+        tabBarRef.setTabBarVisible(_visible: false, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.delegate = transitionController
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        tabBarRef.setTabBarVisible(_visible: true, animated: true)
+    }
+    
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
@@ -81,7 +98,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell: PresentingCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "presenting_cell", for: indexPath) as! PresentingCollectionViewCell
+        let cell: PresentingCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath) as! PresentingCollectionViewCell
         cell.contentView.backgroundColor = UIColor.lightGray
 
         cell.content.image = UIImage(named: "bladerunner2")
@@ -111,10 +128,10 @@ extension StoriesViewController: View2ViewTransitionPresented {
         
         if isPresenting {
             print("isPresenting")
-            let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
-            currentIndex = indexPath
-            let contentOffset: CGPoint = CGPoint(x: self.collectionView.frame.size.width*CGFloat(indexPath.item), y: 0.0)
-            self.collectionView.contentOffset = contentOffset
+//            let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
+//            currentIndex = indexPath
+//            let contentOffset: CGPoint = CGPoint(x: self.collectionView.frame.size.width*CGFloat(indexPath.item), y: 0.0)
+//            self.collectionView.contentOffset = contentOffset
             self.collectionView.reloadData()
             self.collectionView.layoutIfNeeded()
         }

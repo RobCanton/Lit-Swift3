@@ -18,6 +18,15 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        _center = tabBar.center
+        _hiddenCenter = CGPoint(x: _center.x, y: _center.y * 2)
+        
+        
+        visibleFrame = tabBar.frame
+        hiddenFrame = CGRect(x: visibleFrame.origin.x, y: visibleFrame.origin.y, width: visibleFrame.width, height: 0)
+        
+        visibleViewFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height )
+        
         delegate = self
         tabBarController?.delegate = self
 
@@ -52,6 +61,55 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     }
     
     func tracingLocationDidFailWithError(_ error: NSError) {
+        
+    }
+    
+    
+    
+    
+    
+    var _center:CGPoint!
+    var _hiddenCenter:CGPoint!
+    var visibleFrame:CGRect!
+    var hiddenFrame:CGRect!
+    
+    var visibleViewFrame:CGRect!
+    var hiddenViewFrame:CGRect!
+    
+    var visible = true
+    
+    func setTabBarVisible(_visible:Bool, animated:Bool) {
+        
+        if visible == _visible {
+            return
+        }
+        visible = _visible
+        
+        DispatchQueue.main.async {
+            
+            if self.visible {
+                
+                self.tabBar.center = self._center
+                self.tabBar.isUserInteractionEnabled = true
+                self.tabBar.frame = self.visibleFrame
+                
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [], animations: {
+                    self.tabBar.alpha = 1.0
+                    
+                }, completion: { result in
+                })
+            } else {
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [], animations: {
+                    self.tabBar.alpha = 0.0
+                    
+                }, completion: { result in
+                    self.tabBar.isUserInteractionEnabled = false
+                    self.tabBar.frame = self.hiddenFrame
+                    self.tabBar.center = self._hiddenCenter
+                    
+                })
+            }
+        }
         
     }
 }

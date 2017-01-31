@@ -28,6 +28,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
      var returningCell:UserStoryTableViewCell?
     
+    var statusBarShouldHide = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,6 +104,21 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         listenToUserStories()
+        tableView.isUserInteractionEnabled = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.isUserInteractionEnabled = true
+        
+        if let tabBar = self.tabBarController as? MasterTabBarController {
+            tabBar.setTabBarVisible(_visible: true, animated: true)
+        }
+        
+        if let nav = navigationController as? MasterNavigationController {
+            nav.setNavigationBarHidden(false, animated: true)
+            nav.delegate = nav
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -257,8 +274,36 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    let transitionController: TransitionController = TransitionController()
+    var selectedIndexPath: IndexPath = IndexPath(item: 0, section: 0)
+    
     func presentStory(_ indexPath:IndexPath) {
-        print("PRESENT STORY")
+        self.selectedIndexPath = indexPath
+        
+        if let tabBar = self.tabBarController as? MasterTabBarController {
+            tabBar.setTabBarVisible(_visible: false, animated: true)
+        }
+
+        let presentedViewController: StoriesViewController = StoriesViewController()
+        presentedViewController.tabBarRef   = self.tabBarController! as! MasterTabBarController
+        presentedViewController.userStories = userStories
+        //presentedViewController.location    = location
+        presentedViewController.transitionController = self.transitionController
+        let i = IndexPath(item: indexPath.row, section: 0)
+        self.transitionController.userInfo = ["destinationIndexPath": i as AnyObject, "initialIndexPath": i as AnyObject]
+        
+        // This example will push view controller if presenting view controller has navigation controller.
+        // Otherwise, present another view controller
+        if let navigationController = self.navigationController {
+            
+            statusBarShouldHide = true
+            // Set transitionController as a navigation controller delegate and push.
+            
+            
+            navigationController.delegate = transitionController
+            transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
+            
+        }
     }
     
    
@@ -273,7 +318,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
             return CGRect.zero
         }
         
-        let i =  IndexPath(row: indexPath.item, section: 1)
+        let i =  IndexPath(row: indexPath.item, section: 0)
         let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: i)! as! UserStoryTableViewCell
         let image_frame = cell.contentImageView.frame
         let image_height = image_frame.height
@@ -290,7 +335,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
     func initialView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
         
         let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
-        let i = IndexPath(row: indexPath.item, section: 1)
+        let i = IndexPath(row: indexPath.item, section: 0)
         let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: i)! as! UserStoryTableViewCell
         
         return cell.contentImageView
@@ -299,7 +344,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
     func prepareInitialView(_ userInfo: [String : AnyObject]?, isPresenting: Bool) {
         
         let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
-        let i = IndexPath(row: indexPath.item, section: 1)
+        let i = IndexPath(row: indexPath.item, section: 0)
         if !isPresenting {
             if let cell = tableView?.cellForRow(at: i) as? UserStoryTableViewCell {
                 returningCell?.activate(false)
