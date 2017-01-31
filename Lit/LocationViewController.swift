@@ -77,7 +77,15 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         headerView.contentMode = .scaleAspectFill
         headerView.clipsToBounds = true
         
-        headerView.loadImageAsync(location.getImageURL(), completion: nil)
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = documentsURL.appendingPathComponent("location_images").appendingPathComponent("\(self.location.getKey()).jpg")
+
+        if let imageFile = UIImage(contentsOfFile: fileURL.path) {
+            self.headerView.image = imageFile
+        } else {
+            headerView.loadImageAsync(location.getImageURL(), completion: nil)
+        }
+        
         tableView.tableHeaderView = headerView
         
         let footerNib = UINib(nibName: "LocationFooterView", bundle: nil)
@@ -93,7 +101,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         LocationService.getLocationDetails(location, completion: { location in
             self.location = location
             if let footer = self.tableView?.tableFooterView as? LocationFooterView {
-                print("YE: \(self.location.desc)")
                 footer.descriptionLabel.text = self.location.desc
                 footer.descriptionLabel.sizeToFit()
             }

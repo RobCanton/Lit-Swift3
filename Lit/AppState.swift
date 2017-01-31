@@ -11,6 +11,7 @@ import ReSwift
 struct AppState: StateType {
     var userState: UserState
     var locations:[Location]
+    var conversations = [Conversation]()
 
 }
 
@@ -34,7 +35,8 @@ struct AppReducer: Reducer {
         
         return AppState(
             userState: UserStateReducer(action, state: state?.userState),
-            locations:LocationsReducer(action, state: state?.locations)
+            locations:LocationsReducer(action, state: state?.locations),
+            conversations:ConversationsReducer(action: action, state: state?.conversations)
         )
     }
 }

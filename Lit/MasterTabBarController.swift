@@ -36,6 +36,8 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         
         GPSService.sharedInstance.delegate = self
         GPSService.sharedInstance.startUpdatingLocation()
+        
+        self.setupMiddleButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +55,8 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         
     }
     
+    
+    
     func tracingLocation(_ currentLocation: CLLocation){
         
         let lat = currentLocation.coordinate.latitude
@@ -64,10 +68,49 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         
     }
     
-    
-    
-    
-    
+    var cameraButton:UIButton!
+    let cameraDefaultWidth:CGFloat = 2.2
+    let cameraActiveWidth:CGFloat = 4
+    //var cameraActivity:NVActivityIndicatorView!
+    func setupMiddleButton() {
+        if cameraButton == nil {
+            cameraButton = UIButton(frame: CGRect(x: 0, y: 0, width: 56, height: 56))
+            var menuButtonFrame = cameraButton.frame
+            menuButtonFrame.origin.y = self.tabBar.bounds.height - menuButtonFrame.height - 8
+            menuButtonFrame.origin.x = self.tabBar.bounds.width/2 - menuButtonFrame.size.width/2
+            cameraButton.frame = menuButtonFrame
+            
+            cameraButton.backgroundColor = UIColor.black
+            cameraButton.layer.cornerRadius = menuButtonFrame.height/2
+            cameraButton.layer.borderColor = UIColor.white.cgColor
+            cameraButton.layer.borderWidth = cameraActiveWidth
+            //menuButton.setImage(UIImage(named: "camera"), forState: UIControlState.Normal)
+            cameraButton.tintColor = UIColor.white
+            cameraButton.isUserInteractionEnabled = false
+            
+            self.tabBar.addSubview(cameraButton)
+            
+//            cameraActivity = NVActivityIndicatorView(frame: cameraButton.bounds, type: .BallScaleRipple, color: UIColor.whiteColor(), padding: 1.0, speed: 0.75)
+//            self.cameraButton.addSubview(cameraActivity)
+//            cameraActivity.userInteractionEnabled = false
+            
+            let hitArea = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 66))
+            hitArea.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.0)
+            var hitAreaFrame = hitArea.frame
+            hitAreaFrame.origin.y = self.tabBar.bounds.height - hitAreaFrame.height - 2
+            hitAreaFrame.origin.x = self.tabBar.bounds.width/2 - hitAreaFrame.size.width/2
+            hitArea.frame = hitAreaFrame
+            self.tabBar.addSubview(hitArea)
+            
+            hitArea.addTarget(self, action: #selector(presentCamera), for: .touchUpInside)
+            hitArea.isUserInteractionEnabled = true
+        }
+    }
+    func presentCamera() {
+        //deactivateLocation()
+        //self.performSegueWithIdentifier("toCamera", sender: self)
+    }
+
     var _center:CGPoint!
     var _hiddenCenter:CGPoint!
     var visibleFrame:CGRect!

@@ -20,6 +20,7 @@ class UserService {
     static func login(_ user:User) {
         mainStore.dispatch(UserIsAuthenticated(user: user))
         Listeners.startListeningToResponses()
+        Listeners.startListeningToConversations()
     }
     
     static func logout() {
@@ -31,7 +32,11 @@ class UserService {
     static func logoutOfFirebase() {
         try! FIRAuth.auth()!.signOut()
         mainStore.dispatch(UserIsUnauthenticated())
+        mainStore.dispatch(ClearLocations())
+        mainStore.dispatch(ClearConversations())
         Listeners.stopListeningToResponses()
+        Listeners.stopListeningToLocations()
+        Listeners.stopListeningToConversatons()
     }
     
     static func getUser(_ uid:String, completion: @escaping (_ user:User?) -> Void) {

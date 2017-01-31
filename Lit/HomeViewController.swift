@@ -45,6 +45,18 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.tableFooterView = UIView()
         tableView.reloadData()
         
+        searchBar = UISearchBar()
+
+        searchBar.placeholder = "Search Nearby"
+        searchBar.delegate = self
+        
+        searchBar.keyboardAppearance   = .dark
+        searchBar.searchBarStyle       = UISearchBarStyle.minimal
+        searchBar.tintColor            = UIColor.white
+        searchBar.barTintColor         = UIColor(white: 0.05, alpha: 1.0)
+        //searchBar.setTextColor(UIColor.whiteColor())
+    
+        self.navigationItem.titleView = searchBar
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -109,10 +121,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     var selectedLocationPath:IndexPath?
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        selectedLocationPath = indexPath as IndexPath?
+        selectedLocationPath = indexPath
         self.performSegue(withIdentifier: "showLocation", sender: self)
-
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath:
@@ -151,8 +161,75 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showLocation" {
             if let controller = segue.destination as? LocationViewController {
-                controller.location = locations[selectedLocationPath!.row]
+                guard let indexPath = selectedLocationPath else {return}
+                var location:Location
+                if (searchBarActive) {
+                    location = filteredLocations[indexPath.item]
+                    cancelSearching()
+                } else {
+                    location = locations[indexPath.item]
+                }
+                controller.location = location
             }
         }
+    }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    // MARK: Search
+    func filterContentForSearchText(searchText:String){
+        self.filteredLocations = locations.filter({ (location:Location) -> Bool in
+            return location.getName().localizedCaseInsensitiveContains(searchText)
+            
+            //.containsIgnoringCase(searchText)
+        })
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // user did type something, check our datasource for text that looks the same
+        if searchText.characters.count > 0 {
+            // search and reload data source
+            self.searchBarActive    = true
+            self.filterContentForSearchText(searchText: searchText)
+            self.tableView?.contentOffset = CGPoint(x: 0, y: 0)
+            self.tableView?.reloadData()
+        }else{
+            // if text lenght == 0
+            // we will consider the searchbar is not active
+            self.searchBarActive = false
+            self.tableView?.reloadData()
+        }
+        
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.cancelSearching()
+        self.tableView?.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.resignFirstResponder()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        // we used here to set self.searchBarActive = YES
+        // but we'll not do that any more... it made problems
+        // it's better to set self.searchBarActive = YES when user typed something
+        self.searchBar.setShowsCancelButton(true, animated: true)
+        
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        // this method is being called when search btn in the keyboard tapped
+        // we set searchBarActive = NO
+        // but no need to reloadCollectionView
+        //self.searchBarActive = false
+        //self.searchBar.setShowsCancelButton(false, animated: false)
+    }
+    func cancelSearching(){
+        self.searchBar.setShowsCancelButton(false, animated: true)
+        self.searchBarActive = false
+        self.searchBar.resignFirstResponder()
+        self.searchBar.text = ""
     }
 }

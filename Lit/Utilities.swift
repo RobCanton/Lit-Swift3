@@ -93,3 +93,15 @@ func createDirectory(_ dirName:String) {
 var screenStatusBarHeight: CGFloat {
     return UIApplication.shared.statusBarFrame.height
 }
+
+func getDistanceString(distance:Double) -> String {
+    if distance < 0.5 {
+        // meters
+        let meters = Double(round(distance * 1000)/1)
+        return "\(meters) m"
+    } else {
+        let rounded = Double(round(10*distance)/10)
+        return "\(rounded) km"
+    }
+    
+}

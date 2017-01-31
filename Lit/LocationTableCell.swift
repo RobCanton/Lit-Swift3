@@ -98,7 +98,7 @@ class LocationTableCell: UITableViewCell {
             titleLabel.superview!.backgroundColor = UIColor.black
             distanceLabel.font = UIFont(name: "Avenir-Medium", size: 11.0)
             if let distance = location.getDistance() {
-                //distanceLabel.text = getDistanceString(distance)
+                distanceLabel.text = getDistanceString(distance: distance)
                 
             } else {
                 distanceBox.isHidden = true

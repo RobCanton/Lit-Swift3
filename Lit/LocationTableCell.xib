@@ -88,7 +88,6 @@
                     <constraint firstItem="kaL-2C-Qa4" firstAttribute="leading" secondItem="OXv-5w-fm5" secondAttribute="leading" id="vcd-cT-rNV"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="backgroundImage" destination="kaL-2C-Qa4" id="68i-VU-zEa"/>
                 <outlet property="bottomImageViewConstraint" destination="0SB-90-Alg" id="Dcw-Ee-zon"/>

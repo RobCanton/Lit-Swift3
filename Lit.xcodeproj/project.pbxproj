@@ -14,6 +14,10 @@
 		B0B043221E40BB0100D50DA7 /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043211E40BB0100D50DA7 /* StoriesViewController.swift */; };
 		B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043231E40BE0000D50DA7 /* UploadService.swift */; };
 		B0B043261E40C60300D50DA7 /* MasterNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */; };
+		B0B043291E40CF4D00D50DA7 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043281E40CF4D00D50DA7 /* MessagesTableViewController.swift */; };
+		B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432A1E40CFC000D50DA7 /* Conversation.swift */; };
+		B0B0432D1E40D08700D50DA7 /* ConversationsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432C1E40D08700D50DA7 /* ConversationsReducer.swift */; };
+		B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */; };
 		B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */; };
 		B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F701E4046DD0043D28C /* LoginViewController.swift */; };
 		B0D84F741E4046DD0043D28C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0D84F721E4046DD0043D28C /* Main.storyboard */; };
@@ -55,6 +59,10 @@
 		B0B043211E40BB0100D50DA7 /* StoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
 		B0B043231E40BE0000D50DA7 /* UploadService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadService.swift; sourceTree = "<group>"; };
 		B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterNavigationController.swift; sourceTree = "<group>"; };
+		B0B043281E40CF4D00D50DA7 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
+		B0B0432A1E40CFC000D50DA7 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		B0B0432C1E40D08700D50DA7 /* ConversationsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsReducer.swift; sourceTree = "<group>"; };
+		B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewCell.swift; sourceTree = "<group>"; };
 		B0D84F6B1E4046DD0043D28C /* Lit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0D84F701E4046DD0043D28C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +142,15 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		B0B043271E40CE5800D50DA7 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				B0B043281E40CF4D00D50DA7 /* MessagesTableViewController.swift */,
+				B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */,
+			);
+			name = Messages;
+			sourceTree = "<group>";
+		};
 		B0D84F621E4046DD0043D28C = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +192,7 @@
 			children = (
 				B0E59DDC1E405084007B4762 /* Tree.swift */,
 				B0E59DDA1E405052007B4762 /* AppState.swift */,
+				B0B0432C1E40D08700D50DA7 /* ConversationsReducer.swift */,
 			);
 			name = State;
 			sourceTree = "<group>";
@@ -186,6 +204,7 @@
 				B0E59DDF1E4050B5007B4762 /* Story.swift */,
 				B0E59DE01E4050B5007B4762 /* StoryItem.swift */,
 				B0E59DE11E4050B5007B4762 /* User.swift */,
+				B0B0432A1E40CFC000D50DA7 /* Conversation.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -209,6 +228,7 @@
 				B0D84F701E4046DD0043D28C /* LoginViewController.swift */,
 				B0E59DF91E407640007B4762 /* Home */,
 				B0E59E001E409191007B4762 /* Location */,
+				B0B043271E40CE5800D50DA7 /* Messages */,
 				B0E59DF41E4066EC007B4762 /* MasterTabBarController.swift */,
 				B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */,
 				B0E59DFE1E4078BA007B4762 /* Utilities.swift */,
@@ -371,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0B0432D1E40D08700D50DA7 /* ConversationsReducer.swift in Sources */,
 				B0E59DF71E406D50007B4762 /* LocationService.swift in Sources */,
 				B0E59DDB1E405052007B4762 /* AppState.swift in Sources */,
 				B0E59DDD1E405084007B4762 /* Tree.swift in Sources */,
@@ -383,6 +404,7 @@
 				B0E59DFC1E40765D007B4762 /* LocationTableCell.swift in Sources */,
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
 				B0E59DE21E4050B5007B4762 /* Location.swift in Sources */,
+				B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */,
 				B0E59DE41E4050B5007B4762 /* StoryItem.swift in Sources */,
 				B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */,
 				B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */,
@@ -390,11 +412,13 @@
 				B0E59DE51E4050B5007B4762 /* User.swift in Sources */,
 				B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */,
 				B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */,
+				B0B043291E40CF4D00D50DA7 /* MessagesTableViewController.swift in Sources */,
 				B0B043221E40BB0100D50DA7 /* StoriesViewController.swift in Sources */,
 				B0E59DE31E4050B5007B4762 /* Story.swift in Sources */,
 				B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */,
 				B0E59DF01E406662007B4762 /* Listeners.swift in Sources */,
 				B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */,
+				B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

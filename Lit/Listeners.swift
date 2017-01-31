@@ -17,6 +17,7 @@ class Listeners {
     
     fileprivate static var listeningToLocations = false
     fileprivate static var listeningToResponses = false
+    fileprivate static var listeningToConversations = false
     
     static func startListeningToLocations() {
         if !listeningToLocations {
@@ -76,6 +77,37 @@ class Listeners {
         let current_uid = mainStore.state.userState.uid
         ref.child("api/responses/location_updates/\(current_uid)").removeAllObservers()
         listeningToResponses = false
+    }
+    
+    static func startListeningToConversations() {
+        if !listeningToConversations {
+            listeningToConversations = true
+            
+            let uid = mainStore.state.userState.uid
+            let conversationsRef = ref.child("users/conversations/\(uid)")
+            conversationsRef.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    
+                    let partner = snapshot.key
+                    let pairKey = createUserIdPairKey(uid1: uid, uid2: partner)
+                    let listening = snapshot.value! as! Bool
+                    if listening {
+                        print("Listening to: \(pairKey)")
+                        let conversation = Conversation(key: pairKey, partner_uid: partner)
+                        mainStore.dispatch(ConversationAdded(conversation: conversation))
+                    } else {
+                        print("Not listening to: \(pairKey)")
+                    }
+                }
+            })
+        }
+    }
+    
+    static func stopListeningToConversatons() {
+        let uid = mainStore.state.userState.uid
+        let conversationsRef = ref.child("users/conversations/\(uid)")
+        conversationsRef.removeAllObservers()
+        listeningToConversations = false
     }
     
     
