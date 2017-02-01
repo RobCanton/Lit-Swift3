@@ -401,10 +401,10 @@
             </objects>
             <point key="canvasLocation" x="3330" y="1527"/>
         </scene>
-        <!--View Controller-->
+        <!--My User Profile View Controller-->
         <scene sceneID="QoY-UL-OQt">
             <objects>
-                <viewController id="fVb-6i-tFu" sceneMemberID="viewController">
+                <viewController id="fVb-6i-tFu" customClass="MyUserProfileViewController" customModule="Lit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="II7-yK-PGC"/>
                         <viewControllerLayoutGuide type="bottom" id="xdC-Tm-YUc"/>
