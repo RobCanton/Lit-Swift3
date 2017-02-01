@@ -317,21 +317,21 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     }
     
     func sendButtonTapped(sender: UIButton) {
-//        let upload = Upload()
-//        if cameraState == .PhotoTaken {
-//            upload.image = imageCaptureView.image!
-//        } else if cameraState == .VideoTaken {
-//            upload.videoURL = videoUrl
-//        }
-//        
-//        upload.coordinates = uploadCoordinate
-//        
-//        let nav = UIStoryboard(name: "Main", bundle: nil)
-//            .instantiateViewControllerWithIdentifier("SendOffNavigationController") as! UINavigationController
-//        let controller = nav.viewControllers[0] as! SendViewController
-//        controller.upload = upload
-//        
-//        self.presentViewController(nav, animated: false, completion: nil)
+        let upload = Upload()
+        if cameraState == .PhotoTaken {
+            upload.image = imageCaptureView.image!
+        } else if cameraState == .VideoTaken {
+            upload.videoURL = videoUrl
+        }
+        
+        upload.coordinates = uploadCoordinate
+        
+        let nav = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(withIdentifier: "SendNavigationController") as! UINavigationController
+        let controller = nav.viewControllers[0] as! SendViewController
+        controller.upload = upload
+        
+        self.present(nav, animated: false, completion: nil)
     }
     
     func cancelButtonTapped(sender: UIButton) {

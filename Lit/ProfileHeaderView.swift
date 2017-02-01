@@ -26,8 +26,6 @@ class ProfileHeaderView: UICollectionReusableView {
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var messageButton: UIButton!
     
-    
-    
     @IBOutlet weak var dividerView: UIView!
     let subColor = UIColor(white: 0.5, alpha: 1.0)
     

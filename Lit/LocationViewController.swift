@@ -201,6 +201,28 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         return 2
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 && userStories.count == 0 {
+            return 0
+        }
+        return 34
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
+            headerView.isHidden = false
+            headerView.label.text = "RECENT"
+            return headerView
+        } else if section == 1 {
+            let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
+            headerView.isHidden = false
+            headerView.label.text = "INFO"
+            return headerView
+        }
+        return nil
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 76

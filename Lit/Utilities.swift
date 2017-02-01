@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Firebase
+import AVFoundation
 
 
 let imageCache = NSCache<NSString, UIImage>()
@@ -103,5 +104,18 @@ func getDistanceString(distance:Double) -> String {
         let rounded = Double(round(10*distance)/10)
         return "\(rounded) km"
     }
-    
+}
+
+func generateVideoStill(asset:AVAsset, time:CMTime) -> UIImage?{
+    do {
+        
+        let imgGenerator = AVAssetImageGenerator(asset: asset)
+        imgGenerator.appliesPreferredTrackTransform = true
+        let cgImage = try imgGenerator.copyCGImage(at: time, actualTime: nil)
+        let image = UIImage(cgImage: cgImage)
+        return image
+    } catch let error as NSError {
+        print("Error generating thumbnail: \(error)")
+        return nil
+    }
 }

@@ -105,6 +105,12 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         return cell
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        get {
+            return true
+        }
+    }  
 }
 
 extension StoriesViewController: View2ViewTransitionPresented {

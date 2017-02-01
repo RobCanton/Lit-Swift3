@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10117"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CommentsView" customModule="Lit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="536" height="238"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCU-LB-g3s">
+                    <rect key="frame" x="0.0" y="0.0" width="536" height="238"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.35495634869999998" green="1" blue="0.99039781549999995" alpha="0.5" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="cCU-LB-g3s" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="79a-Eu-ANe"/>
+                <constraint firstAttribute="bottom" secondItem="cCU-LB-g3s" secondAttribute="bottom" id="Zjw-7s-n8e"/>
+                <constraint firstItem="cCU-LB-g3s" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="c3L-Yf-bGS"/>
+                <constraint firstAttribute="trailing" secondItem="cCU-LB-g3s" secondAttribute="trailing" id="hj7-a5-GlM"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="tableContainer" destination="cCU-LB-g3s" id="Dy2-6X-70W"/>
+            </connections>
+            <point key="canvasLocation" x="440" y="164"/>
+        </view>
+    </objects>
+</document>

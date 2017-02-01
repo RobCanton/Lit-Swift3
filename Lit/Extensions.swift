@@ -105,3 +105,15 @@ extension UILabel {
         return measurementLabel.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
     }
 }
+
+extension UITextView {
+    
+    func fitHeightToContent() {
+        let fixedWidth = self.frame.size.width
+        self.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        let newSize = self.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        var newFrame = self.frame
+        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        self.frame = newFrame;
+    }
+}

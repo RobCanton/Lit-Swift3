@@ -8,11 +8,93 @@
 
 import Foundation
 import Firebase
+import CoreLocation
 
-
+class Upload {
+    
+    var userProfile = false
+    var toProfile = false
+    var toStory = false
+    var locationKey:String = ""
+    
+    var coordinates:CLLocation?
+    var image:UIImage?
+    var videoURL:URL?
+}
 
 class UploadService {
-    
+
+    static func sendImage(upload:Upload, completion:(()->())) {
+        
+        //If upload has no destination do not upload it
+        if !upload.toProfile && !upload.toStory && upload.locationKey == "" { return }
+        
+        if upload.image == nil { return }
+        
+        let uid = mainStore.state.userState.uid
+        
+        let ref = FIRDatabase.database().reference()
+        let dataRef = ref.child("uploads").childByAutoId()
+        let postKey = dataRef.key
+        
+        if let data = UIImageJPEGRepresentation(upload.image!, 0.5) {
+            // Create a reference to the file you want to upload
+            // Create the file metadata
+            let contentTypeStr = "image/jpg"
+            let metadata = FIRStorageMetadata()
+            metadata.contentType = contentTypeStr
+            
+//            var uploadingMurmer = Murmur(title: "Uploading...")
+//            uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
+//            uploadingMurmer.titleColor = UIColor.lightGrayColor()
+//            show(whistle: uploadingMurmer, action: .Show(60.0))
+            
+            // Upload file and metadata to the object
+            let storageRef = FIRStorage.storage().reference()
+            let uploadTask = storageRef.child("user_uploads/images/\(uid)/\(postKey)").put(data, metadata: metadata) { metadata, error in
+                
+                if (error != nil) {
+                    // HANDLE ERROR
+//                    hide()
+//                    var murmur = Murmur(title: "Unable to upload.")
+//                    murmur.backgroundColor = errorColor
+//                    murmur.titleColor = UIColor.whiteColor()
+//                    show(whistle: murmur, action: .Show(5.0))
+                } else {
+                    // Metadata contains file metadata such as size, content-type, and download URL.
+                    let downloadURL = metadata!.downloadURL()
+                    let obj = [
+                        "author": uid,
+                        "toProfile": upload.toProfile,
+                        "toStory": upload.toStory,
+                        "toLocation": upload.locationKey != "",
+                        "location": upload.locationKey,
+                        "url": downloadURL!.absoluteString,
+                        "contentType": contentTypeStr,
+                        "dateCreated": [".sv": "timestamp"],
+                        "length": 5.0
+                    ] as [String : Any]
+                    dataRef.child("meta").setValue(obj, withCompletionBlock: { error, _ in
+                        //hide()
+//                        if error == nil {
+//                            var murmur = Murmur(title: "Image uploaded!")
+//                            murmur.backgroundColor = accentColor
+//                            murmur.titleColor = UIColor.whiteColor()
+//                            show(whistle: murmur, action: .Show(3.0))
+//                        } else {
+//                            var murmur = Murmur(title: "Unable to upload.")
+//                            murmur.backgroundColor = errorColor
+//                            murmur.titleColor = UIColor.whiteColor()
+//                            show(whistle: murmur, action: .Show(5.0))
+//                        }
+                    })
+                    
+                }
+            }
+            completion()
+        }
+        
+    }
     
     static func getUpload(key:String, completion: @escaping (_ item:StoryItem?)->()) {
         if let cachedUpload = dataCache.object(forKey: "upload-\(key)" as NSString) as? StoryItem {
