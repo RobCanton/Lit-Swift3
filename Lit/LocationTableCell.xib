@@ -73,6 +73,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="kaL-2C-Qa4" secondAttribute="bottom" id="0SB-90-Alg"/>
                     <constraint firstAttribute="trailing" secondItem="kaL-2C-Qa4" secondAttribute="trailing" id="4F6-CE-tjt"/>

@@ -58,4 +58,31 @@ class UserService {
             })
         }
     }
+    
+    static func sendMessage(conversation:Conversation, message:String, uploadKey:String?, completion: ((_ success:Bool)->())?) {
+        let messageRef = ref.child("conversations/\(conversation.getKey())/messages").childByAutoId()
+        let uid = mainStore.state.userState.uid
+        
+        var payload:[String:AnyObject] = [
+            "senderId": uid as AnyObject,
+            "recipientId": conversation.getPartnerId() as AnyObject,
+            "text": message as AnyObject,
+            "timestamp": [".sv":"timestamp"] as AnyObject
+        ]
+        
+        if uploadKey != nil {
+            payload["upload"] = uploadKey! as AnyObject?
+        }
+        
+        messageRef.setValue(payload, withCompletionBlock: { error, ref in
+            completion?(error == nil)
+        })
+        
+        let requestRef = ref.child("api/requests/message").childByAutoId()
+        requestRef.setValue([
+            "sender": uid,
+            "conversation": conversation.getKey(),
+            "messageID": messageRef.key,
+            ])
+    }
 }

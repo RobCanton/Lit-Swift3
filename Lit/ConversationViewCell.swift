@@ -11,7 +11,6 @@ import JSQMessagesViewController
 
 class ConversationViewCell: UITableViewCell, GetUserProtocol {
     
-    
 
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -26,14 +25,7 @@ class ConversationViewCell: UITableViewCell, GetUserProtocol {
     var conversation:Conversation? {
         didSet{
             conversation!.delegate = self
-            print("WAS ER")
             conversation!.retrieveUser()
-            UserService.getUser(conversation!.getPartnerId(), completion: { user in
-                print("asd")
-                if user != nil {
-                    self.userLoaded(user: user!)
-                }
-            })
             
             if let lastMessage = conversation!.lastMessage {
                 messageLabel.text = lastMessage.text
@@ -54,7 +46,6 @@ class ConversationViewCell: UITableViewCell, GetUserProtocol {
     
     
     func userLoaded(user: User) {
-        print("WAS DSI")
         userImageView.clipsToBounds = true
         userImageView.layer.cornerRadius = userImageView.frame.width/2
         userImageView.contentMode = .scaleAspectFill

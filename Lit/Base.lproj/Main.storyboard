@@ -119,6 +119,7 @@
                         <segue destination="leC-Mc-cuv" kind="relationship" relationship="viewControllers" id="Qf1-8k-apL"/>
                         <segue destination="I8Q-CS-gIj" kind="relationship" relationship="viewControllers" id="v9w-8l-wOO"/>
                         <segue destination="SXS-Rb-IAx" kind="relationship" relationship="viewControllers" id="OWZ-iE-KJv"/>
+                        <segue destination="ifC-Dv-tSu" kind="show" identifier="showCamera" customClass="CameraTransition" customModule="Lit" customModuleProvider="target" id="M1W-Fm-seg"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J20-F9-iyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -133,7 +134,7 @@
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="qGY-Uw-S4B">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="qGY-Uw-S4B">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -167,10 +168,10 @@
             </objects>
             <point key="canvasLocation" x="2665" y="98"/>
         </scene>
-        <!--View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="Rmi-GI-vA7">
             <objects>
-                <viewController id="ifC-Dv-tSu" sceneMemberID="viewController">
+                <viewController id="ifC-Dv-tSu" customClass="CameraViewController" customModule="Lit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="B6R-qz-lRd"/>
                         <viewControllerLayoutGuide type="bottom" id="FhP-Gy-F1g"/>
@@ -178,12 +179,58 @@
                     <view key="view" contentMode="scaleToFill" id="BkU-Qw-LSx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ddz-gz-vpK">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSq-es-n9M">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VLx-yO-Bmx">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QcW-Dj-j99">
+                                <rect key="frame" x="175" y="624" width="25" height="25"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" image="collapse"/>
+                                <connections>
+                                    <action selector="handleDismiss:" destination="ifC-Dv-tSu" eventType="touchUpInside" id="ADd-gD-w2U"/>
+                                    <segue destination="8Oa-PT-Fdb" kind="unwind" unwindAction="unwindFromViewControllerWithSender:" id="ris-zV-3hg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="MSq-es-n9M" secondAttribute="trailing" id="2Qf-Y4-xRQ"/>
+                            <constraint firstItem="MSq-es-n9M" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="52N-qd-so6"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="MSq-es-n9M" secondAttribute="bottom" id="7YG-uf-k7C"/>
+                            <constraint firstAttribute="topMargin" secondItem="VLx-yO-Bmx" secondAttribute="top" id="DMX-jQ-fgi"/>
+                            <constraint firstItem="VLx-yO-Bmx" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="DaC-LM-8T0"/>
+                            <constraint firstAttribute="topMargin" secondItem="MSq-es-n9M" secondAttribute="top" id="Lie-w1-SIb"/>
+                            <constraint firstItem="QcW-Dj-j99" firstAttribute="centerX" secondItem="BkU-Qw-LSx" secondAttribute="centerX" id="XGK-wJ-knJ"/>
+                            <constraint firstItem="Ddz-gz-vpK" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="bfg-bg-F2M"/>
+                            <constraint firstAttribute="trailing" secondItem="VLx-yO-Bmx" secondAttribute="trailing" id="bn4-Ow-uXo"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="VLx-yO-Bmx" secondAttribute="bottom" id="lWr-nH-4pf"/>
+                            <constraint firstAttribute="topMargin" secondItem="Ddz-gz-vpK" secondAttribute="top" id="mOk-9V-FLD"/>
+                            <constraint firstAttribute="trailing" secondItem="Ddz-gz-vpK" secondAttribute="trailing" id="pyN-HK-lie"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Ddz-gz-vpK" secondAttribute="bottom" id="rWU-Xs-KSB"/>
+                            <constraint firstItem="FhP-Gy-F1g" firstAttribute="top" secondItem="QcW-Dj-j99" secondAttribute="bottom" constant="18" id="zHh-en-py7"/>
+                        </constraints>
                     </view>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="cameraOutputView" destination="Ddz-gz-vpK" id="cWl-FV-qNC"/>
+                        <outlet property="dismissButton" destination="QcW-Dj-j99" id="cYf-mP-12M"/>
+                        <outlet property="imageCaptureView" destination="VLx-yO-Bmx" id="Uzm-2g-l8u"/>
+                        <outlet property="videoCaptureView" destination="MSq-es-n9M" id="5GB-TF-Vff"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sjr-eZ-aQJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="8Oa-PT-Fdb" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2665" y="824"/>
+            <point key="canvasLocation" x="2664.8000000000002" y="823.53823088455783"/>
         </scene>
         <!--Master Navigation Controller-->
         <scene sceneID="yPf-9A-kwQ">
@@ -259,11 +306,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="conversationCell" rowHeight="74" id="Bw3-Nz-fcR" customClass="ConversationViewCell" customModule="Lit" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="conversationCell" rowHeight="74" id="Bw3-Nz-fcR" customClass="ConversationViewCell" customModule="Lit" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bw3-Nz-fcR" id="idb-AC-haE">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="73"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="bluedot" translatesAutoresizingMaskIntoConstraints="NO" id="llj-Jk-o4h">
@@ -336,6 +383,24 @@
             </objects>
             <point key="canvasLocation" x="2636" y="1526.9865067466269"/>
         </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="Cfu-ez-QFt">
+            <objects>
+                <viewController storyboardIdentifier="ChatViewController" hidesBottomBarWhenPushed="YES" id="mCT-f1-p9X" customClass="ChatViewController" customModule="Lit" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Zg7-0h-0X8"/>
+                        <viewControllerLayoutGuide type="bottom" id="o5Z-eQ-zxs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TO9-MR-ZCS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nsr-p0-Bow" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3330" y="1527"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="QoY-UL-OQt">
             <objects>
@@ -382,6 +447,7 @@
     <resources>
         <image name="activity" width="25" height="25"/>
         <image name="bluedot" width="16" height="16"/>
+        <image name="collapse" width="25" height="25"/>
         <image name="home" width="25" height="25"/>
         <image name="message" width="25" height="25"/>
         <image name="user" width="25" height="25"/>

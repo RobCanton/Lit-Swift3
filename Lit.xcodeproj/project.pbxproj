@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B087C7511E4163AA00234715 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7501E4163AA00234715 /* CameraButton.swift */; };
+		B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7521E41646E00234715 /* KDCircularProgress.swift */; };
 		B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */; };
 		B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */; };
 		B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043101E40AED300D50DA7 /* LocationFooterView.swift */; };
@@ -18,6 +20,9 @@
 		B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432A1E40CFC000D50DA7 /* Conversation.swift */; };
 		B0B0432D1E40D08700D50DA7 /* ConversationsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432C1E40D08700D50DA7 /* ConversationsReducer.swift */; };
 		B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */; };
+		B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */; };
+		B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043331E41599100D50DA7 /* CameraViewController.swift */; };
+		B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043351E4159B800D50DA7 /* CameraTransition.swift */; };
 		B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */; };
 		B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F701E4046DD0043D28C /* LoginViewController.swift */; };
 		B0D84F741E4046DD0043D28C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0D84F721E4046DD0043D28C /* Main.storyboard */; };
@@ -52,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		82D051C960EAD77D39AD3FF9 /* Pods-Lit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lit.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lit/Pods-Lit.release.xcconfig"; sourceTree = "<group>"; };
+		B087C7501E4163AA00234715 /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
+		B087C7521E41646E00234715 /* KDCircularProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDCircularProgress.swift; sourceTree = "<group>"; };
 		B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStoryTableViewCell.swift; sourceTree = "<group>"; };
 		B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserStoryTableViewCell.xib; sourceTree = "<group>"; };
 		B0B043101E40AED300D50DA7 /* LocationFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFooterView.swift; sourceTree = "<group>"; };
@@ -63,6 +70,9 @@
 		B0B0432A1E40CFC000D50DA7 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		B0B0432C1E40D08700D50DA7 /* ConversationsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsReducer.swift; sourceTree = "<group>"; };
 		B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewCell.swift; sourceTree = "<group>"; };
+		B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		B0B043331E41599100D50DA7 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		B0B043351E4159B800D50DA7 /* CameraTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTransition.swift; sourceTree = "<group>"; };
 		B0D84F6B1E4046DD0043D28C /* Lit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0D84F701E4046DD0043D28C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -147,8 +157,20 @@
 			children = (
 				B0B043281E40CF4D00D50DA7 /* MessagesTableViewController.swift */,
 				B0B0432E1E40D36700D50DA7 /* ConversationViewCell.swift */,
+				B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */,
 			);
 			name = Messages;
+			sourceTree = "<group>";
+		};
+		B0B043321E41597F00D50DA7 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				B087C7521E41646E00234715 /* KDCircularProgress.swift */,
+				B0B043351E4159B800D50DA7 /* CameraTransition.swift */,
+				B0B043331E41599100D50DA7 /* CameraViewController.swift */,
+				B087C7501E4163AA00234715 /* CameraButton.swift */,
+			);
+			name = Camera;
 			sourceTree = "<group>";
 		};
 		B0D84F621E4046DD0043D28C = {
@@ -226,11 +248,12 @@
 			isa = PBXGroup;
 			children = (
 				B0D84F701E4046DD0043D28C /* LoginViewController.swift */,
-				B0E59DF91E407640007B4762 /* Home */,
-				B0E59E001E409191007B4762 /* Location */,
-				B0B043271E40CE5800D50DA7 /* Messages */,
 				B0E59DF41E4066EC007B4762 /* MasterTabBarController.swift */,
 				B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */,
+				B0E59DF91E407640007B4762 /* Home */,
+				B0E59E001E409191007B4762 /* Location */,
+				B0B043321E41597F00D50DA7 /* Camera */,
+				B0B043271E40CE5800D50DA7 /* Messages */,
 				B0E59DFE1E4078BA007B4762 /* Utilities.swift */,
 			);
 			name = ViewControllers;
@@ -402,12 +425,16 @@
 				B0E59DE91E40551B007B4762 /* UserService.swift in Sources */,
 				B0E59E081E409B65007B4762 /* Extensions.swift in Sources */,
 				B0E59DFC1E40765D007B4762 /* LocationTableCell.swift in Sources */,
+				B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */,
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
 				B0E59DE21E4050B5007B4762 /* Location.swift in Sources */,
 				B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */,
+				B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */,
 				B0E59DE41E4050B5007B4762 /* StoryItem.swift in Sources */,
 				B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */,
 				B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */,
+				B087C7511E4163AA00234715 /* CameraButton.swift in Sources */,
+				B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */,
 				B0E59DF51E4066EC007B4762 /* MasterTabBarController.swift in Sources */,
 				B0E59DE51E4050B5007B4762 /* User.swift in Sources */,
 				B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */,
@@ -418,6 +445,7 @@
 				B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */,
 				B0E59DF01E406662007B4762 /* Listeners.swift in Sources */,
 				B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */,
+				B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */,
 				B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

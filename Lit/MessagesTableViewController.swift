@@ -65,9 +65,36 @@ class MessagesViewController: UITableViewController, StoreSubscriber {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ConversationViewCell
-        print("WUT")
+        
         cell.conversation = conversations[indexPath.item]
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        prepareConverstaionForPresentation(conversation: conversations[indexPath.row])
+    }
+    
+    func prepareConverstaionForPresentation(conversation:Conversation) {
+        if let user = conversation.getPartner() {
+            presentConversation(conversation: conversation, user: user)
+        } else {
+            UserService.getUser(conversation.getPartnerId(), completion: { user in
+                if user != nil {
+                    self.presentConversation(conversation: conversation, user: user!)
+                }
+            })
+        }
+    }
+    
+    func presentConversation(conversation:Conversation, user:User) {
+        loadImageUsingCacheWithURL(user.getImageUrl(), completion: { image, fromCache in
+            let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+            controller.conversation = conversation
+            controller.partnerImage = image
+            self.navigationController?.navigationBar.tintColor = UIColor.white
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
     }
     
 }

@@ -108,7 +108,17 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     }
     func presentCamera() {
         //deactivateLocation()
-        //self.performSegueWithIdentifier("toCamera", sender: self)
+        self.performSegue(withIdentifier: "showCamera", sender: self)
+    }
+    
+    @IBAction func unwindFromViewController(sender: UIStoryboardSegue) {
+    }
+    
+    
+    override func segueForUnwinding(to toViewController: UIViewController, from fromViewController: UIViewController, identifier: String?) -> UIStoryboardSegue {
+        let segue = CameraUnwindTransition(identifier: identifier, source: fromViewController, destination: toViewController)
+        
+        return segue
     }
 
     var _center:CGPoint!
