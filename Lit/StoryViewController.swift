@@ -39,6 +39,18 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     
     var itemSetHandler:((_ item:StoryItem)->())?
     
+    
+    
+    
+    func commentsInteractionHandler(interacting:Bool) {
+        if interacting || keyboardUp {
+            pauseStory()
+        } else {
+            resumeStory()
+        }
+    }
+    
+    
     func showOptions(){
         pauseStory()
         optionsTappedHandler?()
@@ -185,38 +197,48 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             viewsButton.titleLabel?.sizeToFit()
             viewsButton.sizeToFit()
             
-            commentsView.setTableComments(comments: item.comments, animated: false)
+            commentsView.commentsInteractionHandler = commentsInteractionHandler
             
-            commentsRef?.removeAllObservers()
-            commentsRef = UserService.ref.child("uploads/\(item.getKey())/comments")
-
-//            if let lastItem = item.comments.last {
-//                let lastKey = lastItem.getKey()
-//                let ts = lastItem.getDate().timeIntervalSince1970 * 1000
-//                commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
-//                    let key = snapshot.key
-//                    if key != lastKey {
-//                        let author = snapshot.value!["author"] as! String
-//                        let text = snapshot.value!["text"] as! String
-//                        let timestamp = snapshot.value!["timestamp"] as! Double
-//                        
-//                        let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-//                        item.addComment(comment)
-//                        self.commentsView.setTableComments(comments: item.comments, animated: true)
-//                    }
-//                })
-//            } else {
-//                commentsRef?.observe(.childAdded, with: { snapshot in
-//                    let key = snapshot.key
-//                    let author = snapshot.value!["author"] as! String
-//                    let text = snapshot.value!["text"] as! String
-//                    let timestamp = snapshot.value!["timestamp"] as! Double
-//                    
-//                    let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-//                    item.addComment(comment)
-//                    self.commentsView.setTableComments(comments: item.comments, animated: true)
-//                })
-//            }
+            if !looping {
+                
+                commentsView.setTableComments(comments: item.comments, animated: false)
+                
+                commentsRef?.removeAllObservers()
+                commentsRef = UserService.ref.child("uploads/\(item.getKey())/comments")
+            
+                if let lastItem = item.comments.last {
+                    let lastKey = lastItem.getKey()
+                    let ts = lastItem.getDate().timeIntervalSince1970 * 1000
+                    
+                    print("LAST COMMENT: \(lastItem.getText())")
+                    commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
+                        
+                        let dict = snapshot.value as! [String:Any]
+                        let key = snapshot.key
+                        if key != lastKey {
+                            let author = dict["author"] as! String
+                            let text = dict["text"] as! String
+                            let timestamp = dict["timestamp"] as! Double
+                            
+                            let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
+                            print("ADDING: \(text)")
+                            item.addComment(comment)
+                            self.commentsView.setTableComments(comments: item.comments, animated: true)
+                        }
+                    })
+                } else {
+                    commentsRef?.observe(.childAdded, with: { snapshot in
+                        let dict = snapshot.value as! [String:Any]
+                        let key = snapshot.key
+                        let author = dict["author"] as! String
+                        let text = dict["text"] as! String
+                        let timestamp = dict["timestamp"] as! Double
+                        let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
+                        item.addComment(comment)
+                        self.commentsView.setTableComments(comments: item.comments, animated: true)
+                    })
+                }
+            }
         } else {
             self.removeGestureRecognizer(tap)
             storyCompleteHandler?()
@@ -311,7 +333,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         let uid = mainStore.state.userState.uid
         if !item.hasViewed() && item.authorId != uid{
             item.viewers[uid] = 1
-            //FirebaseService.addView(item.getKey())
+            UploadService.addView(postKey: item.getKey())
         }
     }
     
@@ -400,9 +422,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     
     func pauseStory() {
         looping = true
-//        killTimer()
-//        self.resetVideo()
-//        progressBar?.pauseActiveIndicator()
     }
     
     func getCurrentItem() -> StoryItem? {
@@ -488,6 +507,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         self.contentView.addSubview(self.content)
         self.contentView.addSubview(self.videoContent)
         self.contentView.addSubview(self.fadeCover)
+        self.contentView.addSubview(self.gradientView)
         self.contentView.addSubview(self.prevView)
         self.contentView.addSubview(self.authorOverlay)
         self.contentView.addSubview(self.viewsButton)
@@ -626,10 +646,11 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     }
     
     func sendComment(comment:String) {
+        print("SEND COMMENT: \(comment)")
         textView.text = ""
         updateTextAndCommentViews()
         if item != nil {
-            //FirebaseService.addComment(item!.getKey(), comment: comment)
+            UploadService.addComment(postKey: item!.getKey(), comment: comment)
         }
     }
     
@@ -685,6 +706,21 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         return view
     }()
     
+    public lazy var gradientView: UIView = {
+        
+        let view = UIView(frame: CGRect(x: 0, y: self.bounds.height * 0.3, width: self.bounds.width, height: self.bounds.height * 0.7))
+
+        let gradient = CAGradientLayer()
+        gradient.frame = view.bounds
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        let dark = UIColor(white: 0.0, alpha: 0.55)
+        gradient.colors = [UIColor.clear.cgColor , dark.cgColor]
+        view.layer.insertSublayer(gradient, at: 0)
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
     public lazy var prevView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width * 0.4, height: self.bounds.height))
 
@@ -714,7 +750,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     lazy var commentsView: CommentsView = {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        var commentsView = CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.35 ))
+        var commentsView = CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.42 ))
         
         return commentsView
     }()
@@ -755,14 +791,13 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
 }
 
 extension StoryViewController: UITextViewDelegate {
-    public func textViewDidChange(textView: UITextView) {
+    public func textViewDidChange(_ textView: UITextView) {
         updateTextAndCommentViews()
     }
     
-    public func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         if(text == "\n") {
-            print("Length: \(textView.text.characters.count)")
             if textView.text.characters.count > 0 {
                 sendComment(comment: textView.text)
             } else {

@@ -193,13 +193,13 @@ class StoryItem: NSObject, NSCoding {
     }
     
     func hasViewed() -> Bool{
-        return true//viewers[mainStore.state.userState.uid] != nil
+        return viewers[mainStore.state.userState.uid] != nil
     }
     
     func addComment(_ comment:Comment) {
-//        self.comments.append(comment)
-//        FirebaseService.dataCache.removeObjectForKey(key)
-//        FirebaseService.dataCache.setObject(self, forKey: key)
+        self.comments.append(comment)
+        dataCache.removeObject(forKey: "upload-\(key)" as NSString)
+        dataCache.setObject(self, forKey: "upload-\(key)" as NSString)
     }
     
     func postPoints() -> Int {

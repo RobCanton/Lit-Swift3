@@ -10,16 +10,77 @@ import Foundation
 import UIKit
 import View2ViewTransition
 
-class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate {
+class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
+    weak var transitionController: TransitionController!
+    
+    var label:UILabel!
     var tabBarRef:MasterTabBarController!
     var userStories = [UserStory]()
     var currentIndex:IndexPath!
     var collectionView:UICollectionView!
     
-    weak var transitionController: TransitionController!
-
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        tabBarRef.setTabBarVisible(_visible: false, animated: true)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name:NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        
+        if self.navigationController!.delegate !== transitionController {
+            self.collectionView.reloadData()
+        }
+        
+        if self.navigationController!.delegate !== transitionController {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        automaticallyAdjustsScrollViewInsets = false
+        tabBarRef.setTabBarVisible(_visible: false, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.delegate = transitionController
+        
+        if let cell = getCurrentCell() {
+            cell.setForPlay()
+        }
+        
+        if let gestureRecognizers = self.view.gestureRecognizers {
+            for gestureRecognizer in gestureRecognizers {
+                if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+                    panGestureRecognizer.delegate = self
+                }
+            }
+        }
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+        
+        for cell in collectionView.visibleCells as! [StoryViewController] {
+            cell.yo()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        tabBarRef.setTabBarVisible(_visible: true, animated: true)
+        //clearDirectory("temp")
+        
+        for cell in collectionView.visibleCells as! [StoryViewController] {
+            cell.cleanUp()
+        }
+    }
+    
+    var textField:UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +89,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.extendedLayoutIncludesOpaqueBars = true
         self.automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.black
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
         
@@ -41,8 +103,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: layout)
         collectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         
-        collectionView.register(PresentingCollectionViewCell
-            .self, forCellWithReuseIdentifier: "presented_cell")
+        collectionView.register(StoryViewController.self, forCellWithReuseIdentifier: "presented_cell")
         collectionView.backgroundColor = UIColor.black
         collectionView.bounces = false
         collectionView.delegate = self
@@ -53,64 +114,223 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         self.view.addSubview(collectionView)
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        tabBarRef.setTabBarVisible(_visible: false, animated: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        automaticallyAdjustsScrollViewInsets = false
-        tabBarRef.setTabBarVisible(_visible: false, animated: false)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.delegate = transitionController
+        
+        label = UILabel(frame: CGRect(x:0,y:0,width:self.view.frame.width,height:100))
+        label.textColor = UIColor.white
+        label.center = view.center
+        label.textAlignment = .center
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    func appMovedToBackground() {
+        popStoryController(animated: false)
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        tabBarRef.setTabBarVisible(_visible: true, animated: true)
-    }
-    
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         return UIScreen.main.bounds.size
     }
     
-
+    
+    
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 50
+        return userStories.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
+
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell: PresentingCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath) as! PresentingCollectionViewCell
-        cell.contentView.backgroundColor = UIColor.lightGray
-
-        cell.content.image = UIImage(named: "bladerunner2")
-        
+        let cell: StoryViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! StoryViewController
+        cell.contentView.backgroundColor = UIColor.black
+        cell.story = userStories[indexPath.item]
+        cell.authorOverlay.authorTappedHandler = showAuthor
+        cell.authorOverlay.locationTappedHandler = showLocation
+        cell.optionsTappedHandler = showOptions
+        cell.storyCompleteHandler = storyComplete
+        cell.commentsView.userTapped = showAuthor
         return cell
+    }
+    
+    func popStoryController(animated:Bool) {
+        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
+        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
+        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+        navigationController?.popViewController(animated: animated)
+    }
+    
+    
+    func storyComplete() {
+        popStoryController(animated: true)
+    }
+    
+    func showAuthor(uid:String) {
+        self.navigationController?.delegate = self
+        let controller = UserProfileViewController()
+        controller.uid = uid
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func showLocation(location:Location) {
+        self.navigationController?.delegate = self
+        let controller = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
+        controller.location = location
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+
+    func showOptions() {
+        guard let cell = getCurrentCell() else { return }
+        guard let item = cell.item else {
+            cell.resumeStory()
+            return }
+        
+        if cell.story.getUserId() == mainStore.state.userState.uid {
+            
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+                cell.resumeStory()
+            }
+            actionSheet.addAction(cancelActionButton)
+            
+            let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive) { action -> Void in
+                
+                if item.postPoints() > 1 {
+                    let deleteController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                    
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+                        cell.resumeStory()
+                    }
+                    deleteController.addAction(cancelAction)
+                    let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
+                    { action -> Void in
+                        UploadService.removeItemFromStory(item: item, completion: {
+                            self.popStoryController(animated: true)
+                        })
+                    }
+                    deleteController.addAction(storyAction)
+                    
+                    let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+                        UploadService.deleteItem(item: item, completion: {
+                            self.popStoryController(animated: true)
+                        })
+                    }
+                    deleteController.addAction(deleteAction)
+                    
+                    self.present(deleteController, animated: true, completion: nil)
+                } else {
+                    UploadService.deleteItem(item: item, completion: {
+                        self.popStoryController(animated: true)
+                    })
+                }
+            }
+            actionSheet.addAction(deleteActionButton)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+        } else {
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+                cell.resumeStory()
+            }
+            actionSheet.addAction(cancelActionButton)
+            
+            let OKAction = UIAlertAction(title: "Report", style: .destructive) { (action) in
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+                    cell.resumeStory()
+                }
+                alertController.addAction(cancelAction)
+                
+                let OKAction = UIAlertAction(title: "It's Inappropriate", style: .destructive) { (action) in
+                    UploadService.reportItem(item: item, type: ReportType.Inappropriate, showNotification: true, completion: { success in
+                        
+                        cell.resumeStory()
+                    })
+                }
+                alertController.addAction(OKAction)
+                
+                let OKAction2 = UIAlertAction(title: "It's Spam", style: .destructive) { (action) in
+                    UploadService.reportItem(item: item, type: ReportType.Spam, showNotification: true, completion: { success in
+                        
+                        cell.resumeStory()
+                    })
+                }
+                alertController.addAction(OKAction2)
+                
+                self.present(alertController, animated: true) {
+                    cell.resumeStory()
+                }
+            }
+            actionSheet.addAction(OKAction)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func getCurrentCell() -> StoryViewController? {
+        if let cell = collectionView.visibleCells.first as? StoryViewController {
+            return cell
+        }
+        return nil
+    }
+    
+    func stopPreviousItem() {
+        if let cell = getCurrentCell() {
+            cell.pauseVideo()
+        }
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
+        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
+        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+        
+        let panGestureRecognizer: UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
+        let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
+        
+        return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
+    }
+
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        let xOffset = scrollView.contentOffset.x
+        
+        
+        let newItem = Int(xOffset / self.collectionView.frame.width)
+        currentIndex = IndexPath(item: newItem, section: 0)
+        
+        if let cell = getCurrentCell() {
+            cell.setForPlay()
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! StoryViewController
+        cell.cleanUp()
     }
     
     override var prefersStatusBarHidden: Bool {
         get {
             return true
         }
-    }  
+    }
+    
 }
 
 extension StoriesViewController: View2ViewTransitionPresented {

@@ -47,9 +47,19 @@ class Comment: NSObject {
     {
         return date
     }
-    
 }
 
+func < (lhs: Comment, rhs: Comment) -> Bool {
+    return lhs.date.compare(rhs.date) == .orderedAscending
+}
+
+func > (lhs: Comment, rhs: Comment) -> Bool {
+    return lhs.date.compare(rhs.date) == .orderedDescending
+}
+
+func == (lhs: Comment, rhs: Comment) -> Bool {
+    return lhs.date.compare(rhs.date) == .orderedSame
+}
 
 class User:NSObject, NSCoding {
     var uid: String

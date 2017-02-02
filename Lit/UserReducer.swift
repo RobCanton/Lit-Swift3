@@ -19,7 +19,6 @@ func UserStateReducer(_ action: Action, state: UserState?) -> UserState {
         break
         
     case _ as UserIsUnauthenticated:
-        //Listeners.stopListeningToAll()
         state = UserState()
         break
         

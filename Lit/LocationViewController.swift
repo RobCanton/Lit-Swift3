@@ -126,6 +126,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             nav.setNavigationBarHidden(false, animated: true)
             nav.delegate = nav
         }
+        
+        if returningCell != nil {
+            returningCell!.activate(true)
+            returningCell = nil
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

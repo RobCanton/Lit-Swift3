@@ -49,6 +49,13 @@
 		B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */; };
 		B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043331E41599100D50DA7 /* CameraViewController.swift */; };
 		B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043351E4159B800D50DA7 /* CameraTransition.swift */; };
+		B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */; };
+		B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44E11E4318440078FFFE /* UserViewCell.swift */; };
+		B0CC44E41E4318440078FFFE /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0CC44E21E4318440078FFFE /* UserViewCell.xib */; };
+		B0D0DC411E43057400381AEE /* EditProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0DC3D1E43057200381AEE /* EditProfilePictureView.swift */; };
+		B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D0DC3E1E43057200381AEE /* EditProfilePictureView.xib */; };
+		B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0D0DC3F1E43057200381AEE /* EditProfileViewController.storyboard */; };
+		B0D0DC441E43057400381AEE /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0DC401E43057200381AEE /* EditProfileViewController.swift */; };
 		B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */; };
 		B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D84F701E4046DD0043D28C /* LoginViewController.swift */; };
 		B0D84F741E4046DD0043D28C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0D84F721E4046DD0043D28C /* Main.storyboard */; };
@@ -125,6 +132,13 @@
 		B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		B0B043331E41599100D50DA7 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		B0B043351E4159B800D50DA7 /* CameraTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTransition.swift; sourceTree = "<group>"; };
+		B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
+		B0CC44E11E4318440078FFFE /* UserViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
+		B0CC44E21E4318440078FFFE /* UserViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
+		B0D0DC3D1E43057200381AEE /* EditProfilePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfilePictureView.swift; sourceTree = "<group>"; };
+		B0D0DC3E1E43057200381AEE /* EditProfilePictureView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProfilePictureView.xib; sourceTree = "<group>"; };
+		B0D0DC3F1E43057200381AEE /* EditProfileViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditProfileViewController.storyboard; sourceTree = "<group>"; };
+		B0D0DC401E43057200381AEE /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		B0D84F6B1E4046DD0043D28C /* Lit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0D84F701E4046DD0043D28C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -200,11 +214,18 @@
 		B087C7541E41C0F700234715 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */,
+				B0CC44E11E4318440078FFFE /* UserViewCell.swift */,
+				B0CC44E21E4318440078FFFE /* UserViewCell.xib */,
 				B087C7551E41C10A00234715 /* UserProfileViewController.swift */,
 				B087C7571E41C16600234715 /* PhotoCell.swift */,
 				B087C7581E41C16600234715 /* PhotoCell.xib */,
 				B087C75B1E41C27100234715 /* ProfileHeaderView.swift */,
 				B087C75C1E41C27100234715 /* ProfileHeaderView.xib */,
+				B0D0DC3D1E43057200381AEE /* EditProfilePictureView.swift */,
+				B0D0DC3E1E43057200381AEE /* EditProfilePictureView.xib */,
+				B0D0DC401E43057200381AEE /* EditProfileViewController.swift */,
+				B0D0DC3F1E43057200381AEE /* EditProfileViewController.storyboard */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -437,12 +458,14 @@
 				B087C7681E41E43600234715 /* PostAuthorView.xib in Resources */,
 				B0D84F791E4046DD0043D28C /* LaunchScreen.storyboard in Resources */,
 				B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */,
+				B0CC44E41E4318440078FFFE /* UserViewCell.xib in Resources */,
 				B087C76E1E41E4CD00234715 /* CommentCell.xib in Resources */,
 				B087C7701E41E4CD00234715 /* CommentsView.xib in Resources */,
 				B087C77D1E41E6AE00234715 /* SendLocationViewCell.xib in Resources */,
 				B0B043131E40AEDE00D50DA7 /* LocationFooterView.xib in Resources */,
 				B0E59E061E409444007B4762 /* InfoTableViewCell.xib in Resources */,
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
+				B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */,
 				B0E59DEB1E40570E007B4762 /* GoogleService-Info.plist in Resources */,
 				B087C75A1E41C16600234715 /* PhotoCell.xib in Resources */,
 				B087C77B1E41E6AE00234715 /* SendLocationHeaderView.xib in Resources */,
@@ -451,6 +474,7 @@
 				B087C7861E41EE8600234715 /* ListHeaderView.xib in Resources */,
 				B087C77F1E41E6AE00234715 /* SendProfileViewCell.xib in Resources */,
 				B087C75E1E41C27100234715 /* ProfileHeaderView.xib in Resources */,
+				B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,8 +533,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0D0DC441E43057400381AEE /* EditProfileViewController.swift in Sources */,
 				B0B0432D1E40D08700D50DA7 /* ConversationsReducer.swift in Sources */,
+				B0D0DC411E43057400381AEE /* EditProfilePictureView.swift in Sources */,
 				B0E59DF71E406D50007B4762 /* LocationService.swift in Sources */,
+				B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */,
 				B0E59DDB1E405052007B4762 /* AppState.swift in Sources */,
 				B087C7721E41E5EA00234715 /* StoryViewController.swift in Sources */,
 				B0E59DDD1E405084007B4762 /* Tree.swift in Sources */,
@@ -557,6 +584,7 @@
 				B0E59DF01E406662007B4762 /* Listeners.swift in Sources */,
 				B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */,
 				B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */,
+				B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */,
 				B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */,
 				B087C7851E41EE8600234715 /* ListHeaderView.swift in Sources */,
 			);

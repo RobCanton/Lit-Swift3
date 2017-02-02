@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuf-SF-hr2">
-                                <rect key="frame" x="116.5" y="621" width="141" height="30"/>
+                                <rect key="frame" x="117" y="621" width="141" height="30"/>
                                 <state key="normal" title="Login with Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -321,7 +321,7 @@
                                             </constraints>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LP2-lc-gj4">
-                                            <rect key="frame" x="24" y="12" width="49.5" height="49.5"/>
+                                            <rect key="frame" x="24" y="12" width="50" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="LP2-lc-gj4" secondAttribute="height" multiplier="1:1" id="GM7-Rq-nOY"/>
                                             </constraints>
@@ -399,7 +399,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nsr-p0-Bow" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3330" y="1527"/>
+            <point key="canvasLocation" x="3374" y="1527"/>
         </scene>
         <!--Send To-->
         <scene sceneID="ifK-Ec-Rxb">
@@ -417,7 +417,7 @@
                                 <rect key="frame" x="0.0" y="559" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9eH-Jv-A7l">
-                                        <rect key="frame" x="166.5" y="10.5" width="42" height="23.5"/>
+                                        <rect key="frame" x="167" y="10" width="42" height="24"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -511,7 +511,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SendNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="aJA-z7-s7u" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="afM-T2-vfW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="afM-T2-vfW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

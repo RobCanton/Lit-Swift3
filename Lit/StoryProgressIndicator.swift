@@ -45,7 +45,7 @@ class StoryProgressIndicator: UIView {
             for i in 0 ... storyItems.count - 1 {
                 let item = storyItems[i]
                 let barWidth = itemWidth
-                let frame = CGRect(x: x, y: CGFloat(0), width: barWidth, height: 2.0)
+                let frame = CGRect(x: x, y: CGFloat(0), width: barWidth, height: 1.5)
                 let bar = ProgressIndicator(frame: frame)
                 progressBars.append(bar)
                 self.addSubview(bar)

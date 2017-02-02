@@ -49,13 +49,14 @@ class CommentCell: UITableViewCell {
         userImage.layer.cornerRadius = userImage.frame.width / 2
         userImage.clipsToBounds = true
         
-        commentLabel.text = comment.getText()
         backgroundColor = UIColor.clear
         backgroundView = nil
         
         UserService.getUser(comment.getAuthor(), completion: { user in
             if user != nil {
                 self.authorLabel.text = user!.getDisplayName()
+                self.commentLabel.text = comment.getText()
+                self.commentLabel.sizeToFit()
                 self.userImage.loadImageAsync(user!.getImageUrl(), completion: nil)
             }
         })

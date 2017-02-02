@@ -58,7 +58,7 @@
                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <connections>
-                                        <action selector="handleFollowTap:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="pND-Cw-GTj"/>
+                                        <action selector="handleFollowTapWithSender:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="hcg-ag-kmv"/>
                                     </connections>
                                 </button>
                             </subviews>

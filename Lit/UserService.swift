@@ -21,6 +21,8 @@ class UserService {
         mainStore.dispatch(UserIsAuthenticated(user: user))
         Listeners.startListeningToResponses()
         Listeners.startListeningToConversations()
+        Listeners.startListeningToFollowers()
+        Listeners.startListeningToFollowing()
     }
     
     static func logout() {
@@ -34,13 +36,11 @@ class UserService {
         mainStore.dispatch(UserIsUnauthenticated())
         mainStore.dispatch(ClearLocations())
         mainStore.dispatch(ClearConversations())
-        Listeners.stopListeningToResponses()
-        Listeners.stopListeningToLocations()
-        Listeners.stopListeningToConversatons()
+        Listeners.stopListeningToAll()
     }
     
     static func getUser(_ uid:String, completion: @escaping (_ user:User?) -> Void) {
-        if let cachedUser = dataCache.object(forKey: uid as NSString) as? User {
+        if let cachedUser = dataCache.object(forKey: "user-\(uid)" as NSString as NSString) as? User {
             completion(cachedUser)
         } else {
             ref.child("users/profile/basic/\(uid)").observe(.value, with: { snapshot in
@@ -75,6 +75,24 @@ class UserService {
                     dataCache.setObject(user, forKey: "user-\(uid)" as NSString)
                 }
                 completion(user)
+            })
+        }
+    }
+    
+    static func getUsers(userIds:[String], completionHandler: @escaping (_ users:[User])->()) {
+        var users = [User]()
+        var loadedCount = 0
+        for userId in userIds {
+            getUser(userId, completion: { _user in
+                if let user = _user {
+                    users.append(user)
+                }
+                loadedCount += 1
+                if loadedCount >= userIds.count {
+                    DispatchQueue.main.async {
+                        completionHandler(users)
+                    }
+                }
             })
         }
     }
@@ -185,6 +203,84 @@ class UserService {
         if uid != mainStore.state.userState.uid {
             ref.child("users/social/following/\(uid)").removeAllObservers()
         }
+    }
+    
+    
+    
+    
+    static func uploadProfilePicture(largeImage:UIImage, smallImage:UIImage , completionHandler:@escaping (_ success:Bool, _ largeImageURL:String?, _ smallImageURL:String?)->()) {
+        let storageRef = FIRStorage.storage().reference()
+        if let largeImageTask = uploadLargeProfilePicture(image: largeImage) {
+            largeImageTask.observe(.success, handler: { largeImageSnapshot in
+                if let smallImageTask = uploadSmallProfilePicture(image: smallImage) {
+                    smallImageTask.observe(.success, handler: { smallImageSnapshot in
+                        let largeImageURL = largeImageSnapshot.metadata!.downloadURL()!.absoluteString
+                        let smallImageURL =  smallImageSnapshot.metadata!.downloadURL()!.absoluteString
+                        completionHandler(true,largeImageURL, smallImageURL)
+                    })
+                    smallImageTask.observe(.failure, handler: { _ in completionHandler(false , nil, nil) })
+                } else { completionHandler(false , nil, nil) }
+            })
+            largeImageTask.observe(.failure, handler: { _ in completionHandler(false , nil, nil) })
+        } else { completionHandler(false , nil, nil)}
+        
+    }
+    
+    private static func uploadLargeProfilePicture(image:UIImage) -> FIRStorageUploadTask? {
+        guard let user = FIRAuth.auth()?.currentUser else { return nil}
+        let storageRef = FIRStorage.storage().reference()
+        let imageRef = storageRef.child("user_profiles/\(user.uid)/large")
+        if let picData = UIImageJPEGRepresentation(image, 0.6) {
+            let contentTypeStr = "image/jpg"
+            let metadata = FIRStorageMetadata()
+            metadata.contentType = contentTypeStr
+            
+            let uploadTask = imageRef.put(picData, metadata: metadata) { metadata, error in
+                if (error != nil) {
+                    // Uh-oh, an error occurred!
+                } else {}
+            }
+            return uploadTask
+            
+        }
+        return nil
+    }
+    
+    private static func uploadSmallProfilePicture(image:UIImage) -> FIRStorageUploadTask? {
+        guard let user = FIRAuth.auth()?.currentUser else { return nil}
+
+        let storageRef = FIRStorage.storage().reference()
+        let imageRef = storageRef.child("user_profiles/\(user.uid)/small")
+        if let picData = UIImageJPEGRepresentation(image, 0.9) {
+            let contentTypeStr = "image/jpg"
+            let metadata = FIRStorageMetadata()
+            metadata.contentType = contentTypeStr
+            
+            let uploadTask = imageRef.put(picData, metadata: metadata) { metadata, error in
+                if (error != nil) {
+                    // Uh-oh, an error occurred!
+                } else {}
+            }
+            return uploadTask
+            
+        }
+        return nil
+    }
+    
+    static func updateProfilePictureURL(largeURL:String, smallURL:String, completionHandler:@escaping ()->()) {
+        let uid = mainStore.state.userState.uid
+        let basicRef = FIRDatabase.database().reference().child("users/profile/basic/\(uid)")
+        basicRef.updateChildValues([
+            "profileImageURL": smallURL
+            ], withCompletionBlock: { error, ref in
+                let fullRef = FIRDatabase.database().reference().child("users/profile/full/\(uid)")
+                fullRef.updateChildValues([
+                    "largeProfileImageURL": largeURL
+                    ], withCompletionBlock: { error, ref in
+                        
+                        completionHandler()
+                })
+        })
     }
     
     

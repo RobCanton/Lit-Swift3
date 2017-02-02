@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import CoreLocation
+import AVFoundation
 
 class Upload {
     
@@ -96,6 +97,39 @@ class UploadService {
         
     }
     
+    private static func uploadVideoStill(url:URL, postKey:String, completion:@escaping (_ thumb_url:String)->()) {
+        let storageRef = FIRStorage.storage().reference()
+        if let videoStill = generateVideoStill(url: url) {
+            if let data = UIImageJPEGRepresentation(videoStill, 0.5) {
+                let stillMetaData = FIRStorageMetadata()
+                stillMetaData.contentType = "image/jpg"
+                let uid = mainStore.state.userState.uid
+                _ = storageRef.child("user_uploads/images/\(uid)/\(postKey)").put(data, metadata: stillMetaData) { metadata, error in
+                    if (error != nil) {
+                        
+                    } else {
+                        let thumbURL = metadata!.downloadURL()!
+                        completion(thumbURL.absoluteString)
+                    }
+                }
+            }
+        }
+    }
+    
+    private static func generateVideoStill(url:URL) -> UIImage?{
+        do {
+            let asset = AVAsset(url: url)
+            let imgGenerator = AVAssetImageGenerator(asset: asset)
+            imgGenerator.appliesPreferredTrackTransform = true
+            let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+            let image = UIImage(cgImage: cgImage)
+            return image
+        } catch let error as NSError {
+            print("Error generating thumbnail: \(error)")
+            return nil
+        }
+    }
+    
     static func getUpload(key:String, completion: @escaping (_ item:StoryItem?)->()) {
         if let cachedUpload = dataCache.object(forKey: "upload-\(key)" as NSString) as? StoryItem {
             return completion(cachedUpload)
@@ -160,7 +194,7 @@ class UploadService {
                         }
                     }
                     
-                    //comments.sortInPlace({ return $0 < $1 })
+                    comments.sort(by: { return $0 < $1 })
                     
                     item = StoryItem(key: key, authorId: authorId,locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
                     dataCache.setObject(item!, forKey: "upload-\(key)" as NSString)
@@ -190,4 +224,132 @@ class UploadService {
             })
         }
     }
+    
+    static func addView(postKey:String) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
+        
+        let postRef = ref.child("uploads/\(postKey)/views/\(uid)")
+        postRef.setValue([".sv":"timestamp"])
+        
+    }
+    
+    static func addComment(postKey:String, comment:String) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
+        
+        let postRef = ref.child("uploads/\(postKey)/comments").childByAutoId()
+        postRef.setValue([
+            "author": uid,
+            "text":comment,
+            "timestamp":[".sv":"timestamp"]
+        ])
+    }
+    
+    
+    static func reportItem(item:StoryItem, type:ReportType, showNotification:Bool, completion:@escaping ((_ success:Bool)->())) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
+        let reportRef = ref.child("reports/\(uid)/\(item.getKey())")
+        let value: [String: Any] = [
+            "type": type.rawValue,
+            "timeStamp": [".sv": "timestamp"]
+        ]
+        reportRef.setValue(value, withCompletionBlock: { error, ref in
+            if error == nil {
+                if showNotification {
+//                    var murmur = Murmur(title: "Report Sent!")
+//                    murmur.backgroundColor = accentColor
+//                    murmur.titleColor = UIColor.whiteColor()
+//                    show(whistle: murmur, action: .Show(3.0))
+                    
+                }
+            } else {
+                if showNotification {
+//                    var murmur = Murmur(title: "Report failed to send.")
+//                    murmur.backgroundColor = errorColor
+//                    murmur.titleColor = UIColor.whiteColor()
+//                    show(whistle: murmur, action: .Show(3.0))
+                }
+                completion(false)
+            }
+        })
+    }
+    
+    static func removeItemFromLocation(item:StoryItem, completion:@escaping (()->())) {
+        let ref = FIRDatabase.database().reference()
+        let locationRef = ref.child("locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)")
+        locationRef.removeValue(completionBlock: { error, _locationRef in
+            if error == nil {
+                let uploadRef = ref.child("uploads/\(item.key)/meta/toLocation")
+                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
+                    if error == nil {
+                        item.toLocation = false
+                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                        completion()
+                    } else {
+                        completion()
+                    }
+                })
+            } else {
+                completion()
+            }
+        })
+    }
+    
+    static func removeItemFromStory(item:StoryItem, completion:@escaping (()->())) {
+        let ref = FIRDatabase.database().reference()
+        let storyRef = ref.child("users/activity/\(item.authorId)/\(item.key)")
+        storyRef.removeValue(completionBlock: { error, _locationRef in
+            if error == nil {
+                let uploadRef = ref.child("uploads/\(item.key)/meta/toStory")
+                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
+                    if error == nil {
+                        item.toStory = false
+                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                        completion()
+                    } else {
+                        completion()
+                    }
+                })
+            } else {
+                completion()
+            }
+        })
+    }
+    
+    static func removeItemFromProfile(item:StoryItem, completion:@escaping (()->())) {
+        let ref = FIRDatabase.database().reference()
+        let storyRef = ref.child("users/uploads/\(item.authorId)/\(item.key)")
+        storyRef.removeValue(completionBlock: { error, _locationRef in
+            if error == nil {
+                let uploadRef = ref.child("uploads/\(item.key)/meta/toProfile")
+                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
+                    if error == nil {
+                        item.toProfile = false
+                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                        completion()
+                    } else {
+                        completion()
+                    }
+                })
+            } else {
+                completion()
+            }
+        })
+    }
+    
+    static func deleteItem(item:StoryItem, completion:@escaping (()->())){
+        removeItemFromLocation(item: item, completion: {
+            removeItemFromStory(item: item, completion: {
+                removeItemFromProfile(item: item, completion: completion)
+            })
+        })
+    }
+
+}
+
+enum ReportType:String {
+    case Inappropriate = "Inappropriate"
+    case Spam          = "Spam"
 }

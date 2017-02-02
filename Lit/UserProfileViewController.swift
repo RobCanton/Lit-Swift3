@@ -24,7 +24,7 @@ class MyUserProfileViewController: UserProfileViewController {
     }
 }
 
-class UserProfileViewController: UIViewController, StoreSubscriber, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout {
+class UserProfileViewController: UIViewController, StoreSubscriber, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, EditProfileProtocol {
     
     let cellIdentifier = "photoCell"
     var screenSize: CGRect!
@@ -171,21 +171,19 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     
     func followersBlockTapped() {
-//        if followers.count == 0 { return }
-//        let controller = UIStoryboard(name: "Main", bundle: nil)
-//            .instantiateViewControllerWithIdentifier("UsersListViewController") as! UsersListViewController
-//        controller.title = "Followers"
-//        controller.tempIds = followers
-//        self.navigationController?.pushViewController(controller, animated: true)
+        if followers.count == 0 { return }
+        let controller = UsersListViewController()
+        controller.title = "Followers"
+        controller.tempIds = followers
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     func followingBlockTapped() {
-//        if following.count == 0 { return }
-//        let controller = UIStoryboard(name: "Main", bundle: nil)
-//            .instantiateViewControllerWithIdentifier("UsersListViewController") as! UsersListViewController
-//        controller.title = "Following"
-//        controller.tempIds = following
-//        self.navigationController?.pushViewController(controller, animated: true)
+        if following.count == 0 { return }
+        let controller = UsersListViewController()
+        controller.title = "Following"
+        controller.tempIds = following
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     func messageBlockTapped() {
@@ -219,11 +217,11 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     
     func editProfileTapped() {
-//        let controller = UIStoryboard(name: "EditProfileViewController", bundle: nil)
-//            .instantiateViewControllerWithIdentifier("EditProfileNavigationController") as! UINavigationController
-//        let c = controller.viewControllers[0] as! EditProfileViewController
-//        c.delegate = self
-//        self.presentViewController(controller, animated: true, completion: nil)
+        let controller = UIStoryboard(name: "EditProfileViewController", bundle: nil)
+            .instantiateViewController(withIdentifier: "EditProfileNavigationController") as! UINavigationController
+        let c = controller.viewControllers[0] as! EditProfileViewController
+        c.delegate = self
+        self.present(controller, animated: true, completion: nil)
     }
     
     var presentConversation:Conversation?

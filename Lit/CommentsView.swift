@@ -12,6 +12,8 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     var comments = [Comment]()
 
+    var commentsInteractionHandler:((_ interacting:Bool)->())?
+    
     var userTapped:((_ uid:String)->())?
     var tableView:UITableView!
     var divider:UIView!
@@ -100,7 +102,13 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        
+        let comment = comments[indexPath.row]
+        let text = comment.getText()
+        let width = tableView.frame.width - (8 + 8 + 8 + 33)
+        var size =  UILabel.size(withText: text, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!)
+        let height2 = size.height + 28  // +8 for some bio padding
+        return height2
     }
     
     
@@ -112,10 +120,22 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("SELECTED! \(indexPath.row)")
+    }
+    
     func scrollBottom(animated:Bool) {
         if comments.count > 0 {
             let lastIndex = IndexPath(row: comments.count-1, section: 0)
             self.tableView.scrollToRow(at: lastIndex, at: UITableViewScrollPosition.bottom, animated: animated)
         }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        //commentsInteractionHandler?(true)
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        //commentsInteractionHandler?(false)
     }
 }

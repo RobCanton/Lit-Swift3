@@ -191,7 +191,6 @@ class ProfileHeaderView: UICollectionReusableView {
     @IBAction func handleFollowTap(sender: AnyObject) {
         guard let user = self.user else { return }
         guard let status = self.status else { return }
-
         switch status {
         case .CurrentUser:
             editProfileHandler?()
