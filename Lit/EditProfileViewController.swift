@@ -62,8 +62,6 @@ class EditProfileViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 300 // Something reasonable to help ios render your cells
         
-        
-        
         tableView.tableHeaderView = headerView
         
         nameTextField.delegate = self
@@ -80,7 +78,6 @@ class EditProfileViewController: UITableViewController {
             if let bio = user.bio {
                 bioTextView.text = bio
             }
-            
         }
         
         bioTextView.delegate = self

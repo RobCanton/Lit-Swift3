@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import ReSwift
 import CoreLocation
+import Firebase
 
 class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarControllerDelegate, GPSServiceDelegate {
     typealias StoreSubscriberStateType = AppState
@@ -40,19 +41,34 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         self.setupMiddleButton()
     }
     
+    var authListener: FIRAuthStateDidChangeListenerHandle?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
+        
+        authListener = FIRAuth.auth()?.addStateDidChangeListener { auth, user in
+            if let theUser = user {
+                // User is signed in.
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mainStore.unsubscribe(self)
+        
+        if self.authListener != nil {
+           FIRAuth.auth()?.removeStateDidChangeListener(self.authListener!)
+        }
     }
     
     
+    
+    
     func newState(state: AppState) {
-        
+
     }
     
     

@@ -32,11 +32,12 @@ class UserService {
     }
     
     static func logoutOfFirebase() {
-        try! FIRAuth.auth()!.signOut()
-        mainStore.dispatch(UserIsUnauthenticated())
+
         mainStore.dispatch(ClearLocations())
         mainStore.dispatch(ClearConversations())
         Listeners.stopListeningToAll()
+        mainStore.dispatch(UserIsUnauthenticated())
+        try! FIRAuth.auth()!.signOut()
     }
     
     static func getUser(_ uid:String, completion: @escaping (_ user:User?) -> Void) {

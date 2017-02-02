@@ -22,7 +22,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
     var dict : [String : AnyObject]!
     
     func newState(state:AppState) {
-        if state.userState.supportedVersion && state.userState.isAuth && state.userState.user != nil {
+        if state.supportedVersion && state.userState.isAuth && state.userState.user != nil {
             self.performSegue(withIdentifier: "showLit", sender: self)
         }
     }
@@ -42,8 +42,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
         
-        if !mainStore.state.userState.supportedVersion {
-            
+        if !mainStore.state.supportedVersion {
             checkVersionSupport({ supported in
                 if supported {
                     mainStore.dispatch(SupportedVersion())
@@ -159,6 +158,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             if error == nil && firUser != nil {
                 UserService.getUser(firUser!.uid, completion: { user in
                     if user != nil {
+                        print("SHOULD LOG IN")
                         UserService.login(user!)
                     } else {
                         //Create user

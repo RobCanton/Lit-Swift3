@@ -10,62 +10,52 @@ import ReSwift
 import UIKit
 import FBSDKCoreKit
 
-//class FacebookFriendsListViewController: UsersListViewController {
-//    
-//    var fbIds:[String]?
-//    
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        self.title = "Facebook Friends"
-//        
-//        
-//        if fbIds != nil {
-//            let done = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(handleDone))
-//            self.navigationItem.rightBarButtonItem = done
-//            
-//            self.navigationItem.setHidesBackButton(true, animated: false)
-//            
-//            setFacebookFriends()
-//        } else {
-//            
-//
-//
-//            FacebookGraph.getFacebookFriends({ _userIds in
-//                if _userIds.count == 0 {
-//                    self.performSegueWithIdentifier("showLit", sender: self)
-//                } else {
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        self.fbIds = _userIds
-//                        self.setFacebookFriends()
-//                    })
-//                }
-//            })
-//        }
-//    }
-//    
-//    func setFacebookFriends() {
-//        
-//        var newFriendsList = [String]()
-//        let following = mainStore.state.socialState.following
-//        for id in fbIds! {
-//            if !following.contains(id) {
-//                newFriendsList.append(id)
-//            }
-//        }
-//        self.userIds = newFriendsList
-//    }
-//    
-//    func handleDone() {
-//        self.performSegueWithIdentifier("showLit", sender: self)
-//    }
-//    
-//    
-//    override  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//    }
-//}
+class FacebookFriendsListViewController: UsersListViewController {
+    
+    var fbIds:[String]?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.title = "Facebook Friends"
+        
+        if fbIds != nil {
+            let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
+            self.navigationItem.rightBarButtonItem = done
+            
+            self.navigationItem.setHidesBackButton(true, animated: false)
+            
+            setFacebookFriends()
+        } else {
+            FacebookGraph.getFacebookFriends(completion: { _userIds in
+                DispatchQueue.main.async {
+                    self.fbIds = _userIds
+                    self.setFacebookFriends()
+                }
+            })
+        }
+    }
+    
+    func setFacebookFriends() {
+        
+        var newFriendsList = [String]()
+        let following = mainStore.state.socialState.following
+        for id in fbIds! {
+            if !following.contains(id) {
+                newFriendsList.append(id)
+            }
+        }
+        self.userIds = newFriendsList
+    }
+    
+    func handleDone() {
+        self.performSegue(withIdentifier: "showLit", sender: self)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+    }
+}
 
 class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, StoreSubscriber {
     

@@ -30,10 +30,6 @@ func UserStateReducer(_ action: Action, state: UserState?) -> UserState {
         let a = action as! UpdateProfileImageURL
         state.user!.setImageURLS(a.largeImageURL, smallImageURL: a.smallImageURL)
         break
-        
-    case _ as SupportedVersion:
-        state.supportedVersion = true
-        break
     default:
         break
     }
