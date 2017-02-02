@@ -45,7 +45,7 @@ class PostAuthorView: UIView {
         
         locationTap = UITapGestureRecognizer(target: self, action: #selector(locationTapped))
         
-        let frame = CGRect(x: 0, y: 0, width: authorImageView.frame.width + margin, height: authorImageView.frame.height + margin)
+        _ = CGRect(x: 0, y: 0, width: authorImageView.frame.width + margin, height: authorImageView.frame.height + margin)
         
         //self.applyShadow(2.0, opacity: 0.25, height: 1, shouldRasterize: false)
     }

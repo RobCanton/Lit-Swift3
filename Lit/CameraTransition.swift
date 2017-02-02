@@ -115,7 +115,7 @@ class CameraUnwindTransition: UIStoryboardSegue {
         
     
         let containerView = fromViewController.view.superview
-        var screenBounds = fromViewController.view.bounds
+        let screenBounds = fromViewController.view.bounds
         
         
         let cameraBtnFrame = toViewController.cameraButton.frame

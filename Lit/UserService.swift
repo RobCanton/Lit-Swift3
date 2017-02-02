@@ -32,7 +32,6 @@ class UserService {
     }
     
     static func logoutOfFirebase() {
-
         mainStore.dispatch(ClearLocations())
         mainStore.dispatch(ClearConversations())
         Listeners.stopListeningToAll()

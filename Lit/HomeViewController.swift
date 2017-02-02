@@ -54,7 +54,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         searchBar.searchBarStyle       = UISearchBarStyle.minimal
         searchBar.tintColor            = UIColor.white
         searchBar.barTintColor         = UIColor(white: 0.05, alpha: 1.0)
-        //searchBar.setTextColor(UIColor.whiteColor())
+        searchBar.setTextColor(color: UIColor.white)
     
         self.navigationItem.titleView = searchBar
     }

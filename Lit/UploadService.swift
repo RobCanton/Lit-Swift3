@@ -139,19 +139,14 @@ class UploadService {
         let postRef = ref.child("uploads/\(key)")
         
         postRef.observeSingleEvent(of: .value, with: { snapshot in
-        
-            var item:StoryItem?
             
+            var item:StoryItem?
             if snapshot.exists() {
                 
                 let dict = snapshot.value as! [String:AnyObject]
-                
                 let meta = dict["meta"] as! [String:AnyObject]
-                var viewers = [String:Double]()
-                var comments = [Comment]()
                 
                 if meta["delete"] == nil {
-                    
                     let key = key
                     let authorId = meta["author"] as! String
                     let locationKey = meta["location"] as! String

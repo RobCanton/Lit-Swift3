@@ -417,7 +417,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     var looping = false
     
     func resumeStory() {
-        looping = false
+        if !keyboardUp {
+           looping = false
+        }
     }
     
     func pauseStory() {
@@ -770,7 +772,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
         let button = UIButton(frame: CGRect(x: width - 40,y: height - 40, width: 40,height:40))
-        button.setImage(UIImage(named: "more2"), for: .normal)
+        button.setImage(UIImage(named: "more"), for: .normal)
         button.tintColor = UIColor.white
         button.alpha = 1.0
         return button

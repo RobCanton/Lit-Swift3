@@ -65,8 +65,8 @@ class LoginViewController: UIViewController, StoreSubscriber {
         if let user = FIRAuth.auth()?.currentUser {
             print("print user already authenticated.")
             
-            checkUserAgainstDatabase({ error in
-                if error == nil {
+            checkUserAgainstDatabase({ success in
+                if success {
                     UserService.getUser(user.uid, completion: { user in
                         if user != nil {
                             UserService.login(user!)
@@ -149,8 +149,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
     
     
     func signIntoFirebaseWithCredential(_ credential: FIRAuthCredential, facebook_id: String) {
-        print("FACEBOOK ID: \(facebook_id)")
-        
+
         deactivateLoginButton()
         
         FIRAuth.auth()?.signIn(with: credential, completion: { (firUser, error) in
@@ -158,7 +157,6 @@ class LoginViewController: UIViewController, StoreSubscriber {
             if error == nil && firUser != nil {
                 UserService.getUser(firUser!.uid, completion: { user in
                     if user != nil {
-                        print("SHOULD LOG IN")
                         UserService.login(user!)
                     } else {
                         //Create user
@@ -166,6 +164,8 @@ class LoginViewController: UIViewController, StoreSubscriber {
                 })
             } else {
                 print("error")
+                UserService.logoutOfFirebase()
+                self.removeFbData()
                 return
             }
         })
@@ -178,12 +178,12 @@ class LoginViewController: UIViewController, StoreSubscriber {
         FBSDKAccessToken.setCurrent(nil)
     }
     
-    func checkUserAgainstDatabase(_ completion: @escaping (_ error:NSError?) -> Void) {
-        completion(nil)
-        //        guard let currentUser = FIRAuth.auth()?.currentUser else { return }
-        //        currentUser.getTokenForcingRefresh(true, completion: {(token, error) in
-        //            //completion(error)
-        //        })
+    func checkUserAgainstDatabase(_ completion: @escaping (_ success:Bool) -> Void) {
+        guard let currentUser = FIRAuth.auth()?.currentUser else { return }
+        currentUser.getTokenForcingRefresh(true, completion: {(token, error) in
+            completion(error == nil)
+        })
+        
     }
     
     func checkVersionSupport(_ completion: @escaping ((_ supported:Bool)->())) {
