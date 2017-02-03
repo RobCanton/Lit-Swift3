@@ -26,27 +26,27 @@ extension Date
     {
         let calendar = Calendar.current
         
-        let date = Date()
-        let days = calendar.component(.day, from: date)
-        let hour = calendar.component(.hour, from: date)
-        let minutes = calendar.component(.minute, from: date)
+        let components = calendar.dateComponents([.day, .hour, .minute, .second], from: self, to: Date())
+
         
-        if days >= 365 {
-            return "\(days / 365)y"
-        }
+        print("DATE: \(self.timeIntervalSinceNow)")
         
-        if days >= 7 {
-            return "\(days / 7)w"
+        if components.day! >= 365 {
+            return "\(components.day! / 365)y"
         }
         
-        if days > 0 {
-            return "\(days)d"
+        if components.day! >= 7 {
+            return "\(components.day! / 7)w"
         }
-        else if hour > 0 {
-            return "\(hour)h"
+        
+        if components.day! > 0 {
+            return "\(components.day!)d"
         }
-        else if minutes > 0 {
-            return "\(minutes)m"
+        else if components.hour! > 0 {
+            return "\(components.hour!)h"
+        }
+        else if components.minute! > 0 {
+            return "\(components.minute!)m"
         }
         return "Now"
         //return "\(components.second)s"
@@ -124,5 +124,17 @@ public extension UISearchBar {
         let svs = subviews.flatMap { $0.subviews }
         guard let tf = (svs.filter { $0 is UITextField }).first as? UITextField else { return }
         tf.textColor = color
+    }
+}
+
+// Put this piece of code anywhere you like
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

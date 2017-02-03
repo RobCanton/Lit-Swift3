@@ -44,9 +44,9 @@ class UserService {
             completion(cachedUser)
         } else {
             ref.child("users/profile/basic/\(uid)").observe(.value, with: { snapshot in
-                let dict = snapshot.value as! [String:AnyObject]
                 var user:User?
                 if snapshot.exists() {
+                    let dict = snapshot.value as! [String:AnyObject]
                     let name        = dict["name"] as! String
                     let displayName = dict["username"] as! String
                     let imageURL    = dict["profileImageURL"] as! String
@@ -65,8 +65,9 @@ class UserService {
         }
         if user.bio == nil || user.largeImageURL == nil {
             ref.child("users/profile/full/\(user.getUserId())").observe(.value, with: { (snapshot) in
-                let dict = snapshot.value as! [String:String]
+                
                 if snapshot.exists() {
+                    let dict = snapshot.value as! [String:String]
                     user.largeImageURL   = dict["largeProfileImageURL"]
                     user.bio             = dict["bio"]
                     

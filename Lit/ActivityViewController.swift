@@ -192,10 +192,11 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         
         self.navigationController!.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "Avenir-Medium", size: 18.0)!,
+            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
              NSForegroundColorAttributeName: UIColor.white]
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.automaticallyAdjustsScrollViewInsets = false
+
         
         let nib = UINib(nibName: "UserStoryTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "UserStoryCell")
@@ -277,128 +278,125 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
             return cell
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            if let story = myStory {
+                if story.state == .contentLoaded {
+                    presentStory(indexPath: indexPath)
+                } else {
+                    story.downloadStory()
+                }
+            } else {
+                if let tabBar = self.tabBarController as? MasterTabBarController {
+                    //tabBar.presentCamera()
+                }
+            }
+        } else if indexPath.section == 1 {
+            let story = userStories[indexPath.item]
+            if story.state == .contentLoaded {
+                presentStory(indexPath: indexPath)
+            } else {
+                story.downloadStory()
+            }
+        }
 
-//    let transitionController: TransitionController = TransitionController()
-//    var selectedIndexPath: NSIndexPath!
-//    
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//
-//        if indexPath.section == 0 {
-//            if let story = myStory {
-//                
-//                if story.state == .ContentLoaded {
-//                    presentStory(indexPath)
-//                } else {
-//                    story.downloadStory()
-//                }
-//            } else {
-//                if let tabBar = self.tabBarController as? PopUpTabBarController {
-//                    tabBar.presentCamera()
-//                }
-//            }
-//        } else if indexPath.section == 1 {
-//            let story = userStories[indexPath.item]
-//            if story.state == .ContentLoaded {
-//                presentStory(indexPath)
-//            } else {
-//                story.downloadStory()
-//            }
-//        }
-//
-//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//    }
-//    
-//    func presentStory(indexPath:NSIndexPath) {
-//        self.selectedIndexPath = indexPath
-//        
-//        let presentedViewController: StoriesViewController = StoriesViewController()
-//        presentedViewController.tabBarRef = self.tabBarController! as! PopUpTabBarController
-//        if indexPath.section == 0 {
-//            presentedViewController.userStories = [myStory!]
-//        } else {
-//            presentedViewController.userStories = userStories
-//        }
-//        presentedViewController.transitionController = self.transitionController
-//        let i = NSIndexPath(forItem: indexPath.row, inSection: 0)
-//        self.transitionController.userInfo = ["destinationIndexPath": i, "initialIndexPath": indexPath]
-//
-//        if let navigationController = self.navigationController {
-//            statusBarShouldHide = true
-//            // Set transitionController as a navigation controller delegate and push.
-//            navigationController.delegate = transitionController
-//            transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
-//            
-//        }
-//    }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    let transitionController: TransitionController = TransitionController()
+    var selectedIndexPath: IndexPath = IndexPath(item: 0, section: 0)
+    
+    
+    func presentStory(indexPath:IndexPath) {
+        self.selectedIndexPath = indexPath
+        
+        let presentedViewController: StoriesViewController = StoriesViewController()
+        presentedViewController.tabBarRef = self.tabBarController! as! MasterTabBarController
+        if indexPath.section == 0 {
+            presentedViewController.userStories = [myStory!]
+        } else {
+            presentedViewController.userStories = userStories
+        }
+        presentedViewController.transitionController = self.transitionController
+        let i = IndexPath(item: indexPath.row, section: 0)
+        self.transitionController.userInfo = ["destinationIndexPath": i as AnyObject, "initialIndexPath": indexPath as AnyObject]
+
+        if let navigationController = self.navigationController {
+            statusBarShouldHide = true
+            // Set transitionController as a navigation controller delegate and push.
+            navigationController.delegate = transitionController
+            transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
+            
+        }
+    }
 }
-//
-//extension ActivityViewController: View2ViewTransitionPresenting {
-//    
-//    func initialFrame(userInfo: [String: AnyObject]?, isPresenting: Bool) -> CGRect {
-//        
-//        guard let indexPath: NSIndexPath = userInfo?["initialIndexPath"] as? NSIndexPath else {
-//            return CGRect.zero
-//        }
-//        if indexPath.section == 0 {
-//            let cell: UserStoryTableViewCell = self.tableView!.cellForRowAtIndexPath(indexPath)! as! UserStoryTableViewCell
-//            let image_frame = cell.contentImageView.frame
-//            let image_height = image_frame.height
-//            let margin = (cell.frame.height - image_height) / 2
-//            let x = cell.frame.origin.x + 20
-//            
-//            let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-//            
-//            let y = cell.frame.origin.y + 12 + navHeight
-//            
-//            let rect = CGRectMake(x,y,image_height, image_height)
-//            return self.tableView!.convertRect(rect, toView: self.tableView!.superview)
-//
-//        } else {
-//            let cell: UserStoryTableViewCell = self.tableView!.cellForRowAtIndexPath(indexPath)! as! UserStoryTableViewCell
-//            let image_frame = cell.contentImageView.frame
-//            let image_height = image_frame.height
-//            let margin = (cell.frame.height - image_height) / 2
-//            let x = cell.frame.origin.x + 20
-//            
-//            let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-//            
-//            let y = cell.frame.origin.y + 12 + navHeight
-//            
-//            
-//            let rect = CGRectMake(x,y,image_height, image_height)
-//            return self.tableView!.convertRect(rect, toView: self.tableView!.superview)
-//        }
-//        
-//    }
-//    
-//    func initialView(userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
-//        
-//        let indexPath: NSIndexPath = userInfo!["initialIndexPath"] as! NSIndexPath
-//        if indexPath.section == 0 {
-//            let cell: UserStoryTableViewCell = self.tableView!.cellForRowAtIndexPath(indexPath)! as! UserStoryTableViewCell
-//            return cell.contentImageView
-//        } else {
-//            let cell: UserStoryTableViewCell = self.tableView!.cellForRowAtIndexPath(indexPath)! as! UserStoryTableViewCell
-//            return cell.contentImageView
-//        }
-//    }
-//    
-//    func prepareInitialView(userInfo: [String : AnyObject]?, isPresenting: Bool) {
-//        
-//        let indexPath: NSIndexPath = userInfo!["initialIndexPath"] as! NSIndexPath
-//
-//        if !isPresenting {
-//            if let cell = tableView?.cellForRowAtIndexPath(indexPath) as? UserStoryTableViewCell {
-//                returningCell?.activate(false)
-//                returningCell = cell
-//                returningCell!.deactivate()
-//            }
-//        }
-//        
-//        if !isPresenting && !self.tableView!.indexPathsForVisibleRows!.contains(indexPath) {
-//            self.tableView!.reloadData()
-//            self.tableView!.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: false)
-//            self.tableView!.layoutIfNeeded()
-//        }
-//    }
-//}
+
+
+extension ActivityViewController: View2ViewTransitionPresenting {
+    
+    func initialFrame(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> CGRect {
+        
+        guard let indexPath: IndexPath = userInfo?["initialIndexPath"] as? IndexPath else {
+            return CGRect.zero
+        }
+        if indexPath.section == 0 {
+            let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath)! as! UserStoryTableViewCell
+            let image_frame = cell.contentImageView.frame
+            let image_height = image_frame.height
+            let x = cell.frame.origin.x + 20
+
+            let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
+
+            let y = cell.frame.origin.y + 12 + navHeight
+
+            let rect = CGRect(x: x, y: y, width: image_height, height: image_height)
+            return self.tableView.convert(rect, to: self.tableView.superview)
+
+        } else {
+            let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath)! as! UserStoryTableViewCell
+            let image_frame = cell.contentImageView.frame
+            let image_height = image_frame.height
+            let x = cell.frame.origin.x + 20
+
+            let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
+
+            let y = cell.frame.origin.y + 12 + navHeight
+            
+            
+            let rect = CGRect(x: x, y: y, width: image_height, height: image_height)
+            return self.tableView.convert(rect, to: self.tableView.superview)
+        }
+    }
+    
+    func initialView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
+
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+        if indexPath.section == 0 {
+            let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath as IndexPath)! as! UserStoryTableViewCell
+            return cell.contentImageView
+        } else {
+            let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath as IndexPath)! as! UserStoryTableViewCell
+            return cell.contentImageView
+        }
+    }
+
+    func prepareInitialView(_ userInfo: [String : AnyObject]?, isPresenting: Bool) {
+
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+
+        if !isPresenting {
+            if let cell = tableView?.cellForRow(at: indexPath) as? UserStoryTableViewCell {
+                returningCell?.activate(false)
+                returningCell = cell
+                returningCell!.deactivate()
+            }
+        }
+
+        if !isPresenting && !self.tableView!.indexPathsForVisibleRows!.contains(indexPath) {
+            self.tableView!.reloadData()
+            self.tableView!.scrollToRow(at: indexPath, at: .middle, animated: false)
+            self.tableView!.layoutIfNeeded()
+        }
+    }
+}

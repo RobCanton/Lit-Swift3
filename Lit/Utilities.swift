@@ -91,6 +91,19 @@ func createDirectory(_ dirName:String) {
     }
 }
 
+func clearDirectory(name:String) {
+    let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let dirPath = documentsDirectory.appendingPathComponent("temp")
+    do {
+        let filePaths = try FileManager.default.contentsOfDirectory(at: dirPath, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+        for filePath in filePaths {
+            try FileManager.default.removeItem(at: filePath)
+        }
+    } catch {
+        print("Could not clear temp folder: \(error)")
+    }
+}
+
 var screenStatusBarHeight: CGFloat {
     return UIApplication.shared.statusBarFrame.height
 }

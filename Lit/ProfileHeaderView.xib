@@ -163,9 +163,6 @@
                                                     <exclude reference="r1T-c4-z1j"/>
                                                 </mask>
                                             </variation>
-                                            <connections>
-                                                <action selector="handleMessageTap:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="Y8h-Fk-3AD"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

@@ -339,9 +339,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             
         }
     }
-    
-   
-    
 }
 
 extension LocationViewController: View2ViewTransitionPresenting {

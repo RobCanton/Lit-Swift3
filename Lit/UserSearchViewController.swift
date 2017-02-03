@@ -12,6 +12,8 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     var searchBarActive:Bool = false
+    
+    var activityIndicator:UIActivityIndicatorView!
 
     var userIds = [String]()
     
@@ -33,6 +35,7 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
         
         ref.observe(.value, with: { snapshot in
             if snapshot.exists() {
+                self.activityIndicator.stopAnimating()
                 var uids = [String]()
                 if let failed = snapshot.value as? Bool {
  
@@ -79,8 +82,12 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
         searchBar.tintColor            = UIColor.white
         searchBar.setTextColor(color: UIColor.white)
         searchBar.delegate = self
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x:0,y:0,width:50,height:50))
+        activityIndicator.activityIndicatorViewStyle = .white
+        activityIndicator.center = CGPoint(x:UIScreen.main.bounds.size.width / 2, y: UIScreen.main.bounds.size.height / 4 - 25)
+        tableView.addSubview(activityIndicator)
     }
-
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
@@ -92,6 +99,7 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
             let uid = mainStore.state.userState.uid
             let ref = UserService.ref.child("api/requests/user_search/\(uid)")
             ref.setValue(searchBar.text)
+            self.activityIndicator.startAnimating()
         } else {
             self.userIds = [String]()
             self.tableView.reloadData()

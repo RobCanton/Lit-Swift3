@@ -73,7 +73,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewDidDisappear(animated)
         
         tabBarRef.setTabBarVisible(_visible: true, animated: true)
-        //clearDirectory("temp")
+        clearDirectory(name: "temp")
         
         for cell in collectionView.visibleCells as! [StoryViewController] {
             cell.cleanUp()
@@ -126,15 +126,27 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         popStoryController(animated: false)
     }
     
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let cell = getCurrentCell() else { return false }
+        if cell.keyboardUp {
+            return false
+        }
+        
+        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
+        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
+        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+        
+        let panGestureRecognizer: UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
+        let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
+
+        return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
+    }
+    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         return UIScreen.main.bounds.size
     }
-    
-    
-    
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return userStories.count
@@ -354,10 +366,10 @@ extension StoriesViewController: View2ViewTransitionPresented {
         
         if isPresenting {
             print("isPresenting")
-//            let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
-//            currentIndex = indexPath
-//            let contentOffset: CGPoint = CGPoint(x: self.collectionView.frame.size.width*CGFloat(indexPath.item), y: 0.0)
-//            self.collectionView.contentOffset = contentOffset
+            let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
+            currentIndex = indexPath
+            let contentOffset: CGPoint = CGPoint(x: self.collectionView.frame.size.width*CGFloat(indexPath.item), y: 0.0)
+            self.collectionView.contentOffset = contentOffset
             self.collectionView.reloadData()
             self.collectionView.layoutIfNeeded()
         }

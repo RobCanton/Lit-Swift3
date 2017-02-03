@@ -18,6 +18,13 @@ class MessagesViewController: UITableViewController, StoreSubscriber {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController!.navigationBar.titleTextAttributes =
+            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
+             NSForegroundColorAttributeName: UIColor.white]
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+        self.automaticallyAdjustsScrollViewInsets = false
+        
+        
         tableView.separatorColor = UIColor(white: 0.08, alpha: 1.0)
         
         tableView.tableFooterView = UIView()

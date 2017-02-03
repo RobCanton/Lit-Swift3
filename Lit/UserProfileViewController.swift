@@ -188,29 +188,28 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     func messageBlockTapped() {
         
-//        let uid = mainStore.state.userState.uid
-//        let partner_uid = user!.getUserId()
-//        if uid == partner_uid { return }
-//        if let conversation = checkForExistingConversation(partner_uid) {
-//            self.presentingEmptyConversation = false
-//            presentConversation(conversation)
-//        } else {
-//            
-//            let pairKey = createUserIdPairKey(uid, uid2: partner_uid)
-//            let ref = UserService.ref.child("conversations/\(pairKey)")
-//            ref.child(uid).setValue(["seen": [".sv":"timestamp"]], withCompletionBlock: { error, ref in
-//                
-//                let recipientUserRef = UserService.ref.child("users/conversations/\(partner_uid)")
-//                recipientUserRef.child(uid).setValue(true)
-//                
-//                let currentUserRef = UserService.ref.child("users/conversations/\(uid)")
-//                currentUserRef.child(partner_uid).setValue(true, withCompletionBlock: { error, ref in
-//                    let conversation = Conversation(key: pairKey, partner_uid: partner_uid)
-//                    self.presentingEmptyConversation = true
-//                    self.presentConversation(conversation)
-//                })
-//            })
-//        }
+        let current_uid = mainStore.state.userState.uid
+        guard let partner_uid = uid else { return }
+        if current_uid == partner_uid { return }
+        if let conversation = checkForExistingConversation(partner_uid: current_uid) {
+            prepareConverstaionForPresentation(conversation: conversation)
+        } else {
+            
+            let pairKey = createUserIdPairKey(uid1: current_uid, uid2: partner_uid)
+            let ref = UserService.ref.child("conversations/\(pairKey)")
+            ref.child(uid).setValue(["seen": [".sv":"timestamp"]], withCompletionBlock: { error, ref in
+                
+                let recipientUserRef = UserService.ref.child("users/conversations/\(partner_uid)")
+                recipientUserRef.child(current_uid).setValue(true)
+                
+                let currentUserRef = UserService.ref.child("users/conversations/\(current_uid)")
+                currentUserRef.child(partner_uid).setValue(true, withCompletionBlock: { error, ref in
+                    let conversation = Conversation(key: pairKey, partner_uid: partner_uid)
+                    self.presentingEmptyConversation = true
+                    self.prepareConverstaionForPresentation(conversation: conversation)
+                })
+            })
+        }
     }
     
     var presentingEmptyConversation = false
@@ -226,18 +225,23 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     var presentConversation:Conversation?
     var partnerImage:UIImage?
-    func presentConversation(conversation:Conversation) {
-//        UserService.getUser(conversation.getPartnerId(), completion: { user in
-//            if user != nil {
-//                
-//                loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, fromCache in
-//                    self.presentConversation = conversation
-//                    self.partnerImage = image
-//                    self.performSegueWithIdentifier("toMessage", sender: self)
-//                })
-//            }
-//        })
-        
+    
+    func prepareConverstaionForPresentation(conversation:Conversation) {
+        UserService.getUser(uid, completion: { user in
+            if user != nil {
+                self.presentConversation(conversation: conversation, user: user!)
+            }
+        })
+    }
+    
+    func presentConversation(conversation:Conversation, user:User) {
+        loadImageUsingCacheWithURL(user.getImageUrl(), completion: { image, fromCache in
+            let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+            controller.conversation = conversation
+            controller.partnerImage = image
+            self.navigationController?.navigationBar.tintColor = UIColor.white
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

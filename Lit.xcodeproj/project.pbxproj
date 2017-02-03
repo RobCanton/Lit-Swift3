@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B01EE5301E435CA00049BCBF /* CreateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE52E1E435CA00049BCBF /* CreateProfileViewController.swift */; };
+		B01EE5401E435D450049BCBF /* AkiraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5341E435D450049BCBF /* AkiraTextField.swift */; };
+		B01EE5411E435D450049BCBF /* HoshiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5351E435D450049BCBF /* HoshiTextField.swift */; };
+		B01EE5421E435D450049BCBF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B01EE5361E435D450049BCBF /* Info.plist */; };
+		B01EE5431E435D450049BCBF /* IsaoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5371E435D450049BCBF /* IsaoTextField.swift */; };
+		B01EE5441E435D450049BCBF /* JiroTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5381E435D450049BCBF /* JiroTextField.swift */; };
+		B01EE5451E435D450049BCBF /* KaedeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5391E435D450049BCBF /* KaedeTextField.swift */; };
+		B01EE5461E435D450049BCBF /* MadokaTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53A1E435D450049BCBF /* MadokaTextField.swift */; };
+		B01EE5471E435D450049BCBF /* MinoruTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53B1E435D450049BCBF /* MinoruTextField.swift */; };
+		B01EE5481E435D450049BCBF /* TextFieldsEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53D1E435D450049BCBF /* TextFieldsEffects.swift */; };
+		B01EE5491E435D450049BCBF /* YokoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53E1E435D450049BCBF /* YokoTextField.swift */; };
+		B01EE54A1E435D450049BCBF /* YoshikoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53F1E435D450049BCBF /* YoshikoTextField.swift */; };
 		B0383C211E4322E2002FD893 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0383C201E4322E2002FD893 /* SettingsViewController.swift */; };
 		B0383C231E43256B002FD893 /* FacebookGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0383C221E43256B002FD893 /* FacebookGraph.swift */; };
 		B0383C261E43515C002FD893 /* UserSearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0383C241E43515C002FD893 /* UserSearchViewController.storyboard */; };
@@ -95,6 +107,19 @@
 
 /* Begin PBXFileReference section */
 		82D051C960EAD77D39AD3FF9 /* Pods-Lit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lit.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lit/Pods-Lit.release.xcconfig"; sourceTree = "<group>"; };
+		B01EE52E1E435CA00049BCBF /* CreateProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProfileViewController.swift; sourceTree = "<group>"; };
+		B01EE5341E435D450049BCBF /* AkiraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AkiraTextField.swift; sourceTree = "<group>"; };
+		B01EE5351E435D450049BCBF /* HoshiTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoshiTextField.swift; sourceTree = "<group>"; };
+		B01EE5361E435D450049BCBF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B01EE5371E435D450049BCBF /* IsaoTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsaoTextField.swift; sourceTree = "<group>"; };
+		B01EE5381E435D450049BCBF /* JiroTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JiroTextField.swift; sourceTree = "<group>"; };
+		B01EE5391E435D450049BCBF /* KaedeTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaedeTextField.swift; sourceTree = "<group>"; };
+		B01EE53A1E435D450049BCBF /* MadokaTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MadokaTextField.swift; sourceTree = "<group>"; };
+		B01EE53B1E435D450049BCBF /* MinoruTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinoruTextField.swift; sourceTree = "<group>"; };
+		B01EE53C1E435D450049BCBF /* TextFieldEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldEffects.h; sourceTree = "<group>"; };
+		B01EE53D1E435D450049BCBF /* TextFieldsEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldsEffects.swift; sourceTree = "<group>"; };
+		B01EE53E1E435D450049BCBF /* YokoTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YokoTextField.swift; sourceTree = "<group>"; };
+		B01EE53F1E435D450049BCBF /* YoshikoTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoshikoTextField.swift; sourceTree = "<group>"; };
 		B0383C201E4322E2002FD893 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B0383C221E43256B002FD893 /* FacebookGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookGraph.swift; sourceTree = "<group>"; };
 		B0383C241E43515C002FD893 /* UserSearchViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserSearchViewController.storyboard; sourceTree = "<group>"; };
@@ -221,6 +246,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B01EE5321E435CA40049BCBF /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B0D84F701E4046DD0043D28C /* LoginViewController.swift */,
+				B01EE52E1E435CA00049BCBF /* CreateProfileViewController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		B01EE5331E435D450049BCBF /* TextFieldEffects */ = {
+			isa = PBXGroup;
+			children = (
+				B01EE5341E435D450049BCBF /* AkiraTextField.swift */,
+				B01EE5351E435D450049BCBF /* HoshiTextField.swift */,
+				B01EE5361E435D450049BCBF /* Info.plist */,
+				B01EE5371E435D450049BCBF /* IsaoTextField.swift */,
+				B01EE5381E435D450049BCBF /* JiroTextField.swift */,
+				B01EE5391E435D450049BCBF /* KaedeTextField.swift */,
+				B01EE53A1E435D450049BCBF /* MadokaTextField.swift */,
+				B01EE53B1E435D450049BCBF /* MinoruTextField.swift */,
+				B01EE53C1E435D450049BCBF /* TextFieldEffects.h */,
+				B01EE53D1E435D450049BCBF /* TextFieldsEffects.swift */,
+				B01EE53E1E435D450049BCBF /* YokoTextField.swift */,
+				B01EE53F1E435D450049BCBF /* YoshikoTextField.swift */,
+			);
+			path = TextFieldEffects;
+			sourceTree = "<group>";
+		};
 		B087C7541E41C0F700234715 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				B0E59E071E409B65007B4762 /* Extensions.swift */,
+				B01EE5331E435D450049BCBF /* TextFieldEffects */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -364,9 +418,9 @@
 		B0E59DEC1E406555007B4762 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				B0D84F701E4046DD0043D28C /* LoginViewController.swift */,
 				B0E59DF41E4066EC007B4762 /* MasterTabBarController.swift */,
 				B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */,
+				B01EE5321E435CA40049BCBF /* Login */,
 				B0E59DF91E407640007B4762 /* Home */,
 				B0E59E001E409191007B4762 /* Location */,
 				B0CC44E51E431D1B0078FFFE /* Activity */,
@@ -488,6 +542,7 @@
 				B0B043131E40AEDE00D50DA7 /* LocationFooterView.xib in Resources */,
 				B0E59E061E409444007B4762 /* InfoTableViewCell.xib in Resources */,
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
+				B01EE5421E435D450049BCBF /* Info.plist in Resources */,
 				B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */,
 				B0E59DEB1E40570E007B4762 /* GoogleService-Info.plist in Resources */,
 				B087C75A1E41C16600234715 /* PhotoCell.xib in Resources */,
@@ -568,6 +623,7 @@
 				B0E59DDD1E405084007B4762 /* Tree.swift in Sources */,
 				B0E59E051E409444007B4762 /* InfoTableViewCell.swift in Sources */,
 				B087C7561E41C10A00234715 /* UserProfileViewController.swift in Sources */,
+				B01EE5481E435D450049BCBF /* TextFieldsEffects.swift in Sources */,
 				B087C7891E41F82200234715 /* ProgressIndicator.swift in Sources */,
 				B0E59DF31E406678007B4762 /* GPSService.swift in Sources */,
 				B087C77C1E41E6AE00234715 /* SendLocationViewCell.swift in Sources */,
@@ -575,17 +631,22 @@
 				B0B043261E40C60300D50DA7 /* MasterNavigationController.swift in Sources */,
 				B0E59DE91E40551B007B4762 /* UserService.swift in Sources */,
 				B0E59E081E409B65007B4762 /* Extensions.swift in Sources */,
+				B01EE5451E435D450049BCBF /* KaedeTextField.swift in Sources */,
 				B087C7601E41C52E00234715 /* SocialReducer.swift in Sources */,
 				B0E59DFC1E40765D007B4762 /* LocationTableCell.swift in Sources */,
+				B01EE5441E435D450049BCBF /* JiroTextField.swift in Sources */,
 				B087C77A1E41E6AE00234715 /* SendLocationHeaderView.swift in Sources */,
 				B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */,
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
 				B087C77E1E41E6AE00234715 /* SendProfileViewCell.swift in Sources */,
+				B01EE5401E435D450049BCBF /* AkiraTextField.swift in Sources */,
 				B0383C211E4322E2002FD893 /* SettingsViewController.swift in Sources */,
+				B01EE5411E435D450049BCBF /* HoshiTextField.swift in Sources */,
 				B087C76D1E41E4CD00234715 /* CommentCell.swift in Sources */,
 				B087C7621E41C5D900234715 /* UserReducer.swift in Sources */,
 				B0E59DE21E4050B5007B4762 /* Location.swift in Sources */,
 				B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */,
+				B01EE54A1E435D450049BCBF /* YoshikoTextField.swift in Sources */,
 				B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */,
 				B087C76F1E41E4CD00234715 /* CommentsView.swift in Sources */,
 				B0383C271E43515C002FD893 /* UserSearchViewController.swift in Sources */,
@@ -594,11 +655,13 @@
 				B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */,
 				B087C7641E41C61700234715 /* LocationsReducer.swift in Sources */,
 				B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */,
+				B01EE5301E435CA00049BCBF /* CreateProfileViewController.swift in Sources */,
 				B087C7511E4163AA00234715 /* CameraButton.swift in Sources */,
 				B087C78A1E41F82200234715 /* StoryProgressIndicator.swift in Sources */,
 				B087C7591E41C16600234715 /* PhotoCell.swift in Sources */,
 				B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */,
 				B0E59DF51E4066EC007B4762 /* MasterTabBarController.swift in Sources */,
+				B01EE5431E435D450049BCBF /* IsaoTextField.swift in Sources */,
 				B0E59DE51E4050B5007B4762 /* User.swift in Sources */,
 				B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */,
 				B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */,
@@ -610,9 +673,12 @@
 				B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */,
 				B087C75D1E41C27100234715 /* ProfileHeaderView.swift in Sources */,
 				B0E59DF01E406662007B4762 /* Listeners.swift in Sources */,
+				B01EE5471E435D450049BCBF /* MinoruTextField.swift in Sources */,
 				B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */,
+				B01EE5461E435D450049BCBF /* MadokaTextField.swift in Sources */,
 				B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */,
 				B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */,
+				B01EE5491E435D450049BCBF /* YokoTextField.swift in Sources */,
 				B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */,
 				B087C7851E41EE8600234715 /* ListHeaderView.swift in Sources */,
 			);

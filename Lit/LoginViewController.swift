@@ -159,7 +159,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
                     if user != nil {
                         UserService.login(user!)
                     } else {
-                        //Create user
+                        self.performSegue(withIdentifier: "showCreateProfile", sender: self)
                     }
                 })
             } else {
