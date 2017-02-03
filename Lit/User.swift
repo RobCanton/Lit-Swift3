@@ -68,8 +68,9 @@ class User:NSObject, NSCoding {
     var imageURL: String
     var largeImageURL: String?
     var bio: String?
+    fileprivate var verified:Bool
     
-    init(uid:String, displayName:String, name:String?, imageURL: String, largeImageURL: String?, bio: String?)
+    init(uid:String, displayName:String, name:String?, imageURL: String, largeImageURL: String?, bio: String?, verified:Bool)
     {
         self.uid           = uid
         self.displayName   = displayName
@@ -77,6 +78,7 @@ class User:NSObject, NSCoding {
         self.imageURL      = imageURL
         self.largeImageURL = largeImageURL
         self.bio           = bio
+        self.verified      = verified
     }
     
     required convenience init(coder decoder: NSCoder) {
@@ -87,8 +89,8 @@ class User:NSObject, NSCoding {
         let imageURL = decoder.decodeObject(forKey: "imageURL") as! String
         let largeImageURL = decoder.decodeObject(forKey: "largeImageURL") as? String
         let bio = decoder.decodeObject(forKey: "bio") as? String
-
-        self.init(uid: uid, displayName: displayName, name: name, imageURL: imageURL, largeImageURL: largeImageURL, bio: bio)
+        let verified = decoder.decodeObject(forKey: "verified") as! Bool
+        self.init(uid: uid, displayName: displayName, name: name, imageURL: imageURL, largeImageURL: largeImageURL, bio: bio, verified: verified)
 
     }
 
@@ -100,6 +102,7 @@ class User:NSObject, NSCoding {
         coder.encode(imageURL, forKey: "imageURL")
         coder.encode(largeImageURL, forKey: "largeImageURL")
         coder.encode(bio, forKey: "bio")
+        coder.encode(verified, forKey: "verified")
     }
     
 
@@ -123,6 +126,10 @@ class User:NSObject, NSCoding {
     func setImageURLS(_ largeImageURL:String, smallImageURL:String) {
         self.largeImageURL = largeImageURL
         self.imageURL = smallImageURL
+    }
+    
+    func isVerified() -> Bool {
+        return verified
     }
     
 }

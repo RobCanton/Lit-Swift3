@@ -17,6 +17,7 @@ class ProfileHeaderView: UICollectionReusableView {
     @IBOutlet weak var controlBarContainer: UIView!
     @IBOutlet weak var profileImageView: UIImageView!
     
+    @IBOutlet weak var verifiedImage: UIImageView!
     @IBOutlet weak var errorLabel: UILabel!
     
 
@@ -101,6 +102,8 @@ class ProfileHeaderView: UICollectionReusableView {
         } else {
             nameLabel.text = user.getDisplayName()
         }
+        
+        verifiedImage.isHidden = !user.isVerified()
         
         locationLabel.text = "@\(user.getDisplayName())"
         

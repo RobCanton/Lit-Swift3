@@ -35,7 +35,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="400" height="50"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNR-9M-bfd">
-                                    <rect key="frame" x="8" y="8" width="276" height="22"/>
+                                    <rect key="frame" x="8" y="8" width="174" height="22"/>
                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -61,18 +61,26 @@
                                         <action selector="handleFollowTapWithSender:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="hcg-ag-kmv"/>
                                     </connections>
                                 </button>
+                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="verified" translatesAutoresizingMaskIntoConstraints="NO" id="115-9Q-1uk">
+                                    <rect key="frame" x="189" y="13" width="22" height="22"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="16" id="9gk-0u-Nf3"/>
+                                        <constraint firstAttribute="width" secondItem="115-9Q-1uk" secondAttribute="height" multiplier="1:1" id="iSh-DY-fyr"/>
+                                    </constraints>
+                                </imageView>
                             </subviews>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstItem="lnk-vc-dz6" firstAttribute="leading" secondItem="lNR-9M-bfd" secondAttribute="trailing" constant="8" id="BuK-P9-VuU"/>
                                 <constraint firstAttribute="height" constant="50" id="Hye-t1-RXu"/>
                                 <constraint firstItem="xDH-lw-zf7" firstAttribute="leading" secondItem="QK9-4C-K4x" secondAttribute="leading" constant="8" id="NAa-5h-Lj8"/>
+                                <constraint firstItem="115-9Q-1uk" firstAttribute="centerY" secondItem="lNR-9M-bfd" secondAttribute="centerY" id="QvM-x0-IMG"/>
                                 <constraint firstItem="xDH-lw-zf7" firstAttribute="width" secondItem="lNR-9M-bfd" secondAttribute="width" id="Sep-1L-0gW"/>
                                 <constraint firstAttribute="bottom" secondItem="xDH-lw-zf7" secondAttribute="bottom" id="X9k-Rt-UWB"/>
                                 <constraint firstItem="lNR-9M-bfd" firstAttribute="leading" secondItem="QK9-4C-K4x" secondAttribute="leading" constant="8" id="gAz-yz-JFM"/>
                                 <constraint firstItem="lNR-9M-bfd" firstAttribute="top" secondItem="QK9-4C-K4x" secondAttribute="top" constant="8" id="mcU-QP-aHN"/>
                                 <constraint firstItem="lnk-vc-dz6" firstAttribute="centerY" secondItem="QK9-4C-K4x" secondAttribute="centerY" id="qfG-XN-wJ2"/>
                                 <constraint firstAttribute="trailing" secondItem="lnk-vc-dz6" secondAttribute="trailing" constant="8" id="r6Y-Si-55r"/>
+                                <constraint firstItem="115-9Q-1uk" firstAttribute="leading" secondItem="lNR-9M-bfd" secondAttribute="trailing" constant="6" id="t0b-6u-7q1"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXa-t2-xf9">
@@ -298,11 +306,13 @@
                 <outlet property="nameLabel" destination="lNR-9M-bfd" id="8Vh-nr-Se1"/>
                 <outlet property="postsLabel" destination="0oi-kH-w4P" id="nPC-ZM-KkW"/>
                 <outlet property="profileImageView" destination="e0w-55-qsS" id="2Ix-lD-fc0"/>
+                <outlet property="verifiedImage" destination="115-9Q-1uk" id="1TJ-5w-4du"/>
             </connections>
             <point key="canvasLocation" x="590" y="447"/>
         </collectionReusableView>
     </objects>
     <resources>
         <image name="message_filled" width="25" height="25"/>
+        <image name="verified" width="16" height="16"/>
     </resources>
 </document>

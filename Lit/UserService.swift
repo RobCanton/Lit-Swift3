@@ -50,7 +50,12 @@ class UserService {
                     let name        = dict["name"] as! String
                     let displayName = dict["username"] as! String
                     let imageURL    = dict["profileImageURL"] as! String
-                    user = User(uid: uid, displayName: displayName, name: name, imageURL: imageURL, largeImageURL: nil, bio: nil)
+                    
+                    var verified = false
+                    if snapshot.hasChild("verified") {
+                        verified = true
+                    }
+                    user = User(uid: uid, displayName: displayName, name: name, imageURL: imageURL, largeImageURL: nil, bio: nil, verified: verified)
                     dataCache.setObject(user!, forKey: "user-\(uid)" as NSString)
                 }
                 

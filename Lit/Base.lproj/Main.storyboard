@@ -341,7 +341,7 @@
         <scene sceneID="MRG-qL-Ehi">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="I8Q-CS-gIj" customClass="MasterNavigationController" customModule="Lit" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="message" selectedImage="message_filled" id="LLs-DT-qB1">
+                    <tabBarItem key="tabBarItem" title="" image="message" id="LLs-DT-qB1">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -794,7 +794,6 @@
         <image name="home" width="25" height="25"/>
         <image name="left_arrow" width="25" height="25"/>
         <image name="message" width="25" height="25"/>
-        <image name="message_filled" width="25" height="25"/>
         <image name="settings" width="25" height="25"/>
         <image name="user" width="25" height="25"/>
     </resources>
