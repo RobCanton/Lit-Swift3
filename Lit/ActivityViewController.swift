@@ -196,6 +196,7 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
              NSForegroundColorAttributeName: UIColor.white]
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.automaticallyAdjustsScrollViewInsets = false
+        
 
         
         let nib = UINib(nibName: "UserStoryTableViewCell", bundle: nil)

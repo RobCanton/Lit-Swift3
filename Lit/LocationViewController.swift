@@ -63,6 +63,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         
         let infoNib = UINib(nibName: "InfoTableViewCell", bundle: nil)
         tableView.register(infoNib, forCellReuseIdentifier: "infoCell")
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 100, 0)
         
 
         tableView.dataSource = self
@@ -279,6 +280,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             let story = userStories[indexPath.item]
             if story.state == .contentLoaded {
@@ -290,22 +292,21 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.cellForRow(at: indexPath) as! InfoTableViewCell
             switch cell.type {
             case .fullAddress:
-                //showMap()
+                self.performSegue(withIdentifier: "showMap", sender: self)
                 break
             case .phone:
-                //promptPhoneCall()
+                promptPhoneCall()
                 break
             case .email:
-                //promptEmail()
+                promptEmail()
                 break
             case .website:
-                //promptWebsite()
+                promptWebsite()
                 break
             default:
                 break
             }
         }
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     let transitionController: TransitionController = TransitionController()
@@ -332,13 +333,80 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             
             statusBarShouldHide = true
             // Set transitionController as a navigation controller delegate and push.
-            
-            
             navigationController.delegate = transitionController
             transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
-            
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showMap" {
+            let controller = segue.destination as! MapViewController
+            controller.setMapLocation(_location: location)
+        }
+    }
+    
+    func promptPhoneCall() {
+        guard let phoneNumber = location.phone else { return }
+        let phoneAlert = UIAlertController(title: "Call \(location.getName())?", message: phoneNumber, preferredStyle: UIAlertControllerStyle.alert)
+        
+        phoneAlert.addAction(UIAlertAction(title: "Call", style: .default, handler: { (action: UIAlertAction!) in
+            let stringArray = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted)//decimalDigitCharacterSet().invertedSet)
+            let cleanNumber = stringArray.joined(separator: "")
+            if let phoneCallURL:URL = URL(string:"tel://\(cleanNumber)") {
+                let application:UIApplication = UIApplication.shared
+                if (application.canOpenURL(phoneCallURL)) {
+                    application.open(phoneCallURL, options: [:], completionHandler: nil)
+                }
+            }
+        }))
+        
+        phoneAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(phoneAlert, animated: true, completion: nil)
+    }
+    
+    func promptEmail() {
+        guard let email = location.email else { return }
+        let phoneAlert = UIAlertController(title: "Contact \(location.getName())?", message: email, preferredStyle: UIAlertControllerStyle.alert)
+        
+        phoneAlert.addAction(UIAlertAction(title: "Email", style: .default, handler: { (action: UIAlertAction!) in
+            
+            let url = URL(string: "mailto:\(email)")
+            let application:UIApplication = UIApplication.shared
+            if (application.canOpenURL(url!)) {
+                application.open(url!, options: [:], completionHandler: nil)
+            }
+        }))
+        
+        phoneAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(phoneAlert, animated: true, completion: nil)
+    }
+    
+    
+    func promptWebsite() {
+        guard let website = location.website else { return }
+        let phoneAlert = UIAlertController(title: "Visit \(website)?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        
+        phoneAlert.addAction(UIAlertAction(title: "Open", style: .default, handler: { (action: UIAlertAction!) in
+            let url = URL(string: "http://\(website)")!
+            let application:UIApplication = UIApplication.shared
+            if (application.canOpenURL(url)) {
+                application.open(url, options: [:], completionHandler: nil)
+            }
+        }))
+        
+        phoneAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(phoneAlert, animated: true, completion: nil)
+    }
+
 }
 
 extension LocationViewController: View2ViewTransitionPresenting {

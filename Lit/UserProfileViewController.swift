@@ -9,6 +9,7 @@
 import UIKit
 import ReSwift
 import View2ViewTransition
+import Firebase
 
 class MyUserProfileViewController: UserProfileViewController {
     
@@ -16,12 +17,7 @@ class MyUserProfileViewController: UserProfileViewController {
         uid = mainStore.state.userState.uid
         super.viewDidLoad()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        getKeys()
-    }
+
 }
 
 class UserProfileViewController: UIViewController, StoreSubscriber, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, EditProfileProtocol {
@@ -109,14 +105,12 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
                 self.navigationItem.title = _user!.getDisplayName()
                 UserService.getUserFullProfile(user: _user!, completion: { fullUser in
                     
-                    self.getKeys()
+                    //self.getKeys()
                     self.user = fullUser
                     if self.user!.getUserId() == mainStore.state.userState.uid {
                         mainStore.dispatch(UpdateUser(user: self.user!))
                     }
-                    
-                    
-                    
+
                     self.collectionView?.reloadData()
                     UserService.listenToFollowers(uid: self.user!.getUserId(), completion: { followers in
                         self.followers = followers
@@ -138,6 +132,8 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
         navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -152,6 +148,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
             
             nav.delegate = nav
         }
+        listenToPosts()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -159,16 +156,17 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         mainStore.unsubscribe(self)
         UserService.stopListeningToFollowers(uid: uid)
         UserService.stopListeningToFollowing(uid: uid)
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        stopListeningToPosts()
     }
     
     func newState(state: AppState) {
-        
         let status = checkFollowingStatus(uid: uid)
         getHeaderView()?.setUserStatus(status: status)
     }
-    
-    
     
     func followersBlockTapped() {
         if followers.count == 0 { return }
@@ -257,13 +255,15 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let staticHeight:CGFloat = 275 + 50 + 8 + 56
+        let staticHeight:CGFloat = 275 + 50 + 4 + 56
         if user != nil {
             if let text = self.user!.bio {
-                var size =  UILabel.size(withText: text, forWidth: collectionView.frame.size.width, withFont: UIFont(name: "AvenirNext-Regular", size: 14.0)!)
-                let height2 = size.height + staticHeight + 8  // +8 for some bio padding
-                size.height = height2
-                return size
+                if text != "" {
+                    var size =  UILabel.size(withText: text, forWidth: collectionView.frame.size.width, withFont: UIFont(name: "AvenirNext-Regular", size: 14.0)!)
+                    let height2 = size.height + staticHeight + 10  // +8 for some bio padding
+                    size.height = height2
+                    return size
+                }
             }
             
         }
@@ -293,9 +293,13 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         return UICollectionReusableView()
     }
     
-    func getKeys() {
-        let ref = UserService.ref.child("users/uploads/\(uid)")
-        ref.observeSingleEvent(of: .value, with: { snapshot in
+    var postsRef:FIRDatabaseReference?
+    
+    func listenToPosts() {
+
+        guard let userId = uid else { return }
+        postsRef = UserService.ref.child("users/uploads/\(userId)")
+        postsRef?.observeSingleEvent(of: .value, with: { snapshot in
             var postKeys = [String]()
             if snapshot.exists() {
                 let keys = snapshot.value as! [String:AnyObject]
@@ -306,6 +310,10 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
             self.postKeys = postKeys
             self.downloadStory(postKeys: postKeys)
         })
+    }
+    
+    func stopListeningToPosts() {
+        postsRef?.removeAllObservers()
     }
     
     func downloadStory(postKeys:[String]) {
@@ -352,7 +360,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     }
     
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return getItemSize()
     }
@@ -365,19 +373,18 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     var selectedIndexPath: IndexPath = IndexPath(item: 0, section: 0)
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        /*let _ = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! PhotoCell
+        let _ = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoCell
          
          self.selectedIndexPath = indexPath
          
          let galleryViewController: GalleryViewController = GalleryViewController()
          
-         guard let tabBarController = self.tabBarController as? PopUpTabBarController else { return }
-         
-         galleryViewController.photos = self.posts
+         guard let tabBarController = self.tabBarController as? MasterTabBarController else { return }
          galleryViewController.uid = uid
+         galleryViewController.posts = self.posts
          galleryViewController.tabBarRef = tabBarController
          galleryViewController.transitionController = self.transitionController
-         self.transitionController.userInfo = ["destinationIndexPath": indexPath, "initialIndexPath": indexPath]
+         self.transitionController.userInfo = ["destinationIndexPath": indexPath as AnyObject, "initialIndexPath": indexPath as AnyObject]
          self.transitionController.rounded = false
          
          // This example will push view controller if presenting view controller has navigation controller.
@@ -388,7 +395,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
          navigationController.delegate = transitionController
          transitionController.push(viewController: galleryViewController, on: self, attached: galleryViewController)
          
-         }*/
+         }
     }
 
     
@@ -401,36 +408,36 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
 }
 
-//extension UserProfileViewController: View2ViewTransitionPresenting {
-//    
-//    func initialFrame(userInfo: [String: AnyObject]?, isPresenting: Bool) -> CGRect {
-//        
-//        guard let indexPath: NSIndexPath = userInfo?["initialIndexPath"] as? NSIndexPath, let attributes: UICollectionViewLayoutAttributes = self.collectionView!.layoutAttributesForItemAtIndexPath(indexPath) else {
-//            return CGRect.zero
-//        }
-//        let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-//        let rect = CGRect(x: attributes.frame.origin.x, y: attributes.frame.origin.y + navHeight, width: attributes.frame.width, height: attributes.frame.height)
-//        return self.collectionView!.convertRect(rect, toView: self.collectionView!.superview)
-//    }
-//    
-//    func initialView(userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
-//        
-//        let indexPath: NSIndexPath = userInfo!["initialIndexPath"] as! NSIndexPath
-//        let cell: UICollectionViewCell = self.collectionView!.cellForItemAtIndexPath(indexPath)!
-//        
-//        return cell.contentView
-//    }
-//    
-//    func prepareInitialView(userInfo: [String : AnyObject]?, isPresenting: Bool) {
-//        
-//        let indexPath: NSIndexPath = userInfo!["initialIndexPath"] as! NSIndexPath
-//        
-//        if !isPresenting && !self.collectionView!.indexPathsForVisibleItems().contains(indexPath) {
-//            self.collectionView!.reloadData()
-//            self.collectionView!.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredVertically, animated: false)
-//            self.collectionView!.layoutIfNeeded()
-//        }
-//    }
-//}
+extension UserProfileViewController: View2ViewTransitionPresenting {
+    
+    func initialFrame(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> CGRect {
+        
+        guard let indexPath: IndexPath = userInfo?["initialIndexPath"] as? IndexPath, let attributes: UICollectionViewLayoutAttributes = self.collectionView!.layoutAttributesForItem(at: indexPath) else {
+            return CGRect.zero
+        }
+        let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
+        let rect = CGRect(x: attributes.frame.origin.x, y: attributes.frame.origin.y + navHeight, width: attributes.frame.width, height: attributes.frame.height)
+        return self.collectionView!.convert(rect, to: self.collectionView!.superview)
+    }
+    
+    func initialView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
+        
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+        let cell: UICollectionViewCell = self.collectionView!.cellForItem(at: indexPath)!
+        
+        return cell.contentView
+    }
+    
+    func prepareInitialView(_ userInfo: [String : AnyObject]?, isPresenting: Bool) {
+        
+        let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
+        
+        if !isPresenting && !self.collectionView!.indexPathsForVisibleItems.contains(indexPath) {
+            self.collectionView!.reloadData()
+            self.collectionView!.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            self.collectionView!.layoutIfNeeded()
+        }
+    }
+}
 
 

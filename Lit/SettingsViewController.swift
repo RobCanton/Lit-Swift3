@@ -14,6 +14,10 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var addFacebookFriends: UITableViewCell!
     @IBOutlet weak var notificationsSwitch: UISwitch!
     @IBOutlet weak var privacyPolicy: UITableViewCell!
+    @IBOutlet weak var suggestLocation: UITableViewCell!
+    
+    @IBOutlet weak var report: UITableViewCell!
+    
     @IBOutlet weak var logout: UITableViewCell!
     
     
@@ -58,7 +62,12 @@ class SettingsViewController: UITableViewController {
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case privacyPolicy:
-                showPrivacyPolicy()
+                break
+            case suggestLocation:
+                makeSuggestion()
+                break
+            case report:
+                reportProblem()
                 break
             case logout:
                 showLogoutView()
@@ -87,6 +96,26 @@ class SettingsViewController: UITableViewController {
 //        let controller = storyboard.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 //        controller.title = "Privacy Policy"
 //        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func makeSuggestion() {
+        let subject = "Location suggestion"
+        let coded = "mailto:info@getlit.site?subject=\(subject)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let url = URL(string: coded!)
+        let application:UIApplication = UIApplication.shared
+        if (application.canOpenURL(url!)) {
+            application.open(url!, options: [:], completionHandler: nil)
+        }
+    }
+    
+    func reportProblem() {
+        let subject = "Reporting a problem"
+        let coded = "mailto:info@getlit.site?subject=\(subject)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let url = URL(string: coded!)
+        let application:UIApplication = UIApplication.shared
+        if (application.canOpenURL(url!)) {
+            application.open(url!, options: [:], completionHandler: nil)
+        }
     }
     
     func showLogoutView() {
