@@ -23,6 +23,7 @@ class UserService {
         Listeners.startListeningToConversations()
         Listeners.startListeningToFollowers()
         Listeners.startListeningToFollowing()
+        sendFCMToken()
     }
     
     static func logout() {
@@ -37,6 +38,15 @@ class UserService {
         Listeners.stopListeningToAll()
         mainStore.dispatch(UserIsUnauthenticated())
         try! FIRAuth.auth()!.signOut()
+    }
+    
+    static func sendFCMToken() {
+        if let token = FIRInstanceID.instanceID().token() {
+            if let user = mainStore.state.userState.user {
+                let fcmRef = ref.child("users/FCMToken/\(user.getUserId())")
+                fcmRef.setValue(token)
+            }
+        }
     }
     
     static func getUser(_ uid:String, completion: @escaping (_ user:User?) -> Void) {

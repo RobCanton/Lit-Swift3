@@ -17,6 +17,10 @@ class PostAuthorView: UIView {
     @IBOutlet weak var authorImageView: UIImageView!
     @IBOutlet weak var authorUsernameLabel: UILabel!
     
+    @IBOutlet weak var userBadge: UIImageView!
+
+    @IBOutlet weak var timeLabelLeadingConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var timeLabel: UILabel!
     var user:User?
     var authorTap:UITapGestureRecognizer!
@@ -41,6 +45,7 @@ class PostAuthorView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+
         authorImageView.layer.cornerRadius = authorImageView.frame.width/2
         authorImageView.clipsToBounds = true
         authorTap = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
@@ -61,6 +66,16 @@ class PostAuthorView: UIView {
                 self.authorUsernameLabel.text = user!.getDisplayName()
                 self.authorImageView.removeGestureRecognizer(self.authorTap)
                 self.authorImageView.addGestureRecognizer(self.authorTap)
+                
+                self.userBadge.isHidden = !user!.isVerified()
+                if user!.isVerified() {
+                    self.timeLabelLeadingConstraint.constant = 4 + 8 + self.userBadge.frame.width
+                } else {
+                    self.timeLabelLeadingConstraint.constant = 8
+                }
+                self.timeLabel.layoutIfNeeded()
+                self.layoutIfNeeded()
+
                 
                 let superView = self.authorImageView.superview!
                 superView.isUserInteractionEnabled = true

@@ -16,6 +16,9 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     
+    
+    @IBOutlet weak var userBadge: UIImageView!
+    
     var userStory:UserStory?
     
     override func awakeFromNib() {
@@ -83,6 +86,8 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
                 } else {
                     self.usernameLabel.text = user!.getDisplayName()
                 }
+                
+                self.userBadge.isHidden = !user!.isVerified()
                 
                 
                 // Load in image to avoid blip in story view

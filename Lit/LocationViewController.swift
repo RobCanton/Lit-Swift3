@@ -113,6 +113,9 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewWillAppear(animated)
         listenToUserStories()
         tableView.isUserInteractionEnabled = false
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(handleEnterForeground), name:
+            NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -137,6 +140,14 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UserService.ref.child("locations/uploads/\(location.getKey())").removeAllObservers()
+         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func handleEnterForeground() {
+        for story in self.userStories {
+            story.determineState()
+        }
+        tableView?.reloadData()
     }
     
     func listenToUserStories() {
@@ -355,7 +366,12 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             if let phoneCallURL:URL = URL(string:"tel://\(cleanNumber)") {
                 let application:UIApplication = UIApplication.shared
                 if (application.canOpenURL(phoneCallURL)) {
-                    application.open(phoneCallURL, options: [:], completionHandler: nil)
+                    if #available(iOS 10.0, *) {
+                        application.open(phoneCallURL, options: [:], completionHandler: nil)
+                    } else {
+                        // Fallback on earlier versions
+                        application.openURL(phoneCallURL)
+                    }
                 }
             }
         }))
@@ -376,7 +392,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             let url = URL(string: "mailto:\(email)")
             let application:UIApplication = UIApplication.shared
             if (application.canOpenURL(url!)) {
-                application.open(url!, options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    application.open(url!, options: [:], completionHandler: nil)
+                } else {
+                    application.openURL(url!)
+                }
             }
         }))
         
@@ -396,7 +416,12 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             let url = URL(string: "http://\(website)")!
             let application:UIApplication = UIApplication.shared
             if (application.canOpenURL(url)) {
-                application.open(url, options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    application.open(url, options: [:], completionHandler: nil)
+                } else {
+                    // Fallback on earlier versions
+                    application.openURL(url)
+                }
             }
         }))
         

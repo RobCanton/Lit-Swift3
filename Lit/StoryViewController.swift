@@ -10,6 +10,7 @@
 import UIKit
 import AVFoundation
 import Firebase
+import NVActivityIndicatorView
 
 
 public class StoryViewController: UICollectionViewCell, StoryProtocol {
@@ -39,6 +40,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     
     var itemSetHandler:((_ item:StoryItem)->())?
     
+    var activityView:NVActivityIndicatorView!
+    
     
     
     
@@ -57,7 +60,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     }
     
     var playerLayer:AVPlayerLayer?
-    //var activityView:NVActivityIndicatorView!
     var currentProgress:Double = 0.0
     var timer:Timer?
     
@@ -112,23 +114,23 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     var animateInitiated = false
     
     func animateIndicator() {
-//        if !animateInitiated {
-//            animateInitiated = true
-//            dispatch_async(dispatch_get_main_queue(), {
-//                if self.story.state != .ContentLoaded {
-//                    self.activityView.startAnimating()
-//                }
-//            })
-//        }
+        if !animateInitiated {
+            animateInitiated = true
+            DispatchQueue.main.async {
+                if self.story.state != .contentLoaded {
+                    self.activityView.startAnimating()
+                }
+            }
+        }
     }
     
     func stopIndicator() {
-//        if activityView.animating {
-//            dispatch_async(dispatch_get_main_queue(), {
-//                self.activityView.stopAnimating()
-//                self.animateInitiated = false
-//            })
-//        }
+        if activityView.animating {
+            DispatchQueue.main.async {
+                self.activityView.stopAnimating()
+                self.animateInitiated = false
+            }
+        }
     }
     
     
@@ -209,8 +211,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
                 if let lastItem = item.comments.last {
                     let lastKey = lastItem.getKey()
                     let ts = lastItem.getDate().timeIntervalSince1970 * 1000
-                    
-                    print("LAST COMMENT: \(lastItem.getText())")
                     commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
                         
                         let dict = snapshot.value as! [String:Any]
@@ -221,7 +221,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
                             let timestamp = dict["timestamp"] as! Double
                             
                             let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-                            print("ADDING: \(text)")
                             item.addComment(comment)
                             self.commentsView.setTableComments(comments: item.comments, animated: true)
                         }
@@ -294,7 +293,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     
     func loadContent() {
         self.fadeCoverIn()
-        //self.activityView.startAnimating()
         story.downloadStory()
         
     }
@@ -530,9 +528,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         self.viewsButton.isUserInteractionEnabled = true
         self.viewsButton.addTarget(self, action: #selector(viewsTapped), for: .touchUpInside)
         
-//        activityView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 44, height: 44), type: .BallScaleRipple, color: UIColor.whiteColor(), padding: 1.0, speed: 1.0)
-//        activityView.center = self.contentView.center
-//        
+        activityView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 44, height: 44), type: .ballScaleRipple, color: UIColor.white, padding: 1.0, speed: 1.0)
+        activityView.center = self.contentView.center
+        
         textView = UITextView(frame: CGRect(x: 0,y: frame.height - 44 ,width: frame.width - 26,height: 44))
         
         textView.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
@@ -564,7 +562,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         
         self.contentView.addSubview(self.moreButton)
         
-        //self.contentView.addSubview(activityView)
+        self.contentView.addSubview(activityView)
         
     }
     

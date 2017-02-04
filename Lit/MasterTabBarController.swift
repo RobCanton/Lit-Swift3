@@ -11,6 +11,7 @@ import UIKit
 import ReSwift
 import CoreLocation
 import Firebase
+import NVActivityIndicatorView
 
 class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarControllerDelegate, GPSServiceDelegate {
     typealias StoreSubscriberStateType = AppState
@@ -68,7 +69,47 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     
     
     func newState(state: AppState) {
-
+        
+        var activeLocations = [Location]()
+        for location in mainStore.state.locations {
+            if location.isActive() {
+                activeLocations.append(location)
+            }
+        }
+        
+        if activeLocations.count > 0 {
+            activateLocation()
+            var title:String!
+            if activeLocations.count == 1 {
+                title = "You are near \(activeLocations[0].getName())"
+            } else {
+                title = "You are near \(activeLocations.count) locations"
+            }
+            //let whisper = Murmur(title: title, backgroundColor: accentColor, titleColor: UIColor.whiteColor(), font: UIFont(name: "AvenirNext-Medium", size: 12.0)!)
+            
+            //show(whistle: whisper, action: .Present)
+            
+        } else {
+            deactivateLocation()
+            //hide()
+        }
+    }
+    
+    var isActive = false
+    
+    func activateLocation() {
+        if isActive { return }
+        isActive = true
+        
+        cameraActivity?.startAnimating()
+        
+    }
+    
+    func deactivateLocation() {
+        if !isActive { return }
+        isActive = false
+        cameraButton.layer.borderColor = UIColor.white.cgColor
+        cameraActivity?.stopAnimating()
     }
     
     
@@ -87,7 +128,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     var cameraButton:UIButton!
     let cameraDefaultWidth:CGFloat = 2.2
     let cameraActiveWidth:CGFloat = 4
-    //var cameraActivity:NVActivityIndicatorView!
+    var cameraActivity:NVActivityIndicatorView!
     func setupMiddleButton() {
         if cameraButton == nil {
             cameraButton = UIButton(frame: CGRect(x: 0, y: 0, width: 56, height: 56))
@@ -106,9 +147,10 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
             
             self.tabBar.addSubview(cameraButton)
             
-//            cameraActivity = NVActivityIndicatorView(frame: cameraButton.bounds, type: .BallScaleRipple, color: UIColor.whiteColor(), padding: 1.0, speed: 0.75)
-//            self.cameraButton.addSubview(cameraActivity)
-//            cameraActivity.userInteractionEnabled = false
+            cameraActivity = NVActivityIndicatorView(frame: cameraButton.bounds, type: .ballScaleRipple, color: UIColor.white, padding: 1.0, speed: 0.75)
+            
+            self.cameraButton.addSubview(cameraActivity)
+            cameraActivity.isUserInteractionEnabled = false
             
             let hitArea = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 66))
             hitArea.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.0)

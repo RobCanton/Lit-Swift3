@@ -104,7 +104,12 @@ class SettingsViewController: UITableViewController {
         let url = URL(string: coded!)
         let application:UIApplication = UIApplication.shared
         if (application.canOpenURL(url!)) {
-            application.open(url!, options: [:], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                application.open(url!, options: [:], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+                application.openURL(url!)
+            }
         }
     }
     
@@ -114,7 +119,12 @@ class SettingsViewController: UITableViewController {
         let url = URL(string: coded!)
         let application:UIApplication = UIApplication.shared
         if (application.canOpenURL(url!)) {
-            application.open(url!, options: [:], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                application.open(url!, options: [:], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+                application.openURL(url!)
+            }
         }
     }
     

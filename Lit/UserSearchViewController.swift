@@ -40,8 +40,9 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
                 if let failed = snapshot.value as? Bool {
  
                 } else {
-                    for uid in snapshot.children {
-                        uids.append((uid as AnyObject).key!!)
+                    let dict = snapshot.value as! [String:Any]
+                    for (key, _) in dict {
+                        uids.append(key)
                     }
 
                 }

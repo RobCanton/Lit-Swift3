@@ -66,6 +66,7 @@ PODS:
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
+  - NVActivityIndicatorView (3.0)
   - ReSwift (3.0.0)
   - View2ViewTransition (1.0.0)
 
@@ -77,6 +78,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Storage
   - JSQMessagesViewController
+  - NVActivityIndicatorView
   - ReSwift (= 3.0.0)
   - View2ViewTransition
 
@@ -96,9 +98,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   ReSwift: f0255f4b4f2dacd12c5d97d34d13fc5dad6d6371
   View2ViewTransition: 010ea80e451e42427988102527b0216b8534a741
 
-PODFILE CHECKSUM: ec4df305fc3515f047637ec7e1e45056779fb77e
+PODFILE CHECKSUM: b92160d12a3190b6f985ff0aa5c8b92382ddf7fe
 
 COCOAPODS: 1.2.0.beta.1

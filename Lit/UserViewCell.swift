@@ -18,6 +18,8 @@ class UserViewCell: UITableViewCell {
     
     @IBOutlet weak var followButton: UIButton!
     
+    @IBOutlet weak var verifiedBadge: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -47,6 +49,8 @@ class UserViewCell: UITableViewCell {
                 self.user = user!
                 self.contentImageView.loadImageAsync(user!.getImageUrl(), completion: nil)
                 self.usernameLabel.text = user!.getDisplayName()
+                
+                self.verifiedBadge.isHidden = !user!.isVerified()
                 
             }
         })

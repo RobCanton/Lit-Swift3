@@ -55,6 +55,7 @@
 		B09405CD1E44B19900CE0068 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405CC1E44B19900CE0068 /* WebViewController.swift */; };
 		B09405CF1E44CF9E00CE0068 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405CE1E44CF9E00CE0068 /* GalleryViewController.swift */; };
 		B09405D11E44D04400CE0068 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405D01E44D04400CE0068 /* PostViewController.swift */; };
+		B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B09405D51E460BF100CE0068 /* GoogleService-Info.plist */; };
 		B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */; };
 		B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */; };
 		B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043101E40AED300D50DA7 /* LocationFooterView.swift */; };
@@ -93,7 +94,6 @@
 		B0E59DE41E4050B5007B4762 /* StoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DE01E4050B5007B4762 /* StoryItem.swift */; };
 		B0E59DE51E4050B5007B4762 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DE11E4050B5007B4762 /* User.swift */; };
 		B0E59DE91E40551B007B4762 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DE81E40551B007B4762 /* UserService.swift */; };
-		B0E59DEB1E40570E007B4762 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0E59DEA1E40570E007B4762 /* GoogleService-Info.plist */; };
 		B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DED1E406575007B4762 /* HomeViewController.swift */; };
 		B0E59DF01E406662007B4762 /* Listeners.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DEF1E406662007B4762 /* Listeners.swift */; };
 		B0E59DF31E406678007B4762 /* GPSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E59DF21E406678007B4762 /* GPSService.swift */; };
@@ -160,6 +160,8 @@
 		B09405CC1E44B19900CE0068 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		B09405CE1E44CF9E00CE0068 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		B09405D01E44D04400CE0068 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		B09405D51E460BF100CE0068 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B09405D71E46131100CE0068 /* Lit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lit.entitlements; sourceTree = "<group>"; };
 		B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStoryTableViewCell.swift; sourceTree = "<group>"; };
 		B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserStoryTableViewCell.xib; sourceTree = "<group>"; };
 		B0B043101E40AED300D50DA7 /* LocationFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFooterView.swift; sourceTree = "<group>"; };
@@ -200,7 +202,6 @@
 		B0E59DE01E4050B5007B4762 /* StoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryItem.swift; sourceTree = "<group>"; };
 		B0E59DE11E4050B5007B4762 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B0E59DE81E40551B007B4762 /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		B0E59DEA1E40570E007B4762 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0E59DED1E406575007B4762 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0E59DEF1E406662007B4762 /* Listeners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listeners.swift; sourceTree = "<group>"; };
 		B0E59DF21E406678007B4762 /* GPSService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSService.swift; sourceTree = "<group>"; };
@@ -373,11 +374,12 @@
 		B0D84F6D1E4046DD0043D28C /* Lit */ = {
 			isa = PBXGroup;
 			children = (
+				B09405D71E46131100CE0068 /* Lit.entitlements */,
 				B0D84F721E4046DD0043D28C /* Main.storyboard */,
 				B0D84F751E4046DD0043D28C /* Assets.xcassets */,
 				B0D84F771E4046DD0043D28C /* LaunchScreen.storyboard */,
 				B0D84F7A1E4046DD0043D28C /* Info.plist */,
-				B0E59DEA1E40570E007B4762 /* GoogleService-Info.plist */,
+				B09405D51E460BF100CE0068 /* GoogleService-Info.plist */,
 				B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */,
 				B0E59DE61E4050B9007B4762 /* Models */,
 				B0E59DD91E404FDC007B4762 /* State */,
@@ -517,7 +519,15 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 6BES3VUFCX;
 						LastSwiftMigration = 0820;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -556,7 +566,6 @@
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
 				B01EE5421E435D450049BCBF /* Info.plist in Resources */,
 				B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */,
-				B0E59DEB1E40570E007B4762 /* GoogleService-Info.plist in Resources */,
 				B087C75A1E41C16600234715 /* PhotoCell.xib in Resources */,
 				B087C77B1E41E6AE00234715 /* SendLocationHeaderView.xib in Resources */,
 				B0383C261E43515C002FD893 /* UserSearchViewController.storyboard in Resources */,
@@ -564,6 +573,7 @@
 				B0D84F741E4046DD0043D28C /* Main.storyboard in Resources */,
 				B087C7861E41EE8600234715 /* ListHeaderView.xib in Resources */,
 				B087C77F1E41E6AE00234715 /* SendProfileViewCell.xib in Resources */,
+				B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */,
 				B087C75E1E41C27100234715 /* ProfileHeaderView.xib in Resources */,
 				B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */,
 			);
@@ -743,7 +753,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Robert Canton (WDQ99T7CA8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Robert Canton (WDQ99T7CA8)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -792,7 +803,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Robert Canton (6BES3VUFCX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Robert Canton (6BES3VUFCX)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -818,15 +830,21 @@
 			baseConfigurationReference = F2E7A42E988E95735BC9E6F1 /* Pods-Lit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Lit/Lit.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Robert Canton (WDQ99T7CA8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Robert Canton (WDQ99T7CA8)";
 				DEVELOPMENT_TEAM = 6BES3VUFCX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Lit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.robcanton.Lit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robcanton.lit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "00e87235-e0d6-4373-965c-75a8a32f8a8d";
+				PROVISIONING_PROFILE_SPECIFIER = "Lit-iOS-2017-Development-Profile";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -836,15 +854,21 @@
 			baseConfigurationReference = 82D051C960EAD77D39AD3FF9 /* Pods-Lit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Lit/Lit.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Robert Canton (6BES3VUFCX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Robert Canton (6BES3VUFCX)";
 				DEVELOPMENT_TEAM = 6BES3VUFCX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Lit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.robcanton.Lit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robcanton.lit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "fce9e410-99e3-4931-b814-ba5407eb7211";
+				PROVISIONING_PROFILE_SPECIFIER = "Lit-iOS-2017-Profile";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

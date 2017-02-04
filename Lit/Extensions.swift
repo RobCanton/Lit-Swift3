@@ -27,9 +27,6 @@ extension Date
         let calendar = Calendar.current
         
         let components = calendar.dateComponents([.day, .hour, .minute, .second], from: self, to: Date())
-
-        
-        print("DATE: \(self.timeIntervalSinceNow)")
         
         if components.day! >= 365 {
             return "\(components.day! / 365)y"

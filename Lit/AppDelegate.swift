@@ -11,6 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import ReSwift
 import Firebase
+import UserNotifications
 
 let mainStore = Store<AppState>(
     reducer: AppReducer(),
@@ -27,7 +28,7 @@ let selectedColor:UIColor = UIColor(white: 0.15, alpha: 1.0)
 let inRangeDistance = 0.15
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
@@ -48,7 +49,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
 
+        
+        if #available(iOS 10.0, *) {
+            let center  = UNUserNotificationCenter.current()
+            center.delegate = self
+            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+                if error == nil{
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
+        }
+        else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+        
         return true
+    }
+    
+    //Called when a notification is delivered to a foreground app.
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print("User Info = ",notification.request.content.userInfo)
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    //Called to let your app know which action was selected by the user for a given notification.
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("User Info = ",response.notification.request.content.userInfo)
+        completionHandler()
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {

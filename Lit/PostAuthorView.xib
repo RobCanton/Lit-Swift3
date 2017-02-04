@@ -61,13 +61,20 @@
                                 <constraint firstAttribute="width" constant="35" id="owf-D3-oK4"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-Gd-JVu">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-Gd-JVu">
                             <rect key="frame" x="51" y="15" width="91" height="22"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob0-0G-ySD">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="verified" translatesAutoresizingMaskIntoConstraints="NO" id="mzQ-SY-5e8">
+                            <rect key="frame" x="135" y="15" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="mzQ-SY-5e8" secondAttribute="height" multiplier="1:1" id="Pzv-eX-gN0"/>
+                                <constraint firstAttribute="width" constant="16" id="ds1-Qv-rjy"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="15m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob0-0G-ySD">
                             <rect key="frame" x="163" y="15" width="64" height="22"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
@@ -77,14 +84,16 @@
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="centerY" secondItem="Sbx-ev-NXw" secondAttribute="centerY" id="44c-lG-aRD"/>
-                        <constraint firstItem="ob0-0G-ySD" firstAttribute="leading" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="8" id="5p2-BS-Hoz"/>
+                        <constraint firstItem="mzQ-SY-5e8" firstAttribute="leading" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="6" id="5GM-AF-cjp"/>
                         <constraint firstItem="oMp-3g-Vyj" firstAttribute="centerY" secondItem="Sbx-ev-NXw" secondAttribute="centerY" id="62i-iR-a6F"/>
+                        <constraint firstItem="ob0-0G-ySD" firstAttribute="centerY" secondItem="mzQ-SY-5e8" secondAttribute="centerY" id="6In-BR-nhi"/>
                         <constraint firstItem="oMp-3g-Vyj" firstAttribute="leading" secondItem="Sbx-ev-NXw" secondAttribute="leading" constant="8" id="G6X-WC-W2l"/>
+                        <constraint firstItem="mzQ-SY-5e8" firstAttribute="centerY" secondItem="BEh-Gd-JVu" secondAttribute="centerY" id="ctO-6f-g9T"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="leading" secondItem="oMp-3g-Vyj" secondAttribute="trailing" constant="12" id="d00-mC-e20"/>
+                        <constraint firstItem="ob0-0G-ySD" firstAttribute="leading" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="8" id="gSG-5t-XxY"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="centerY" secondItem="Sbx-ev-NXw" secondAttribute="centerY" id="jKu-ZG-jaa"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="leading" secondItem="oMp-3g-Vyj" secondAttribute="trailing" constant="10" id="jNo-gx-xza"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="top" secondItem="Sbx-ev-NXw" secondAttribute="top" constant="6" id="lkR-UY-sw6"/>
-                        <constraint firstItem="ob0-0G-ySD" firstAttribute="centerY" secondItem="BEh-Gd-JVu" secondAttribute="centerY" id="nbG-QR-uMa"/>
                         <constraint firstAttribute="trailing" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="8" id="r0p-C9-ZeE"/>
                     </constraints>
                     <variation key="default">
@@ -96,7 +105,7 @@
                     </variation>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="QHe-Ty-rfz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3xq-Yh-Q8D"/>
                 <constraint firstAttribute="trailing" secondItem="QHe-Ty-rfz" secondAttribute="trailing" id="6H7-v7-e6Q"/>
@@ -117,11 +126,14 @@
                 <outlet property="authorUsernameLabel" destination="BEh-Gd-JVu" id="DBm-6r-Rgu"/>
                 <outlet property="locationLabel" destination="a8c-9B-TCZ" id="KjK-ho-MFq"/>
                 <outlet property="timeLabel" destination="ob0-0G-ySD" id="xd6-yS-FuB"/>
+                <outlet property="timeLabelLeadingConstraint" destination="gSG-5t-XxY" id="fdV-Vz-WPV"/>
+                <outlet property="userBadge" destination="mzQ-SY-5e8" id="a3j-Wb-msY"/>
             </connections>
             <point key="canvasLocation" x="396.5" y="104"/>
         </view>
     </objects>
     <resources>
         <image name="delete_thin" width="25" height="25"/>
+        <image name="verified" width="16" height="16"/>
     </resources>
 </document>
