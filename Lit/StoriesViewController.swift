@@ -366,7 +366,6 @@ extension StoriesViewController: View2ViewTransitionPresented {
     func prepareDestinationView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) {
         
         if isPresenting {
-            print("isPresenting")
             let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
             currentIndex = indexPath
             let contentOffset: CGPoint = CGPoint(x: self.collectionView.frame.size.width*CGFloat(indexPath.item), y: 0.0)

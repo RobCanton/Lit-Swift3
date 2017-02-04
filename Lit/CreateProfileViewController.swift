@@ -268,7 +268,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
                     ref.setValue(user.uid)
                     
                     let publicRef = UserService.ref.child("users/profile/basic/\(user.uid)")
-                    publicRef.setValue([
+                    publicRef.updateChildValues([
                         "name": name,
                         "username":username,
                         "profileImageURL": smallImageURL!

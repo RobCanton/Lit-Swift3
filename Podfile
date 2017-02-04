@@ -15,8 +15,7 @@ pod 'JSQMessagesViewController'
 pod 'ReSwift', '3.0.0'
 pod 'View2ViewTransition'
 pod 'NVActivityIndicatorView'
-
-
+pod 'Whisper'
 
 end
 

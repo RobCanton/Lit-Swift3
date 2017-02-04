@@ -438,6 +438,12 @@ extension UserProfileViewController: View2ViewTransitionPresenting {
             self.collectionView!.layoutIfNeeded()
         }
     }
+    
+    func dismissInteractionEnded(completed: Bool) {
+        if completed {
+            
+        }
+    }
 }
 
 

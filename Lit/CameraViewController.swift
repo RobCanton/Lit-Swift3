@@ -98,13 +98,13 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         flashButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         flashButton.setImage(UIImage(named: "flashoff"), for: .normal)
         flashButton.center = CGPoint(x: cameraBtnFrame.origin.x / 2, y: cameraBtnFrame.origin.y + cameraBtnFrame.height / 2)
-        flashButton.alpha = 0.6
+        flashButton.alpha = 0.75
         flashButton.tintColor = UIColor.white
         
         switchButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         switchButton.setImage(UIImage(named: "switchcamera"), for: .normal)
         switchButton.center = CGPoint(x: view.frame.width - cameraBtnFrame.origin.x / 2, y: cameraBtnFrame.origin.y + cameraBtnFrame.height / 2)
-        switchButton.alpha = 0.6
+        switchButton.alpha = 0.75
         switchButton.tintColor = UIColor.white
         
         self.view.insertSubview(flashView, aboveSubview: imageCaptureView)
@@ -123,7 +123,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIView.animate(withDuration: 0.6, animations: {
-            self.dismissButton.alpha = 0.6
+            self.dismissButton.alpha = 0.75
         })
     }
     

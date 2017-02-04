@@ -400,4 +400,10 @@ extension ActivityViewController: View2ViewTransitionPresenting {
             self.tableView!.layoutIfNeeded()
         }
     }
+    
+    func dismissInteractionEnded(completed: Bool) {
+        if completed {
+            
+        }
+    }
 }

@@ -105,7 +105,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             animateIndicator()
             break
         case .contentLoaded:
-            print("ContentLoaded")
             stopIndicator()
             contentLoaded()
             break
@@ -646,7 +645,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     }
     
     func sendComment(comment:String) {
-        print("SEND COMMENT: \(comment)")
         textView.text = ""
         updateTextAndCommentViews()
         if item != nil {

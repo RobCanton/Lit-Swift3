@@ -10,6 +10,7 @@ import Foundation
 import Firebase
 import CoreLocation
 import AVFoundation
+import Whisper
 
 class Upload {
     
@@ -45,10 +46,10 @@ class UploadService {
             let metadata = FIRStorageMetadata()
             metadata.contentType = contentTypeStr
             
-//            var uploadingMurmer = Murmur(title: "Uploading...")
-//            uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
-//            uploadingMurmer.titleColor = UIColor.lightGrayColor()
-//            show(whistle: uploadingMurmer, action: .Show(60.0))
+            var uploadingMurmer = Murmur(title: "Uploading...")
+            uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
+            uploadingMurmer.titleColor = UIColor.lightGray
+            show(whistle: uploadingMurmer, action: .show(60.0))
             
             // Upload file and metadata to the object
             let storageRef = FIRStorage.storage().reference()
@@ -56,11 +57,11 @@ class UploadService {
                 
                 if (error != nil) {
                     // HANDLE ERROR
-//                    hide()
-//                    var murmur = Murmur(title: "Unable to upload.")
-//                    murmur.backgroundColor = errorColor
-//                    murmur.titleColor = UIColor.whiteColor()
-//                    show(whistle: murmur, action: .Show(5.0))
+                    hide()
+                    var murmur = Murmur(title: "Unable to upload.")
+                    murmur.backgroundColor = errorColor
+                    murmur.titleColor = UIColor.white
+                    show(whistle: murmur, action: .show(5.0))
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()
@@ -76,18 +77,18 @@ class UploadService {
                         "length": 5.0
                     ] as [String : Any]
                     dataRef.child("meta").setValue(obj, withCompletionBlock: { error, _ in
-                        //hide()
-//                        if error == nil {
-//                            var murmur = Murmur(title: "Image uploaded!")
-//                            murmur.backgroundColor = accentColor
-//                            murmur.titleColor = UIColor.whiteColor()
-//                            show(whistle: murmur, action: .Show(3.0))
-//                        } else {
-//                            var murmur = Murmur(title: "Unable to upload.")
-//                            murmur.backgroundColor = errorColor
-//                            murmur.titleColor = UIColor.whiteColor()
-//                            show(whistle: murmur, action: .Show(5.0))
-//                        }
+                        hide()
+                        if error == nil {
+                            var murmur = Murmur(title: "Image uploaded!")
+                            murmur.backgroundColor = accentColor
+                            murmur.titleColor = UIColor.white
+                            show(whistle: murmur, action: .show(3.0))
+                        } else {
+                            var murmur = Murmur(title: "Unable to upload.")
+                            murmur.backgroundColor = errorColor
+                            murmur.titleColor = UIColor.white
+                            show(whistle: murmur, action: .show(5.0))
+                        }
                     })
                     
                 }

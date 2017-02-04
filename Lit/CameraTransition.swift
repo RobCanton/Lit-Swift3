@@ -36,7 +36,6 @@ class CameraTransition: UIStoryboardSegue {
         let cameraButton = UIButton(frame: CGRect(x: 0, y: 0, width: 56, height: 56))
 
         cameraButton.frame = CGRect(x: screenBounds.width/2 - cameraBtnFrame.size.width/2, y: screenBounds.height - cameraBtnFrame.height - 8, width: cameraBtnFrame.width, height: cameraBtnFrame.height)
- 
         
         cameraButton.backgroundColor = UIColor.black
         cameraButton.layer.cornerRadius = cameraBtnFrame.height/2
@@ -44,7 +43,6 @@ class CameraTransition: UIStoryboardSegue {
         cameraButton.layer.borderWidth = fromViewController.cameraButton.layer.borderWidth
         cameraButton.tintColor = UIColor.white
 
-        
         let definiteBounds = UIScreen.main.bounds
         
         let recordButtonCenter = CGPoint(x: cameraButton.center.x, y: definiteBounds.height - 100)
@@ -85,7 +83,9 @@ class CameraTransition: UIStoryboardSegue {
             cameraButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
             cameraButton.center = recordButtonCenter
             cameraButton.backgroundColor = UIColor.clear
-            }, completion: { finished in
+            
+        
+        }, completion: { finished in
                 cameraButton.removeFromSuperview()
                 toViewController.recordBtn?.isHidden = false
                 fromViewController.cameraButton.isHidden = false
@@ -111,9 +111,7 @@ class CameraUnwindTransition: UIStoryboardSegue {
     private func animateSwipeDown() {
         let toViewController = destination as! MasterTabBarController
         let fromViewController = source as! CameraViewController
-        
-        
-    
+
         let containerView = fromViewController.view.superview
         let screenBounds = fromViewController.view.bounds
         

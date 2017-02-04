@@ -30,6 +30,13 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     var statusBarShouldHide = false
     
+    override var prefersStatusBarHidden: Bool
+    {
+        get{
+            return statusBarShouldHide
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -121,6 +128,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.isUserInteractionEnabled = true
+        
         
         if let tabBar = self.tabBarController as? MasterTabBarController {
             tabBar.setTabBarVisible(_visible: true, animated: true)
@@ -450,7 +458,10 @@ extension LocationViewController: View2ViewTransitionPresenting {
         
         let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
         
-        let y = cell.frame.origin.y + 12 + navHeight
+        var y = cell.frame.origin.y + 12 + navHeight
+        if !isPresenting {
+            y += 20.0
+        }
         
         let rect = CGRect(x: x, y: y, width: image_height, height: image_height)// CGRectMake(x,y,image_height, image_height)
         return self.tableView.convert(rect, to: self.tableView.superview)
@@ -482,4 +493,22 @@ extension LocationViewController: View2ViewTransitionPresenting {
             self.tableView!.layoutIfNeeded()
         }
     }
+    
+    func dismissInteractionEnded(completed: Bool) {
+        print("Dismiss Interaction Ended: \(completed)")
+        if completed {
+            statusBarShouldHide = false
+            self.setNeedsStatusBarAppearanceUpdate()
+            
+            if let tabBar = self.tabBarController as? MasterTabBarController {
+                tabBar.setTabBarVisible(_visible: true, animated: true)
+            }
+            
+//            if let nav = navigationController as? MasterNavigationController {
+//                nav.setNavigationBarHidden(false, animated: true)
+//                nav.delegate = nav
+//            }
+        }
+    }
+
 }

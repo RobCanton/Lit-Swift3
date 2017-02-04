@@ -108,6 +108,11 @@ var screenStatusBarHeight: CGFloat {
     return UIApplication.shared.statusBarFrame.height
 }
 
+func statusBarHeight() -> CGFloat {
+    let statusBarSize = UIApplication.shared.statusBarFrame.size
+    return Swift.min(statusBarSize.width, statusBarSize.height)
+}
+
 func getDistanceString(distance:Double) -> String {
     if distance < 0.5 {
         // meters
