@@ -19,11 +19,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuf-SF-hr2">
-                                <rect key="frame" x="117" y="621" width="141" height="30"/>
+                                <rect key="frame" x="117" y="572" width="141" height="30"/>
                                 <state key="normal" title="Login with Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -209,6 +209,7 @@
                         <segue destination="I8Q-CS-gIj" kind="relationship" relationship="viewControllers" id="v9w-8l-wOO"/>
                         <segue destination="SXS-Rb-IAx" kind="relationship" relationship="viewControllers" id="OWZ-iE-KJv"/>
                         <segue destination="ifC-Dv-tSu" kind="show" identifier="showCamera" customClass="CameraTransition" customModule="Lit" customModuleProvider="target" id="M1W-Fm-seg"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="logout" animates="NO" id="fGy-cr-SAt"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J20-F9-iyj" userLabel="First Responder" sceneMemberID="firstResponder"/>

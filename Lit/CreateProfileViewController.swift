@@ -55,13 +55,13 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         
         self.automaticallyAdjustsScrollViewInsets = false
         
-        headerView =  UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 300))
+        headerView =  UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width))
         headerView.contentMode = .scaleAspectFill
         scrollView = UIScrollView()
 
         scrollView.frame = view.frame
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 300)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + headerView.frame.height)
         scrollView.backgroundColor = UIColor.black
         scrollView.isScrollEnabled = true
         bodyView = UIView()
@@ -100,14 +100,14 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         
         usernameField.center = CGPoint(x: bodyView.frame.width/2, y: fullnameField.center.y + usernameField.frame.height + 15)
         bodyView.addSubview(usernameField)
-        
-
+    
         
         tap = UITapGestureRecognizer(target: self, action: #selector(proceed))
         
         headerTap = UITapGestureRecognizer(target: self, action: #selector(showProfilePhotoMessagesView))
         headerView.addGestureRecognizer(headerTap)
         headerView.isUserInteractionEnabled = true
+        headerView.clipsToBounds = true
 
         imagePicker.delegate = self
         imagePicker.navigationBar.isTranslucent = false
@@ -147,14 +147,19 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         self.present(actionSheet, animated: true, completion: nil)
     }
     
+    var croppedImage:UIImage!
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             
             self.headerView.image = nil
-            self.smallProfileImageView.image = nil
-            headerView.image = resizeImage(image: pickedImage, newWidth: 720)
-            smallProfileImageView.image = resizeImage(image: pickedImage, newWidth: 150)
+            self.smallProfileImage = nil
+
+            if let image = cropImageToSquare(image: pickedImage) {
+                self.headerView.image = resizeImage(image: image, newWidth: 600)
+                self.smallProfileImage = resizeImage(image: image, newWidth: 100)
+            }
+ 
         }
         
         dismiss(animated: true, completion: nil)
@@ -164,7 +169,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         dismiss(animated: true, completion: nil)
         
     }
-    var smallProfileImageView:UIImageView!
+    var smallProfileImage:UIImage?
     
     var facebook_uid = ""
     
@@ -181,10 +186,6 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         }
         
         fullnameField.text = userInfo["displayName"]
-        
-        smallProfileImageView = UIImageView()
-        smallProfileImageView.loadImageAsync(userInfo["photoURL"]!, completion: nil)
-        
         setFacebookProfilePicture()
         
     }
@@ -194,8 +195,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
             if imageURL != nil {
                 self.headerView.image = nil
                 self.headerView.loadImageAsync(imageURL!, completion: { fromCache in
-                    self.smallProfileImageView.image = nil
-                    self.smallProfileImageView.image = resizeImage(image: self.headerView.image!, newWidth: 150)
+                    self.smallProfileImage = resizeImage(image: self.headerView.image!, newWidth: 150)
                 })
             }
         })
@@ -238,7 +238,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
     
     func proceed() {
         if usernameField.text == nil || usernameField.text == "" { return }
-        
+        if smallProfileImage == nil || headerView.image == nil { return }
         
         let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         let barButton = UIBarButtonItem(customView: activityIndicator)
@@ -260,7 +260,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         
         if let user = FIRAuth.auth()?.currentUser {
             let largeImage = headerView.image!
-            let smallImage = smallProfileImageView.image!
+            let smallImage = smallProfileImage!
             UserService.uploadProfilePicture(largeImage: largeImage, smallImage: smallImage, completionHandler: { success, largeImageURL, smallImageURL in
                 
                 if success {
@@ -394,10 +394,8 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        scrollView.setContentOffset(CGPoint(x:0,y:view.frame.height/2), animated: true)
         if textField === usernameField {
-            //[scroll setContentOffset:CGPointMake(0, (textField.superview.frame.origin.y + (textField.frame.origin.y))) animated:YES]    }
-            let point = CGPoint(x: 0,y: (textField.superview!.frame.origin.y + (textField.frame.origin.y) - headerView.frame.height))
-            scrollView.setContentOffset(CGPoint(x:0,y:headerView.frame.height), animated: true)
             
             usernameField.borderColor = UIColor.white
             usernameField.placeholderColor = UIColor.white
@@ -412,6 +410,7 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
                 checkUsernameAvailability()
             }
         }
+        scrollView.setContentOffset(CGPoint(x:0,y:0), animated: true)
     }
     
     func deactivateCreateProfileButton() {

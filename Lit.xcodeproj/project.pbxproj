@@ -56,6 +56,12 @@
 		B09405CF1E44CF9E00CE0068 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405CE1E44CF9E00CE0068 /* GalleryViewController.swift */; };
 		B09405D11E44D04400CE0068 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405D01E44D04400CE0068 /* PostViewController.swift */; };
 		B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B09405D51E460BF100CE0068 /* GoogleService-Info.plist */; };
+		B09405DF1E4834FB00CE0068 /* WDCropBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405D91E4834F800CE0068 /* WDCropBorderView.swift */; };
+		B09405E01E4834FB00CE0068 /* WDImageCropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DA1E4834F800CE0068 /* WDImageCropOverlayView.swift */; };
+		B09405E11E4834FB00CE0068 /* WDImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DB1E4834F800CE0068 /* WDImageCropView.swift */; };
+		B09405E21E4834FB00CE0068 /* WDImageCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DC1E4834F800CE0068 /* WDImageCropViewController.swift */; };
+		B09405E31E4834FB00CE0068 /* WDImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DD1E4834F800CE0068 /* WDImagePicker.swift */; };
+		B09405E41E4834FB00CE0068 /* WDResizableCropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */; };
 		B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */; };
 		B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */; };
 		B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043101E40AED300D50DA7 /* LocationFooterView.swift */; };
@@ -162,6 +168,12 @@
 		B09405D01E44D04400CE0068 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		B09405D51E460BF100CE0068 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B09405D71E46131100CE0068 /* Lit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lit.entitlements; sourceTree = "<group>"; };
+		B09405D91E4834F800CE0068 /* WDCropBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDCropBorderView.swift; sourceTree = "<group>"; };
+		B09405DA1E4834F800CE0068 /* WDImageCropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImageCropOverlayView.swift; sourceTree = "<group>"; };
+		B09405DB1E4834F800CE0068 /* WDImageCropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImageCropView.swift; sourceTree = "<group>"; };
+		B09405DC1E4834F800CE0068 /* WDImageCropViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImageCropViewController.swift; sourceTree = "<group>"; };
+		B09405DD1E4834F800CE0068 /* WDImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImagePicker.swift; sourceTree = "<group>"; };
+		B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDResizableCropOverlayView.swift; sourceTree = "<group>"; };
 		B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStoryTableViewCell.swift; sourceTree = "<group>"; };
 		B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserStoryTableViewCell.xib; sourceTree = "<group>"; };
 		B0B043101E40AED300D50DA7 /* LocationFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFooterView.swift; sourceTree = "<group>"; };
@@ -306,9 +318,23 @@
 			name = Profile;
 			sourceTree = "<group>";
 		};
+		B09405D81E4834EB00CE0068 /* WDImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				B09405D91E4834F800CE0068 /* WDCropBorderView.swift */,
+				B09405DA1E4834F800CE0068 /* WDImageCropOverlayView.swift */,
+				B09405DB1E4834F800CE0068 /* WDImageCropView.swift */,
+				B09405DC1E4834F800CE0068 /* WDImageCropViewController.swift */,
+				B09405DD1E4834F800CE0068 /* WDImagePicker.swift */,
+				B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */,
+			);
+			name = WDImagePicker;
+			sourceTree = "<group>";
+		};
 		B0B043141E40B53000D50DA7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B09405D81E4834EB00CE0068 /* WDImagePicker */,
 				B0E59E071E409B65007B4762 /* Extensions.swift */,
 				B01EE5331E435D450049BCBF /* TextFieldEffects */,
 			);
@@ -648,8 +674,11 @@
 				B01EE5481E435D450049BCBF /* TextFieldsEffects.swift in Sources */,
 				B087C7891E41F82200234715 /* ProgressIndicator.swift in Sources */,
 				B09405CB1E44B18400CE0068 /* MapViewController.swift in Sources */,
+				B09405E31E4834FB00CE0068 /* WDImagePicker.swift in Sources */,
 				B0E59DF31E406678007B4762 /* GPSService.swift in Sources */,
+				B09405E21E4834FB00CE0068 /* WDImageCropViewController.swift in Sources */,
 				B087C77C1E41E6AE00234715 /* SendLocationViewCell.swift in Sources */,
+				B09405E41E4834FB00CE0068 /* WDResizableCropOverlayView.swift in Sources */,
 				B0E59E021E4091D1007B4762 /* LocationViewController.swift in Sources */,
 				B0B043261E40C60300D50DA7 /* MasterNavigationController.swift in Sources */,
 				B0E59DE91E40551B007B4762 /* UserService.swift in Sources */,
@@ -679,6 +708,7 @@
 				B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */,
 				B087C7641E41C61700234715 /* LocationsReducer.swift in Sources */,
 				B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */,
+				B09405E11E4834FB00CE0068 /* WDImageCropView.swift in Sources */,
 				B01EE5301E435CA00049BCBF /* CreateProfileViewController.swift in Sources */,
 				B087C7511E4163AA00234715 /* CameraButton.swift in Sources */,
 				B087C78A1E41F82200234715 /* StoryProgressIndicator.swift in Sources */,
@@ -689,6 +719,7 @@
 				B0E59DE51E4050B5007B4762 /* User.swift in Sources */,
 				B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */,
 				B0D84F6F1E4046DD0043D28C /* AppDelegate.swift in Sources */,
+				B09405E01E4834FB00CE0068 /* WDImageCropOverlayView.swift in Sources */,
 				B0B043291E40CF4D00D50DA7 /* MessagesTableViewController.swift in Sources */,
 				B0CC44E71E431D260078FFFE /* ActivityViewController.swift in Sources */,
 				B087C7801E41E6AE00234715 /* SendTableViewController.swift in Sources */,
@@ -703,6 +734,7 @@
 				B01EE5461E435D450049BCBF /* MadokaTextField.swift in Sources */,
 				B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */,
 				B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */,
+				B09405DF1E4834FB00CE0068 /* WDCropBorderView.swift in Sources */,
 				B01EE5491E435D450049BCBF /* YokoTextField.swift in Sources */,
 				B09405CF1E44CF9E00CE0068 /* GalleryViewController.swift in Sources */,
 				B0B0432F1E40D36700D50DA7 /* ConversationViewCell.swift in Sources */,

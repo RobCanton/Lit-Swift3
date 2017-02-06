@@ -45,12 +45,17 @@ class LocationTableCell: UITableViewCell {
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var guestsCountBubble: UIView!
     @IBOutlet weak var guestsCountLabel: UILabel!
+    
+    @IBOutlet weak var gradientView: UIView!
+    
 
     var imageViewInitialTopConstraint: CGFloat!
     var imageViewInitialBottomConstraint: CGFloat!
     let parallaxIndex: CGFloat = 18
     var location:Location?
     var fadeView:UIView!
+    
+    var gradient:CAGradientLayer?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -64,7 +69,7 @@ class LocationTableCell: UITableViewCell {
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
         
-        titleLabel.superview!.layer.cornerRadius = 2.0
+        titleLabel.superview!.layer.cornerRadius = 0.0
         titleLabel.superview!.clipsToBounds = true
     }
 
@@ -129,9 +134,12 @@ class LocationTableCell: UITableViewCell {
                 icon.removeFromSuperview()
             }
         }
+        gradient?.removeFromSuperlayer()
         
         x = guestsCountBubble.frame.origin.x + guestsCountBubble.frame.width - (guestsCountBubble.frame.height * 0.2)
         guestIcons = [UIImageView]()
+        
+        
         
         if visitors.count > 0 {
             guestsCountBubble.isHidden = false
@@ -149,6 +157,16 @@ class LocationTableCell: UITableViewCell {
                     }
                 })
             }
+            let sideLength = guestIconsView.frame.height * 0.8
+            let gradientWidth = guestsCountBubble.frame.origin.x * 4.0 + guestsCountBubble.frame.width + sideLength * CGFloat(visitors.count + 2)
+            gradient = CAGradientLayer()
+            gradient!.frame = CGRect(x: 0, y: 0, width: gradientWidth, height: gradientView.bounds.height * 1.25)
+            gradient!.startPoint = CGPoint(x: 0, y: 1)
+            gradient!.endPoint = CGPoint(x: 1, y: 0)
+            gradient!.locations = [0.0, 0.5]
+            let dark = UIColor(white: 0.0, alpha: 0.65)
+            gradient!.colors = [dark.cgColor, UIColor.clear.cgColor]
+            gradientView.layer.insertSublayer(gradient!, at: 0)
         } else {
             guestsCountBubble.isHidden = true
         }
@@ -170,7 +188,6 @@ class LocationTableCell: UITableViewCell {
         guestIcon.layer.cornerRadius = guestIcon.frame.width / 2
         guestIcon.clipsToBounds = true
         guestIcon.contentMode = .scaleAspectFill
-        
         
         guestIcons!.append(guestIcon)
         

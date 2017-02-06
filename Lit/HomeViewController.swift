@@ -44,6 +44,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.showsVerticalScrollIndicator = false
         tableView.tableFooterView = UIView()
         tableView.reloadData()
+        setCellAlphas()
         
         searchBar = UISearchBar()
 
@@ -70,8 +71,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func newState(state: AppState) {
-        locations = state.locations
-        locations.sort(by: {
+        var templocations = state.locations
+        templocations.sort(by: {
             if $0.getVisitorsCount() == $1.getVisitorsCount() {
                 return $0.getDistance()! < $1.getDistance()!
             }
@@ -79,15 +80,35 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             return $0.getVisitorsCount() > $1.getVisitorsCount()
         })
         
-        for i in 0 ..< locations.count {
-            let location = locations[i]
+        var activeLocations = [Location]()
+        for i in 0 ..< templocations.count {
+            let location = templocations[i]
             if location.isActive() {
-                locations.remove(at: i)
-                locations.insert(location, at: 0)
+                templocations.remove(at: i)
+                templocations.insert(location, at: 0)
+                activeLocations.append(location)
+            }
+        }
+        
+        activeLocations.sort(by: {
+            if $0.getVisitorsCount() == $1.getVisitorsCount() {
+                return $0.getDistance()! < $1.getDistance()!
             }
             
+            return $0.getVisitorsCount() > $1.getVisitorsCount()
+        })
+        
+        
+        
+        for _ in 0..<activeLocations.count {
+            templocations.remove(at: 0)
         }
+        
+        templocations.insert(contentsOf: activeLocations, at: 0)
+        
+        locations = templocations
         tableView.reloadData()
+        setCellAlphas()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

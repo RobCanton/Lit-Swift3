@@ -27,7 +27,11 @@ class EditProfileViewController: UITableViewController {
     
     @IBOutlet weak var bioPlaceholder: UITextField!
     
-    var headerView: EditProfilePictureView!
+    var imageTap: UITapGestureRecognizer!
+    
+    
+    var headerView:UIImageView!
+    var smallProfileImage:UIImage?
     
     var profileImageChanged = false
     
@@ -40,25 +44,12 @@ class EditProfileViewController: UITableViewController {
     
     var delegate:EditProfileProtocol?
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if let user = mainStore.state.userState.user {
-            if let largeImage = user.largeImageURL {
-                if !profileImageChanged {
-                    headerView.setImage(url: largeImage)
-                    headerView.handler = showProfilePhotoMessagesView
-                }
-            }
-        }
-        
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        headerView = UINib(nibName: "EditProfilePictureView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! EditProfilePictureView
-        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 300)
-        headerView.isUserInteractionEnabled = true
-        
+        headerView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width))
+        headerView.contentMode = .scaleAspectFill
+
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 300 // Something reasonable to help ios render your cells
         
@@ -71,6 +62,12 @@ class EditProfileViewController: UITableViewController {
         usernameTextField.addTarget(self, action: #selector(textViewChanged), for: .editingChanged);
         
         if let user = mainStore.state.userState.user {
+            
+            headerView.loadImageAsync(user.largeImageURL!, completion: { _ in
+                self.imageTap = UITapGestureRecognizer(target: self, action: #selector(self.showProfilePhotoMessagesView))
+                self.headerView.isUserInteractionEnabled = true
+                self.headerView.addGestureRecognizer(self.imageTap)
+            })
             
             nameTextField.text     = user.getName()
             usernameTextField.text = user.getDisplayName()
@@ -132,11 +129,8 @@ class EditProfileViewController: UITableViewController {
         activityIndicator.startAnimating()
         
         if profileImageChanged {
-            let image = headerView.imageView.image!
-            let largeImage = resizeImage(image: image, newWidth: 720)
-            let smallImage = resizeImage(image: image, newWidth: 150)
             
-            UserService.uploadProfilePicture(largeImage: largeImage, smallImage: smallImage, completionHandler: { success, largeImageURL, smallImageURL in
+            UserService.uploadProfilePicture(largeImage: headerView.image!, smallImage: smallProfileImage!, completionHandler: { success, largeImageURL, smallImageURL in
                 if success {
                     self.smallImageURL = smallImageURL
                     self.largeImageURL = largeImageURL
@@ -149,7 +143,6 @@ class EditProfileViewController: UITableViewController {
         } else {
             updateUser()
         }
-        
     }
     
     func updateUser() {
@@ -219,24 +212,28 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
     }
     
     func setFacebookProfilePicture() {
-//        FacebookGraph.getProfilePicture({ imageURL in
-//            if imageURL != nil {
-//                loadImageUsingCacheWithURL(imageURL!, completion: { image, fromCache in
-//                    if image != nil {
-//                       self.previewNewImage(image!)
-//                    }
-//                })
-//                
-//            }
-//        })
+        FacebookGraph.getProfilePicture(completion: { imageURL in
+            if imageURL != nil {
+                loadImageUsingCacheWithURL(imageURL!, completion: { image, fromCache in
+                    if image != nil {
+                        self.previewNewImage(image: image!)
+                    }
+                })
+            }
+        })
     }
     
     func previewNewImage(image:UIImage) {
         
         DispatchQueue.main.async {
+            self.headerView.image = nil
+            
+            if let croppedImage = cropImageToSquare(image: image) {
+                self.headerView.image = resizeImage(image: croppedImage, newWidth: 600)
+                self.smallProfileImage = resizeImage(image: croppedImage, newWidth: 100)
+            }
             self.didEdit = true
             self.profileImageChanged = true
-            self.headerView.imageView.image = image
         }
     }
     
@@ -245,7 +242,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
             if success {
                 UserService.updateProfilePictureURL(largeURL: largeImageURL!, smallURL: smallImageURL!, completionHandler: {
                     mainStore.dispatch(UpdateProfileImageURL(largeImageURL: largeImageURL!, smallImageURL: smallImageURL!))
-                    self.headerView.imageView.loadImageAsync(largeImageURL!, completion: nil)  //loadImageUsingCacheWithURLString(largeImageURL!, completion: {result in})
+                    self.headerView.loadImageAsync(largeImageURL!, completion: nil)
                 })
             }
         })

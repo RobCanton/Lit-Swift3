@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,6 +21,13 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kaL-2C-Qa4">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="217"/>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Exd-Qk-z2q">
+                        <rect key="frame" x="0.0" y="175" width="500" height="42"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="42" id="wQu-IG-ZFL"/>
+                        </constraints>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eBd-Xl-yvI">
                         <rect key="frame" x="0.0" y="175" width="500" height="34"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -80,10 +86,13 @@
                     <constraint firstAttribute="trailingMargin" secondItem="eBd-Xl-yvI" secondAttribute="trailing" constant="-8" id="6yO-43-rco"/>
                     <constraint firstItem="fxS-s4-SJX" firstAttribute="top" secondItem="OXv-5w-fm5" secondAttribute="topMargin" id="8YN-L7-WmK"/>
                     <constraint firstAttribute="leadingMargin" secondItem="msW-rc-d61" secondAttribute="leading" id="AdD-9T-yJj"/>
+                    <constraint firstAttribute="bottom" secondItem="Exd-Qk-z2q" secondAttribute="bottom" id="Df1-7J-4up"/>
+                    <constraint firstItem="Exd-Qk-z2q" firstAttribute="leading" secondItem="OXv-5w-fm5" secondAttribute="leading" id="LCU-8E-tIG"/>
                     <constraint firstItem="eBd-Xl-yvI" firstAttribute="height" secondItem="msW-rc-d61" secondAttribute="height" id="Mfa-NS-4ln"/>
                     <constraint firstItem="eBd-Xl-yvI" firstAttribute="leading" secondItem="OXv-5w-fm5" secondAttribute="leadingMargin" constant="-8" id="Wkf-DN-4qZ"/>
                     <constraint firstAttribute="leadingMargin" secondItem="fxS-s4-SJX" secondAttribute="leading" id="ZyT-OT-gsa"/>
                     <constraint firstItem="kaL-2C-Qa4" firstAttribute="top" secondItem="OXv-5w-fm5" secondAttribute="top" id="aFp-RS-vQg"/>
+                    <constraint firstAttribute="trailing" secondItem="Exd-Qk-z2q" secondAttribute="trailing" id="edI-fu-AiW"/>
                     <constraint firstAttribute="bottomMargin" secondItem="msW-rc-d61" secondAttribute="bottom" id="kGZ-C3-Qqu"/>
                     <constraint firstItem="eBd-Xl-yvI" firstAttribute="centerY" secondItem="msW-rc-d61" secondAttribute="centerY" id="m5V-Wn-jbI"/>
                     <constraint firstItem="kaL-2C-Qa4" firstAttribute="leading" secondItem="OXv-5w-fm5" secondAttribute="leading" id="vcd-cT-rNV"/>
@@ -93,6 +102,7 @@
                 <outlet property="backgroundImage" destination="kaL-2C-Qa4" id="68i-VU-zEa"/>
                 <outlet property="bottomImageViewConstraint" destination="0SB-90-Alg" id="Dcw-Ee-zon"/>
                 <outlet property="distanceLabel" destination="BAm-yK-Pow" id="EhS-NU-ewg"/>
+                <outlet property="gradientView" destination="Exd-Qk-z2q" id="iWK-BK-I1W"/>
                 <outlet property="guestIconsView" destination="eBd-Xl-yvI" id="gJC-WX-ane"/>
                 <outlet property="guestsCountBubble" destination="msW-rc-d61" id="1c8-pB-GqU"/>
                 <outlet property="guestsCountLabel" destination="kXW-gE-FGP" id="7Ac-ub-DVc"/>

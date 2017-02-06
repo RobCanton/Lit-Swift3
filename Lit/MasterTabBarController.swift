@@ -51,7 +51,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
             if let theUser = user {
                 // User is signed in.
             } else {
-                self.dismiss(animated: true, completion: nil)
+                self.performSegue(withIdentifier: "logout", sender: self)
             }
         }
     }
