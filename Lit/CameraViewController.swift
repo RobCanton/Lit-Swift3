@@ -16,6 +16,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     @IBOutlet weak var cameraOutputView: UIView!
     @IBOutlet weak var videoCaptureView: UIView!
     @IBOutlet weak var imageCaptureView: UIImageView!
+    @IBOutlet weak var gradientView: UIView!
+    
     
     var captureSession: AVCaptureSession?
     var stillImageOutput: AVCaptureStillImageOutput?
@@ -27,6 +29,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     var cameraDevice: AVCaptureDevice?
     
     var pinchGesture:UIPinchGestureRecognizer!
+    var tapGesture:UITapGestureRecognizer!
 
     @IBOutlet weak var dismissButton: UIButton!
     
@@ -47,13 +50,15 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     var flashView:UIView!
     
+    var textView:UITextView!
+    
     lazy var cancelButton: UIButton = {
         let definiteBounds = UIScreen.main.bounds
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 48, height: 48))
         button.setImage(UIImage(named: "delete"), for: .normal)
-        button.center = CGPoint(x: button.frame.width * 0.75, y: definiteBounds.height - button.frame.height * 0.75)
+        button.center = CGPoint(x: button.frame.width * 0.60, y: definiteBounds.height - button.frame.height * 0.60)
         button.tintColor = UIColor.white
-        
+        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
         return button
         
     }()
@@ -67,7 +72,18 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         button.backgroundColor = accentColor
         button.layer.cornerRadius = button.frame.width / 2
         button.clipsToBounds = true
-        //button.applyShadow(2.0, opacity: 0.5, height: 1.0, shouldRasterize: false)
+        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
+        return button
+    }()
+    
+    lazy var captionButton: UIButton = {
+        let definiteBounds = UIScreen.main.bounds
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 54, height: 54))
+        button.center = CGPoint(x: definiteBounds.width - button.frame.width * 0.5, y: button.frame.height * 0.5)
+        button.setImage(UIImage(named: "type"), for: .normal)
+        button.tintColor = UIColor.white
+        button.clipsToBounds = true
+        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
         return button
     }()
     
@@ -75,15 +91,14 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         return true
     }
     
-    
-    
-    
     @IBAction func handleDismiss(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         let definiteBounds = UIScreen.main.bounds
         
         flashView = UIView(frame: view.bounds)
@@ -99,18 +114,23 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         recordBtn.isHidden = true
         recordBtn.tappedHandler = didPressTakePhoto
         recordBtn.pressedHandler = pressed
+        recordBtn.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         
         flashButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         flashButton.setImage(UIImage(named: "flashoff"), for: .normal)
         flashButton.center = CGPoint(x: cameraBtnFrame.origin.x / 2, y: cameraBtnFrame.origin.y + cameraBtnFrame.height / 2)
         flashButton.alpha = 0.75
         flashButton.tintColor = UIColor.white
+        flashButton.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         
         switchButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         switchButton.setImage(UIImage(named: "switchcamera"), for: .normal)
         switchButton.center = CGPoint(x: view.frame.width - cameraBtnFrame.origin.x / 2, y: cameraBtnFrame.origin.y + cameraBtnFrame.height / 2)
         switchButton.alpha = 0.75
         switchButton.tintColor = UIColor.white
+        switchButton.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
+        
+        dismissButton.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         
         self.view.insertSubview(flashView, aboveSubview: imageCaptureView)
         self.view.addSubview(recordBtn)
@@ -119,16 +139,42 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         
         flashButton.addTarget(self, action: #selector(switchFlashMode), for: .touchUpInside)
         switchButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
-        
-    
-        cameraState = .Initiating
-        
+
         pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture))
-        //self.cameraOutputView.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(pinchGesture)
         pinchGesture.delegate = self
         recordBtn.press.delegate = self
         recordBtn.tap.delegate = self
+        
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGesture))
+        
+        
+        textView = UITextView(frame: CGRect(x: 0,y: view.frame.height - 72,width: view.frame.width,height: 44))
+        
+        textView.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
+        textView.textColor = UIColor.white
+        textView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+        textView.isHidden = false
+        textView.keyboardAppearance = .dark
+        textView.isScrollEnabled = false
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
+        textView.text = "Send a message"
+        textView.fitHeightToContent()
+        textView.text = ""
+        textView.delegate = self
+        
+        
+        let gradient = CAGradientLayer()
+        gradient.frame = gradientView.bounds
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        let dark = UIColor(white: 0.0, alpha: 0.5)
+        gradient.colors = [UIColor.clear.cgColor , dark.cgColor]
+        gradientView.layer.insertSublayer(gradient, at: 0)
+        gradientView.alpha = 0.0
+
+        cameraState = .Initiating
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,7 +190,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        //tabBarDelegate?.returnToPreviousSelection()
         destroyVideoPreview()
         
         UIView.animate(withDuration: 0.3, animations: {
@@ -155,9 +200,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         destroyCameraSession()
-        
     }
-    
     
     var cameraState:CameraState = .Off
         {
@@ -283,8 +326,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         previewLayer?.removeFromSuperlayer()
         playerLayer?.player = nil
         playerLayer = nil
-        
-        
     }
     
     func destroyVideoPreview() {
@@ -315,16 +356,39 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     func showEditOptions() {
         self.view.addSubview(cancelButton)
         self.view.addSubview(sendButton)
+        self.view.addSubview(captionButton)
+        self.view.addSubview(textView)
+
         
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        captionButton.addTarget(self, action: #selector(captionButtonTapped), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        view.addGestureRecognizer(tapGesture)
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            self.gradientView.alpha = 1.0
+        })
     }
     
     func hideEditOptions() {
         cancelButton.removeFromSuperview()
         sendButton.removeFromSuperview()
+        captionButton.removeFromSuperview()
+        
+        gradientView.isHidden = true
         
         cancelButton.removeTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        textView.removeFromSuperview()
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        view.removeGestureRecognizer(tapGesture)
+        
+        self.gradientView.alpha = 0.0
     }
     
     func sendButtonTapped(sender: UIButton) {
@@ -334,6 +398,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         } else if cameraState == .VideoTaken {
             upload.videoURL = videoUrl
         }
+        
+        upload.caption = textView.text
         
         upload.coordinates = uploadCoordinate
         
@@ -397,7 +463,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     }
     
     
-    
     let maxDuration = CGFloat(10)
     
     func updateProgress() {
@@ -436,8 +501,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             break
         }
     }
-    
-    
     
     func recordVideo() {
         cameraState = .Recording
@@ -546,6 +609,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         }
         return true
     }
+    
     func handlePinchGesture(gesture:UIPinchGestureRecognizer) {
 
         guard let device = cameraDevice else { return }
@@ -593,16 +657,87 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         }
     }
     
-
     override public var preferredStatusBarStyle: UIStatusBarStyle {
         get {
             return .lightContent
         }
     }
+    override public var prefersStatusBarHidden: Bool {
+        get {
+            return true
+        }
+    }
+    
+    var keyboardUp = false
+    
+    func keyboardWillAppear(notification: NSNotification){
+        
+        keyboardUp = true
+        
+        
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        captionButton.isUserInteractionEnabled = false
+        
+        UIView.animate(withDuration: 0.1, animations: { () -> Void in
+            let height = self.view.frame.height
+            let textViewFrame = self.textView.frame
+            let textViewY = height - keyboardFrame.height - textViewFrame.height
+            self.textView.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
+            self.captionButton.alpha = 0.0
+            
+        })
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        keyboardUp = false
+        
+        captionButton.isUserInteractionEnabled = true
+        UIView.animate(withDuration: 0.1, animations: { () -> Void in
+            
+            let height = self.view.frame.height
+            let textViewFrame = self.textView.frame
+            let textViewStart = height - textViewFrame.height - 72
+            self.textView.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
+            self.captionButton.alpha = 1.0
+        })
+    }
+    
+    func handleTapGesture(tap:UITapGestureRecognizer) {
+        if keyboardUp {
+            textView.resignFirstResponder()
+        } else {
+            textView.becomeFirstResponder()
+        }
+    }
+    
+    func captionButtonTapped(button:UIButton) {
+        textView.becomeFirstResponder()
+    }
+    
+    func updateTextAndCommentViews() {
+        let oldHeight = textView.frame.size.height
+        textView.fitHeightToContent()
+        let change = textView.frame.height - oldHeight
+
+        textView.center = CGPoint(x: textView.center.x, y: textView.center.y - change)
+    }
 }
 
-
-
+extension CameraViewController: UITextViewDelegate {
+    public func textViewDidChange(_ textView: UITextView) {
+        updateTextAndCommentViews()
+    }
+    
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if(text == "\n") {
+            dismissKeyboard()
+            return false
+        }
+        return textView.text.characters.count + (text.characters.count - range.length) <= 140
+    }
+}
 
 
 enum CameraState {

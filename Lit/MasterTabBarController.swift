@@ -23,7 +23,6 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         _center = tabBar.center
         _hiddenCenter = CGPoint(x: _center.x, y: _center.y * 2)
         
-        
         visibleFrame = tabBar.frame
         hiddenFrame = CGRect(x: visibleFrame.origin.x, y: visibleFrame.origin.y, width: visibleFrame.width, height: 0)
         

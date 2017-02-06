@@ -262,6 +262,10 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VLx-yO-Bmx">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jvI-xs-dMo">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QcW-Dj-j99">
                                 <rect key="frame" x="175" y="624" width="25" height="25"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -274,6 +278,7 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
+                            <constraint firstItem="jvI-xs-dMo" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="2JE-0S-fMi"/>
                             <constraint firstAttribute="trailing" secondItem="MSq-es-n9M" secondAttribute="trailing" id="2Qf-Y4-xRQ"/>
                             <constraint firstItem="MSq-es-n9M" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="52N-qd-so6"/>
                             <constraint firstAttribute="bottomMargin" secondItem="MSq-es-n9M" secondAttribute="bottom" id="7YG-uf-k7C"/>
@@ -283,10 +288,13 @@
                             <constraint firstItem="QcW-Dj-j99" firstAttribute="centerX" secondItem="BkU-Qw-LSx" secondAttribute="centerX" id="XGK-wJ-knJ"/>
                             <constraint firstItem="Ddz-gz-vpK" firstAttribute="leading" secondItem="BkU-Qw-LSx" secondAttribute="leading" id="bfg-bg-F2M"/>
                             <constraint firstAttribute="trailing" secondItem="VLx-yO-Bmx" secondAttribute="trailing" id="bn4-Ow-uXo"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="jvI-xs-dMo" secondAttribute="bottom" id="j1T-c5-Xtr"/>
                             <constraint firstAttribute="bottomMargin" secondItem="VLx-yO-Bmx" secondAttribute="bottom" id="lWr-nH-4pf"/>
                             <constraint firstAttribute="topMargin" secondItem="Ddz-gz-vpK" secondAttribute="top" id="mOk-9V-FLD"/>
+                            <constraint firstAttribute="trailing" secondItem="jvI-xs-dMo" secondAttribute="trailing" id="mot-v9-5br"/>
                             <constraint firstAttribute="trailing" secondItem="Ddz-gz-vpK" secondAttribute="trailing" id="pyN-HK-lie"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Ddz-gz-vpK" secondAttribute="bottom" id="rWU-Xs-KSB"/>
+                            <constraint firstAttribute="topMargin" secondItem="jvI-xs-dMo" secondAttribute="top" id="ugd-0d-g29"/>
                             <constraint firstItem="FhP-Gy-F1g" firstAttribute="top" secondItem="QcW-Dj-j99" secondAttribute="bottom" constant="18" id="zHh-en-py7"/>
                         </constraints>
                     </view>
@@ -294,6 +302,7 @@
                     <connections>
                         <outlet property="cameraOutputView" destination="Ddz-gz-vpK" id="cWl-FV-qNC"/>
                         <outlet property="dismissButton" destination="QcW-Dj-j99" id="cYf-mP-12M"/>
+                        <outlet property="gradientView" destination="jvI-xs-dMo" id="W2N-VH-GT1"/>
                         <outlet property="imageCaptureView" destination="VLx-yO-Bmx" id="Uzm-2g-l8u"/>
                         <outlet property="videoCaptureView" destination="MSq-es-n9M" id="5GB-TF-Vff"/>
                     </connections>

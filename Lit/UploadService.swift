@@ -19,6 +19,8 @@ class Upload {
     var toStory = false
     var locationKey:String = ""
     
+    var caption:String = ""
+    
     var coordinates:CLLocation?
     var image:UIImage?
     var videoURL:URL?
@@ -67,6 +69,7 @@ class UploadService {
                     let downloadURL = metadata!.downloadURL()
                     let obj = [
                         "author": uid,
+                        "caption": upload.caption,
                         "toProfile": upload.toProfile,
                         "toStory": upload.toStory,
                         "toLocation": upload.locationKey != "",

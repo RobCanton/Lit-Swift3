@@ -9,6 +9,15 @@
 import Foundation
 import UIKit
 
+extension UIView {
+    func applyShadow(radius:CGFloat, opacity:Float, height:CGFloat, shouldRasterize:Bool) {
+        self.layer.masksToBounds = false
+        self.layer.shadowOffset = CGSize(width: 0, height: height)
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowRadius = radius
+        self.layer.shouldRasterize = shouldRasterize
+    }
+}
 extension UIImageView {
     
     func loadImageAsync(_ url:String, completion:((_ fromCache:Bool)->())?) {

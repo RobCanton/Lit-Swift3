@@ -290,7 +290,7 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
                 }
             } else {
                 if let tabBar = self.tabBarController as? MasterTabBarController {
-                    //tabBar.presentCamera()
+                    tabBar.presentCamera()
                 }
             }
         } else if indexPath.section == 1 {

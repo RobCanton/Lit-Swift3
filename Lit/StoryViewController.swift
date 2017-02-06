@@ -72,16 +72,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     var story:UserStory!
         {
         didSet {
-            
-            
+
             shouldPlay = false
             self.story.delegate = self
             story.determineState()
             
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-            
-            
+
         }
     }
     
