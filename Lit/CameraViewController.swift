@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 import CoreLocation
 
-class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate {
+class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var cameraOutputView: UIView!
     @IBOutlet weak var videoCaptureView: UIView!
@@ -25,6 +25,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     var videoFileOutput: AVCaptureMovieFileOutput?
     var videoUrl: URL?
     var cameraDevice: AVCaptureDevice?
+    
+    var pinchGesture:UIPinchGestureRecognizer!
 
     @IBOutlet weak var dismissButton: UIButton!
     
@@ -39,7 +41,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     var didTakePhoto = false
     
     var uploadCoordinate:CLLocation?
-    var pinchGesture:UIPinchGestureRecognizer!
     
     var flashButton:UIButton!
     var switchButton:UIButton!
@@ -69,6 +70,10 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         //button.applyShadow(2.0, opacity: 0.5, height: 1.0, shouldRasterize: false)
         return button
     }()
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     
     
@@ -115,9 +120,15 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         flashButton.addTarget(self, action: #selector(switchFlashMode), for: .touchUpInside)
         switchButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         
-        
-        
+    
         cameraState = .Initiating
+        
+        pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture))
+        //self.cameraOutputView.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(pinchGesture)
+        pinchGesture.delegate = self
+        recordBtn.press.delegate = self
+        recordBtn.tap.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -472,9 +483,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             self.playerLayer?.player?.play()
         }
     }
-    
-    
-    
+
     func endLoopVideo() {
         NotificationCenter.default.removeObserver(NSNotification.Name.AVPlayerItemDidPlayToEndTime, name: nil, object: nil)
     }
@@ -524,6 +533,38 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             break
         }
         reloadCamera()
+    }
+    
+    var pivotPinchScale:CGFloat!
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if gestureRecognizer === pinchGesture {
+            let loc = touch.location(in: view)
+            if loc.y > recordBtn.frame.origin.y - 8 {
+                return false
+            }
+        }
+        return true
+    }
+    func handlePinchGesture(gesture:UIPinchGestureRecognizer) {
+
+        guard let device = cameraDevice else { return }
+        do {
+            try device.lockForConfiguration()
+            switch gesture.state {
+            case .began:
+                self.pivotPinchScale = device.videoZoomFactor
+            case .changed:
+                var factor = self.pivotPinchScale * gesture.scale
+                factor = max(1, min(factor, device.activeFormat.videoMaxZoomFactor))
+                device.videoZoomFactor = factor
+            default:
+                break
+            }
+            device.unlockForConfiguration()
+        } catch {
+            // handle exception
+        }
     }
     
     var animateActivity: Bool!
