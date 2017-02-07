@@ -153,6 +153,7 @@ class UploadService {
                 if meta["delete"] == nil {
                     let key = key
                     let authorId = meta["author"] as! String
+                    let caption = meta["caption"] as! String
                     let locationKey = meta["location"] as! String
                     let downloadUrl = URL(string: meta["url"] as! String)!
                     let contentTypeStr = meta["contentType"] as! String
@@ -195,7 +196,7 @@ class UploadService {
                     
                     comments.sort(by: { return $0 < $1 })
                     
-                    item = StoryItem(key: key, authorId: authorId,locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
+                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
                     dataCache.setObject(item!, forKey: "upload-\(key)" as NSString)
                 }
             }

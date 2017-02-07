@@ -35,7 +35,7 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         gradient.frame = self.bounds 
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor, UIColor.black.cgColor]
-        gradient.locations = [0.0, 0.05, 1.0]
+        gradient.locations = [0.0, 0.075, 1.0]
         self.layer.mask = gradient
         
         tableView = UITableView(frame: self.bounds)
@@ -55,7 +55,7 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         divider = UIView(frame: CGRect(x: 8,y: frame.height-1, width: frame.width-16, height: 1))
         divider.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
-        self.addSubview(divider)
+        //self.addSubview(divider)
         divider.isHidden = true
         
         reloadTable()
@@ -89,8 +89,6 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
             tableView.frame.origin.y = 0
             tableView.isScrollEnabled = true
         }
-        
-        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -105,9 +103,9 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         let comment = comments[indexPath.row]
         let text = comment.getText()
-        let width = tableView.frame.width - (8 + 8 + 8 + 33)
+        let width = tableView.frame.width - (8 + 8 + 8 + 36)
         let size =  UILabel.size(withText: text, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!)
-        let height2 = size.height + 28  // +8 for some bio padding
+        let height2 = size.height + 30  // +8 for some bio padding
         return height2
     }
     

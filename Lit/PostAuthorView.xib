@@ -60,13 +60,13 @@
                                 <constraint firstAttribute="width" constant="35" id="owf-D3-oK4"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-Gd-JVu">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-Gd-JVu">
                             <rect key="frame" x="51" y="15" width="91" height="22"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="15m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob0-0G-ySD">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob0-0G-ySD">
                             <rect key="frame" x="163" y="15" width="64" height="22"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
@@ -80,7 +80,7 @@
                         <constraint firstItem="oMp-3g-Vyj" firstAttribute="leading" secondItem="Sbx-ev-NXw" secondAttribute="leading" constant="8" id="G6X-WC-W2l"/>
                         <constraint firstItem="ob0-0G-ySD" firstAttribute="centerY" secondItem="BEh-Gd-JVu" secondAttribute="centerY" id="LXo-hP-V7B"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="leading" secondItem="oMp-3g-Vyj" secondAttribute="trailing" constant="12" id="d00-mC-e20"/>
-                        <constraint firstItem="ob0-0G-ySD" firstAttribute="leading" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="6" id="gSG-5t-XxY"/>
+                        <constraint firstItem="ob0-0G-ySD" firstAttribute="leading" secondItem="BEh-Gd-JVu" secondAttribute="trailing" constant="8" id="gSG-5t-XxY"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="centerY" secondItem="Sbx-ev-NXw" secondAttribute="centerY" id="jKu-ZG-jaa"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="leading" secondItem="oMp-3g-Vyj" secondAttribute="trailing" constant="10" id="jNo-gx-xza"/>
                         <constraint firstItem="BEh-Gd-JVu" firstAttribute="top" secondItem="Sbx-ev-NXw" secondAttribute="top" constant="6" id="lkR-UY-sw6"/>

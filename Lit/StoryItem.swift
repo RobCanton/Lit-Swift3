@@ -24,6 +24,7 @@ class StoryItem: NSObject, NSCoding {
     
     var key:String                    // Key in database
     var authorId:String
+    var caption:String
     var locationKey:String
     var downloadUrl:URL
     var videoURL:URL?
@@ -44,12 +45,13 @@ class StoryItem: NSObject, NSCoding {
     dynamic var videoFilePath: URL?
     dynamic var videoData:Data?
     
-    init(key: String, authorId: String, locationKey:String, downloadUrl: URL, videoURL:URL?, contentType: ContentType, dateCreated: Double, length: Double,
+    init(key: String, authorId: String, caption:String, locationKey:String, downloadUrl: URL, videoURL:URL?, contentType: ContentType, dateCreated: Double, length: Double,
          toProfile: Bool, toStory: Bool, toLocation:Bool, viewers:[String:Double], comments: [Comment])
     {
         
         self.key          = key
         self.authorId     = authorId
+        self.caption      = caption
         self.locationKey  = locationKey
         self.downloadUrl  = downloadUrl
         self.videoURL     = videoURL
@@ -68,6 +70,7 @@ class StoryItem: NSObject, NSCoding {
         
         let key         = decoder.decodeObject(forKey: "key") as! String
         let authorId    = decoder.decodeObject(forKey: "authorId") as! String
+        let caption     = decoder.decodeObject(forKey: "caption") as! String
         let locationKey = decoder.decodeObject(forKey: "imageUrl") as! String
         let downloadUrl = decoder.decodeObject(forKey: "downloadUrl") as! URL
         let ctInt       = decoder.decodeObject(forKey: "contentType") as! Int
@@ -100,13 +103,14 @@ class StoryItem: NSObject, NSCoding {
             break
         }
         
-        self.init(key: key, authorId: authorId, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
+        self.init(key: key, authorId: authorId, caption: caption, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
     }
     
     
     func encode(with coder: NSCoder) {
         coder.encode(key, forKey: "key")
         coder.encode(authorId, forKey: "authorId")
+        coder.encode(caption, forKey: "caption")
         coder.encode(downloadUrl, forKey: "downloadUrl")
         coder.encode(contentType.rawValue, forKey: "contentType")
         coder.encode(dateCreated, forKey: "dateCreated")
@@ -120,7 +124,6 @@ class StoryItem: NSObject, NSCoding {
             coder.encode(videoURL!, forKey: "videoURL")
         }
     }
-    
     
     func getKey() -> String {
         return key

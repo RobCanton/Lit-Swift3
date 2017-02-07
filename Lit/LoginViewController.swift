@@ -23,6 +23,9 @@ class LoginViewController: UIViewController, StoreSubscriber {
     
     func newState(state:AppState) {
         if state.supportedVersion && state.userState.isAuth && state.userState.user != nil {
+            print("supportedVersion \(state.supportedVersion)")
+            print("isAuth \(state.userState.isAuth)")
+            print("user \(state.userState.user != nil)")
             self.performSegue(withIdentifier: "showLit", sender: self)
         }
     }
@@ -99,7 +102,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
 
     @IBAction func handleLoginButton(_ sender: Any) {
         loginButton.isEnabled = false
-        
+
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
         fbLoginManager.logIn(withReadPermissions: ["public_profile", "email", "user_friends"], from: self) { (result, error) in
             if (error == nil){
@@ -128,6 +131,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             self.removeFbData()
             self.activateLoginButton()
         } else {
+            
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
                     self.dict = result as! [String : AnyObject]
@@ -156,6 +160,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             
             if error == nil && firUser != nil {
                 UserService.getUser(firUser!.uid, completion: { user in
+                    print("fetched user: \(user)")
                     if user != nil {
                         UserService.login(user!)
                     } else {

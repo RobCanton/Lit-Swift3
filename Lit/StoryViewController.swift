@@ -35,15 +35,10 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     var authorTappedHandler:((_ uid:String)->())?
     var optionsTappedHandler:(()->())?
     var storyCompleteHandler:(()->())?
-    
     var viewsTappedHandler:(()->())?
-    
     var itemSetHandler:((_ item:StoryItem)->())?
     
     var activityView:NVActivityIndicatorView!
-    
-    
-    
     
     func commentsInteractionHandler(interacting:Bool) {
         if interacting || keyboardUp {
@@ -116,6 +111,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             DispatchQueue.main.async {
                 if self.story.state != .contentLoaded {
                     self.activityView.startAnimating()
+                    self.captionView.alpha = 0.0
                 }
             }
         }
@@ -126,6 +122,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             DispatchQueue.main.async {
                 self.activityView.stopAnimating()
                 self.animateInitiated = false
+                self.captionView.alpha = 1.0
             }
         }
     }
@@ -157,13 +154,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             viewIndex = 0
         }
         
-        
         self.setupItem()
-        
-        
     }
-    
-    
     
     func setupItem() {
         pauseVideo()
@@ -175,12 +167,29 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let item = items[viewIndex]
             self.item = item
             itemSetHandler?(item)
+            
             self.authorOverlay.setPostMetadata(post: item)
             if item.contentType == .image {
                 loadImageContent(item: item)
             } else if item.contentType == .video {
                 loadVideoContent(item: item)
             }
+            
+            UserService.getUser(item.authorId, completion: { user in
+                if user != nil {
+                    self.authorOverlay.setAuthorInfo(user: user!, post: item)
+                    self.captionView.authorLabel.text = user!.displayName
+                    
+                    loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, _ in
+                        if image != nil {
+                            self.authorOverlay.setAuthorImage(image: image!)
+                            self.captionView.userImage.image = image!
+                            self.captionView.userImage.layer.cornerRadius = self.captionView.userImage.frame.width / 2
+                            self.captionView.userImage.clipsToBounds = true
+                        }
+                    })
+                }
+            })
             
             let viewers = item.viewers
             if viewers.count == 1 {
@@ -196,8 +205,18 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             viewsButton.titleLabel?.sizeToFit()
             viewsButton.sizeToFit()
             
+            let caption = item.caption
+            let width = self.frame.width - (8 + 8 + 8 + 33)
+            var size:CGFloat = 0.0
+            if caption != "" {
+                size =  UILabel.size(withText: caption, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!).height
+            }
+            let height = size + 30
+            self.captionView.commentLabel.text = item.caption
+            self.captionView.frame = CGRect(x: 0, y: self.textView.frame.origin.y - height, width: self.captionView.frame.width, height: height)
+
             commentsView.commentsInteractionHandler = commentsInteractionHandler
-            
+            commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
             if !looping {
                 
                 commentsView.setTableComments(comments: item.comments, animated: false)
@@ -235,11 +254,54 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
                     })
                 }
             }
+            
+            if item.caption != "" {
+                captionView.isHidden = false
+                commentsView.divider.isHidden = true
+            } else {
+                captionView.isHidden = true
+                commentsView.divider.isHidden = false
+            }
+
         } else {
             self.removeGestureRecognizer(tap)
             storyCompleteHandler?()
         }
+    }
+    
+    func phaseInCaption(animated:Bool) {
+        if #available(iOS 10.0, *) {
+            
+            let effectView = self.captionView.backgroundView as! UIVisualEffectView
+            if effectView.isHidden {
+                if animated {
+                    var animator: UIViewPropertyAnimator?
+                    effectView.effect = nil
+                    animator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut) {
+                        effectView.effect = UIBlurEffect(style: .light)
+                    }
+                    
+                    effectView.isHidden = false
+                    animator?.startAnimation()
+                } else {
+                    effectView.effect = UIBlurEffect(style: .light)
+                    effectView.isHidden = false
+                }
+            }
+
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    func getCommentsViewOriginY() -> CGFloat {
         
+        var captionHeight:CGFloat = 0.0
+        if item!.caption != "" {
+            captionHeight = captionView.frame.height
+        }
+        
+        return textView.frame.origin.y - captionHeight - commentsView.frame.height
     }
     
     func loadImageContent(item:StoryItem) {
@@ -376,11 +438,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         videoContent.isHidden = false
         
     }
-    
-    func getViews() {
 
-    }
-    
     func cleanUp() {
         shouldPlay = false
         content.image = nil
@@ -394,6 +452,12 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         textView.isUserInteractionEnabled = false
         moreButton.isUserInteractionEnabled = false
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func removeTimers() {
+        killTimer()
+        progressBar?.resetActiveIndicator()
+        pauseVideo()
     }
     
     func playVideo() {
@@ -509,7 +573,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         self.contentView.addSubview(self.authorOverlay)
         self.contentView.addSubview(self.viewsButton)
         
-        
+        self.contentView.addSubview(self.captionView)
 
         self.fadeCover.alpha = 0.0
         
@@ -561,6 +625,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         
         self.contentView.addSubview(activityView)
         
+
     }
     
     func setLoopState(looping:Bool) {
@@ -590,12 +655,16 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let commentLabelY = height - keyboardFrame.height - commentLabelFrame.height
             self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x,y: commentLabelY,width: commentLabelFrame.width,height: commentLabelFrame.height)
             
-            let commentsViewStart = textViewY - self.commentsView.frame.height
-            self.commentsView.frame = CGRect(x: 0,y: commentsViewStart,width: self.commentsView.frame.width,height: self.commentsView.frame.height)
+            //let commentsViewStart = textViewY - self.commentsView.frame.height
+            self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
             let moreButtonFrame = self.moreButton.frame
             let moreButtonY = height - keyboardFrame.height - moreButtonFrame.height
             self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: moreButtonY, width: moreButtonFrame.width, height: moreButtonFrame.height)
+            
+            let captionFrame = self.captionView.frame
+            let captionY = textViewY - captionFrame.height
+            self.captionView.frame = CGRect(x: captionFrame.origin.x,y: captionY, width: captionFrame.width, height: captionFrame.height)
             
             self.progressBar?.alpha = 0.0
             self.authorOverlay.alpha = 0.0
@@ -620,11 +689,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let commentLabelY = height - commentLabelFrame.height
             self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x, y: commentLabelY, width: commentLabelFrame.width, height: commentLabelFrame.height)
             
-            let commentsViewStart = textViewStart - self.commentsView.frame.height
-            self.commentsView.frame = CGRect(x: 0,y: commentsViewStart,width: self.commentsView.frame.width,height: self.commentsView.frame.height)
+            self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
             let moreButtonFrame = self.moreButton.frame
             self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: height - moreButtonFrame.height, width: moreButtonFrame.width, height: moreButtonFrame.height)
+            
+            let captionFrame = self.captionView.frame
+            let captionY = height - textViewFrame.height - captionFrame.height
+            self.captionView.frame = CGRect(x: captionFrame.origin.x,y: captionY, width: captionFrame.width, height: captionFrame.height)
             
             self.progressBar?.alpha = 1.0
             self.authorOverlay.alpha = 1.0
@@ -746,9 +818,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     lazy var commentsView: CommentsView = {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        var commentsView = CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.42 ))
-        
-        return commentsView
+        return CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.34 ))
     }()
 
     
@@ -757,7 +827,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         let button = UIButton(frame: CGRect(x: 12,y: height - 36,width: 40,height:40))
         button.titleLabel!.font = UIFont.init(name: "AvenirNext-Medium", size: 16)
         button.tintColor = UIColor.white
-        button.alpha = 0.0//0.70
+        button.alpha = 0.0
         return button
     }()
 
@@ -772,6 +842,19 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         return button
     }()
     
+    lazy var captionView: CommentCell = {
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        var view = UINib(nibName: "CommentCell", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! CommentCell
+
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        blurView.frame = view.bounds
+        view.backgroundView = blurView
+        return view
+    }()
+    
+    //var blurView:UIVisualEffectView!
+    
     var change:CGFloat = 0
     
     func updateTextAndCommentViews() {
@@ -782,7 +865,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         
         textView.center = CGPoint(x: textView.center.x, y: textView.center.y - change)
         
-        self.commentsView.frame = CGRect(x: 0,y: textView.frame.origin.y - self.commentsView.frame.height, width: self.commentsView.frame.width, height: self.commentsView.frame.height)
+        self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(), width: self.commentsView.frame.width, height: self.commentsView.frame.height)
+        self.captionView.frame = CGRect(x: 0, y: textView.frame.origin.y - captionView.frame.height, width: captionView.frame.width, height: captionView.frame.height)
     }
 }
 

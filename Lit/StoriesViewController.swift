@@ -20,12 +20,15 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var currentIndex:IndexPath!
     var collectionView:UICollectionView!
     
-    
+    var firstCell = true
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         tabBarRef.setTabBarVisible(_visible: false, animated: true)
+
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name:NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         if self.navigationController!.delegate !== transitionController {
             self.collectionView.reloadData()
@@ -35,8 +38,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.collectionView.reloadData()
         }
     }
-    
-    
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -46,7 +48,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.navigationController?.delegate = transitionController
         
         if let cell = getCurrentCell() {
+            
             cell.setForPlay()
+            cell.phaseInCaption(animated:true)
         }
         
         if let gestureRecognizers = self.view.gestureRecognizers {
@@ -128,9 +132,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let cell = getCurrentCell() else { return false }
-        if cell.keyboardUp {
-            return false
-        }
+
         
         let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
         let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
@@ -139,6 +141,15 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let panGestureRecognizer: UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
         let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
+        
+        if cell.keyboardUp {
+            if translate.y > 0 {
+                cell.dismissKeyboard()
+            }
+            return false
+        } else if !cell.keyboardUp && translate.y < 0{
+            cell.textView.becomeFirstResponder()
+        }
 
         return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
     }
@@ -167,6 +178,12 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         cell.optionsTappedHandler = showOptions
         cell.storyCompleteHandler = storyComplete
         cell.commentsView.userTapped = showAuthor
+        
+        if firstCell {
+            firstCell = false
+            cell.captionView.backgroundView!.isHidden = true
+        }
+        
         return cell
     }
     
@@ -316,12 +333,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
     }
-
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let xOffset = scrollView.contentOffset.x
         
         
@@ -333,15 +346,24 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! StoryViewController
-        cell.cleanUp()
+    
+        cell.removeTimers()
     }
     
     override var prefersStatusBarHidden: Bool {
         get {
             return true
         }
+    }
+    
+    func keyboardWillAppear() {
+        collectionView.isScrollEnabled = false
+    }
+    
+    func keyboardWillDisappear() {
+        collectionView.isScrollEnabled = true
     }
     
 }

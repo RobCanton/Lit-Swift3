@@ -160,9 +160,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
         textView.text = "Send a message"
         textView.fitHeightToContent()
-        textView.text = ""
         textView.delegate = self
-        
+        textView.backgroundColor = UIColor.clear
         
         let gradient = CAGradientLayer()
         gradient.frame = gradientView.bounds
@@ -219,6 +218,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                 playerLayer?.removeFromSuperlayer()
                 playerLayer?.player = nil
                 playerLayer = nil
+                
                 
                 showCameraOptions()
                 hideEditOptions()
@@ -380,6 +380,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         captionButton.removeFromSuperview()
         
         gradientView.isHidden = true
+        textView.text = ""
+        updateTextAndCommentViews()
         
         cancelButton.removeTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         textView.removeFromSuperview()
@@ -686,6 +688,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             self.textView.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
             self.captionButton.alpha = 0.0
             
+            self.textView.backgroundColor = UIColor(white: 0.0, alpha: 0.3)
         })
     }
     
@@ -694,12 +697,17 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         
         captionButton.isUserInteractionEnabled = true
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
-            
             let height = self.view.frame.height
             let textViewFrame = self.textView.frame
             let textViewStart = height - textViewFrame.height - 72
             self.textView.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
             self.captionButton.alpha = 1.0
+            
+            if self.textView.text != "" {
+               self.textView.backgroundColor = UIColor(white: 0.0, alpha: 0.3)
+            } else {
+                self.textView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+            }
         })
     }
     

@@ -96,6 +96,24 @@ class PostAuthorView: UIView {
 
     }
     
+    func setAuthorInfo(user:User, post:StoryItem) {
+       
+        self.authorUsernameLabel.text = user.getDisplayName()
+        self.user = user
+        self.timeLabel.text = post.getDateCreated()!.timeStringSinceNow()
+    }
+    
+    func setAuthorImage(image:UIImage) {
+        self.authorImageView.image = image
+        self.authorImageView.removeGestureRecognizer(self.authorTap)
+        self.authorImageView.addGestureRecognizer(self.authorTap)
+        
+        let superView = self.authorImageView.superview!
+        superView.isUserInteractionEnabled = true
+        superView.removeGestureRecognizer(self.authorTap)
+        superView.addGestureRecognizer(self.authorTap)
+    }
+    
     func authorTapped(gesture:UITapGestureRecognizer) {
         if user != nil {
             authorTappedHandler?(user!.getUserId())

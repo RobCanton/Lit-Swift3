@@ -495,7 +495,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
     }
     
     func dismissInteractionEnded(completed: Bool) {
-        print("Dismiss Interaction Ended: \(completed)")
+        //print("Dismiss Interaction Ended: \(completed)")
         if completed {
             statusBarShouldHide = false
             self.setNeedsStatusBarAppearanceUpdate()
