@@ -85,7 +85,7 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     
     func setItem() {
         guard let item = storyItem else { return }
-        self.authorOverlay.setPostMetadata(post: storyItem)
+        //self.authorOverlay.setPostMetadata(post: storyItem)
         if let image = storyItem.image {
             self.content.image = image
         } else {

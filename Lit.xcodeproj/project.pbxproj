@@ -62,8 +62,8 @@
 		B09405E21E4834FB00CE0068 /* WDImageCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DC1E4834F800CE0068 /* WDImageCropViewController.swift */; };
 		B09405E31E4834FB00CE0068 /* WDImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DD1E4834F800CE0068 /* WDImagePicker.swift */; };
 		B09405E41E4834FB00CE0068 /* WDResizableCropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */; };
-		B09405E61E48E5FB00CE0068 /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405E51E48E5F800CE0068 /* CaptionView.swift */; };
-		B09405E81E48E60800CE0068 /* CaptionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09405E71E48E60700CE0068 /* CaptionView.xib */; };
+		B09405EA1E4A7C3F00CE0068 /* StoryInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */; };
+		B09405EC1E4A7C4F00CE0068 /* StoryInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405EB1E4A7C4F00CE0068 /* StoryInfoView.swift */; };
 		B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */; };
 		B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */; };
 		B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043101E40AED300D50DA7 /* LocationFooterView.swift */; };
@@ -176,8 +176,8 @@
 		B09405DC1E4834F800CE0068 /* WDImageCropViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImageCropViewController.swift; sourceTree = "<group>"; };
 		B09405DD1E4834F800CE0068 /* WDImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDImagePicker.swift; sourceTree = "<group>"; };
 		B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDResizableCropOverlayView.swift; sourceTree = "<group>"; };
-		B09405E51E48E5F800CE0068 /* CaptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
-		B09405E71E48E60700CE0068 /* CaptionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CaptionView.xib; sourceTree = "<group>"; };
+		B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StoryInfoView.xib; sourceTree = "<group>"; };
+		B09405EB1E4A7C4F00CE0068 /* StoryInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryInfoView.swift; sourceTree = "<group>"; };
 		B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStoryTableViewCell.swift; sourceTree = "<group>"; };
 		B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserStoryTableViewCell.xib; sourceTree = "<group>"; };
 		B0B043101E40AED300D50DA7 /* LocationFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFooterView.swift; sourceTree = "<group>"; };
@@ -491,16 +491,16 @@
 				B0E59E011E4091D1007B4762 /* LocationViewController.swift */,
 				B0B043211E40BB0100D50DA7 /* StoriesViewController.swift */,
 				B087C7711E41E5EA00234715 /* StoryViewController.swift */,
-				B09405E51E48E5F800CE0068 /* CaptionView.swift */,
-				B09405E71E48E60700CE0068 /* CaptionView.xib */,
-				B087C7871E41F82200234715 /* ProgressIndicator.swift */,
 				B087C7881E41F82200234715 /* StoryProgressIndicator.swift */,
+				B087C7871E41F82200234715 /* ProgressIndicator.swift */,
 				B087C7651E41E43600234715 /* PostAuthorView.swift */,
 				B087C7661E41E43600234715 /* PostAuthorView.xib */,
 				B087C76B1E41E4CD00234715 /* CommentsView.swift */,
 				B087C76C1E41E4CD00234715 /* CommentsView.xib */,
 				B087C7691E41E4CD00234715 /* CommentCell.swift */,
 				B087C76A1E41E4CD00234715 /* CommentCell.xib */,
+				B09405EB1E4A7C4F00CE0068 /* StoryInfoView.swift */,
+				B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */,
 				B087C7831E41EE8600234715 /* ListHeaderView.swift */,
 				B087C7841E41EE8600234715 /* ListHeaderView.xib */,
 				B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */,
@@ -596,7 +596,7 @@
 				B0B043131E40AEDE00D50DA7 /* LocationFooterView.xib in Resources */,
 				B0E59E061E409444007B4762 /* InfoTableViewCell.xib in Resources */,
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
-				B09405E81E48E60800CE0068 /* CaptionView.xib in Resources */,
+				B09405EA1E4A7C3F00CE0068 /* StoryInfoView.xib in Resources */,
 				B01EE5421E435D450049BCBF /* Info.plist in Resources */,
 				B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */,
 				B087C75A1E41C16600234715 /* PhotoCell.xib in Resources */,
@@ -672,7 +672,6 @@
 				B0D0DC411E43057400381AEE /* EditProfilePictureView.swift in Sources */,
 				B0E59DF71E406D50007B4762 /* LocationService.swift in Sources */,
 				B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */,
-				B09405E61E48E5FB00CE0068 /* CaptionView.swift in Sources */,
 				B0E59DDB1E405052007B4762 /* AppState.swift in Sources */,
 				B0383C231E43256B002FD893 /* FacebookGraph.swift in Sources */,
 				B087C7721E41E5EA00234715 /* StoryViewController.swift in Sources */,
@@ -700,6 +699,7 @@
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
 				B087C77E1E41E6AE00234715 /* SendProfileViewCell.swift in Sources */,
 				B01EE5401E435D450049BCBF /* AkiraTextField.swift in Sources */,
+				B09405EC1E4A7C4F00CE0068 /* StoryInfoView.swift in Sources */,
 				B0383C211E4322E2002FD893 /* SettingsViewController.swift in Sources */,
 				B01EE5411E435D450049BCBF /* HoshiTextField.swift in Sources */,
 				B087C76D1E41E4CD00234715 /* CommentCell.swift in Sources */,

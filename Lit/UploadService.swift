@@ -101,6 +101,82 @@ class UploadService {
         
     }
     
+    static func uploadVideo(upload:Upload, completion:(_ success:Bool)->()){
+        
+        //If upload has no destination do not upload it
+        if !upload.toProfile && !upload.toStory && upload.locationKey == "" { return }
+        
+        if upload.videoURL == nil { return }
+        
+        let uid = mainStore.state.userState.uid
+        let url = upload.videoURL!
+        
+        let ref = FIRDatabase.database().reference()
+        let dataRef = ref.child("uploads").childByAutoId()
+        let postKey = dataRef.key
+        
+        var uploadingMurmer = Murmur(title: "Uploading...")
+        uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
+        uploadingMurmer.titleColor = UIColor.lightGray
+        show(whistle: uploadingMurmer, action: .show(60.0))
+        completion(true)
+        
+        uploadVideoStill(url: url, postKey: postKey, completion: { thumbURL in
+            
+            
+            let data = NSData(contentsOf: url)
+            
+            let metadata = FIRStorageMetadata()
+            let contentTypeStr = "video/mp4"
+            let playerItem = AVAsset(url: url)
+            let length = CMTimeGetSeconds(playerItem.duration)
+            metadata.contentType = contentTypeStr
+            
+            let storageRef = FIRStorage.storage().reference()
+            let uploadTask = storageRef.child("user_uploads/videos/\(uid)/\(postKey)").put(data as! Data, metadata: metadata) { metadata, error in
+                if (error != nil) {
+                    // HANDLE ERROR
+                    hide()
+                    var murmur = Murmur(title: "Unable to upload.")
+                    murmur.backgroundColor = errorColor
+                    murmur.titleColor = UIColor.white
+                    show(whistle: murmur, action: .show(5.0))
+                } else {
+                    // Metadata contains file metadata such as size, content-type, and download URL.
+                    let downloadURL = metadata!.downloadURL()
+                    let obj = [
+                        "author": uid,
+                        "caption": upload.caption,
+                        "toProfile": upload.toProfile,
+                        "toStory": upload.toStory,
+                        "toLocation": upload.locationKey != "",
+                        "location": upload.locationKey,
+                        "videoURL": downloadURL!.absoluteString,
+                        "url": thumbURL,
+                        "contentType": contentTypeStr,
+                        "dateCreated": [".sv": "timestamp"],
+                        "length": length
+                    ] as [String:Any]
+                    dataRef.child("meta").setValue(obj, withCompletionBlock: { error, _ in
+                        hide()
+                        if error == nil {
+                            var murmur = Murmur(title: "Video uploaded!")
+                            murmur.backgroundColor = accentColor
+                            murmur.titleColor = UIColor.white
+                            show(whistle: murmur, action: .show(3.0))
+                        } else {
+                            var murmur = Murmur(title: "Unable to upload.")
+                            murmur.backgroundColor = errorColor
+                            murmur.titleColor = UIColor.white
+                            show(whistle: murmur, action: .show(5.0))
+                        }
+                    })
+                }
+            }
+            
+        })
+    }
+    
     private static func uploadVideoStill(url:URL, postKey:String, completion:@escaping (_ thumb_url:String)->()) {
         let storageRef = FIRStorage.storage().reference()
         if let videoStill = generateVideoStill(url: url) {
@@ -131,6 +207,19 @@ class UploadService {
         } catch let error as NSError {
             print("Error generating thumbnail: \(error)")
             return nil
+        }
+    }
+    
+    static func compressVideo(inputURL: URL, outputURL: URL, handler:@escaping (_ session: AVAssetExportSession)-> Void) {
+        let urlAsset = AVURLAsset(url: inputURL, options: nil)
+        if let exportSession = AVAssetExportSession(asset: urlAsset, presetName: AVAssetExportPresetMediumQuality) {
+            exportSession.outputURL = outputURL
+            exportSession.outputFileType = AVFileTypeMPEG4
+            exportSession.shouldOptimizeForNetworkUse = true
+            
+            exportSession.exportAsynchronously { () -> Void in
+                handler(exportSession)
+            }
         }
     }
     

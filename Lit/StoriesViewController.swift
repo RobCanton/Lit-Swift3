@@ -20,6 +20,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var currentIndex:IndexPath!
     var collectionView:UICollectionView!
     
+    var longPressGR:UILongPressGestureRecognizer!
+    var tapGR:UITapGestureRecognizer!
+    
     var firstCell = true
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,7 +53,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         if let cell = getCurrentCell() {
             
             cell.setForPlay()
-            cell.phaseInCaption(animated:true)
+            //cell.phaseInCaption(animated:true)
         }
         
         if let gestureRecognizers = self.view.gestureRecognizers {
@@ -67,10 +70,6 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewWillDisappear(animated)
         
         NotificationCenter.default.removeObserver(self)
-        
-        for cell in collectionView.visibleCells as! [StoryViewController] {
-            cell.yo()
-        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -118,11 +117,17 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         self.view.addSubview(collectionView)
         
-        
         label = UILabel(frame: CGRect(x:0,y:0,width:self.view.frame.width,height:100))
         label.textColor = UIColor.white
         label.center = view.center
         label.textAlignment = .center
+        
+        longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPressGR.minimumPressDuration = 0.5
+        self.view.addGestureRecognizer(longPressGR)
+        
+        tapGR = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.view.addGestureRecognizer(tapGR)
         
     }
     
@@ -130,28 +135,50 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         popStoryController(animated: false)
     }
     
+    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+        if gestureReconizer.state == .began {
+            getCurrentCell()?.pauseStory()
+            getCurrentCell()?.focusItem()
+            self.collectionView.isScrollEnabled = false
+        }
+        if gestureReconizer.state == UIGestureRecognizerState.ended {
+            getCurrentCell()?.resumeStory()
+            getCurrentCell()?.unfocusItem()
+            self.collectionView.isScrollEnabled = true
+        }
+    }
+    
+    func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+        print("Tapped")
+        getCurrentCell()?.tapped(gesture: gestureRecognizer)
+    }
+    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let cell = getCurrentCell() else { return false }
-
         
-        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
-        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
-        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
-        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+        if let _ = gestureRecognizer as? UILongPressGestureRecognizer  {
+            return true
+        }
         
-        let panGestureRecognizer: UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
-        let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
-        
-        if cell.keyboardUp {
-            if translate.y > 0 {
-                cell.dismissKeyboard()
-            }
-            return false
-        } else if !cell.keyboardUp && translate.y < 0{
-            cell.textView.becomeFirstResponder()
+        if let _ = gestureRecognizer as? UITapGestureRecognizer  {
+            return true
         }
 
-        return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
+        if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
+            let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
+            self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+            self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+
+            let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
+
+            return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
+        }
+        return false
+        
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -172,22 +199,21 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell: StoryViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! StoryViewController
         cell.contentView.backgroundColor = UIColor.black
         cell.story = userStories[indexPath.item]
-        cell.authorOverlay.authorTappedHandler = showAuthor
-        cell.authorOverlay.locationTappedHandler = showLocation
-        cell.authorOverlay.closeHandler = storyComplete
         cell.optionsTappedHandler = showOptions
         cell.storyCompleteHandler = storyComplete
         cell.commentsView.userTapped = showAuthor
         
         if firstCell {
             firstCell = false
-            cell.captionView.backgroundView!.isHidden = true
+            //cell.captionView.backgroundView!.isHidden = true
         }
         
         return cell
     }
     
     func popStoryController(animated:Bool) {
+        getCurrentCell()?.pauseVideo()
+        getCurrentCell()?.destroyVideoPlayer()
         let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
         let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
         self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
@@ -349,8 +375,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! StoryViewController
     
-        cell.removeTimers()
+        cell.reset()
     }
+    
     
     override var prefersStatusBarHidden: Bool {
         get {
@@ -377,9 +404,9 @@ extension StoriesViewController: View2ViewTransitionPresented {
     func destinationView(_ userInfo: [String: AnyObject]?, isPresenting: Bool) -> UIView {
         
         let indexPath: IndexPath = userInfo!["destinationIndexPath"] as! IndexPath
-        //let cell: StoryViewController = self.collectionView.cellForItemAtIndexPath(indexPath) as! StoryViewController
+        let cell: StoryViewController = self.collectionView.cellForItem(at: indexPath) as! StoryViewController
         
-        //cell.prepareForTransition(isPresenting)
+        cell.prepareForTransition(isPresenting: isPresenting)
         
         return view
         

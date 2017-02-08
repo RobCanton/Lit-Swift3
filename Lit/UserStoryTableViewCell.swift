@@ -25,7 +25,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         super.awakeFromNib()
         imageContainer.layer.cornerRadius = imageContainer.frame.width/2
         imageContainer.clipsToBounds = true
-        imageContainer.layer.borderColor = UIColor.black.cgColor
+        imageContainer.layer.borderColor = UIColor.clear.cgColor
         imageContainer.layer.borderWidth = 1.8
         
         contentImageView.layer.cornerRadius = contentImageView.frame.width/2
@@ -62,7 +62,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
     }
     
     func deactivate() {
-        imageContainer.layer.borderColor = UIColor.black.cgColor
+        imageContainer.layer.borderColor = UIColor.clear.cgColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

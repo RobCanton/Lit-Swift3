@@ -20,13 +20,10 @@ class PostAuthorView: UIView {
     @IBOutlet weak var timeLabelLeadingConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var timeLabel: UILabel!
+    
     var user:User?
     var authorTap:UITapGestureRecognizer!
     var authorTappedHandler:((_ uid:String)->())?
-
-    var locationTap:UITapGestureRecognizer!
-    var locationTappedHandler:((_ location:Location)->())?
-    var closeHandler:(()->())?
     
     var location:Location?
 
@@ -48,52 +45,8 @@ class PostAuthorView: UIView {
         authorImageView.clipsToBounds = true
         authorTap = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
         
-        locationTap = UITapGestureRecognizer(target: self, action: #selector(locationTapped))
-        
         _ = CGRect(x: 0, y: 0, width: authorImageView.frame.width + margin, height: authorImageView.frame.height + margin)
         
-        //self.applyShadow(2.0, opacity: 0.25, height: 1, shouldRasterize: false)
-    }
-    
-    func setPostMetadata(post:StoryItem) {
-        
-        UserService.getUser(post.getAuthorId(), completion: { user in
-            if user != nil {
-
-                self.authorImageView.loadImageAsync(user!.getImageUrl(), completion: nil)
-                self.authorUsernameLabel.text = user!.getDisplayName()
-                self.authorImageView.removeGestureRecognizer(self.authorTap)
-                self.authorImageView.addGestureRecognizer(self.authorTap)
-                
-                let superView = self.authorImageView.superview!
-                superView.isUserInteractionEnabled = true
-                superView.removeGestureRecognizer(self.authorTap)
-                superView.addGestureRecognizer(self.authorTap)
-                
-                //let locSuperview = self.locationLabel.superview!
-                //locSuperview.removeGestureRecognizer(self.locationTap)
-                //locSuperview.addGestureRecognizer(self.locationTap)
-
-                self.user = user
-                
-                self.timeLabel.text = post.getDateCreated()!.timeStringSinceNow()
-                
-                if post.toLocation {
-                    LocationService.getLocation(post.getLocationKey(), completion: { location in
-                        if location != nil {
-                            self.location = location!
-                            self.locationLabel.text = location!.getName()
-                            //locSuperview.isUserInteractionEnabled = true
-                        }
-                    })
-                } else {
-                    self.location = nil
-                    self.locationLabel.text = ""
-                    //locSuperview.isUserInteractionEnabled = false
-                }
-            }
-        })
-
     }
     
     func setAuthorInfo(user:User, post:StoryItem) {
@@ -119,19 +72,6 @@ class PostAuthorView: UIView {
             authorTappedHandler?(user!.getUserId())
         }
     }
-    
-    func locationTapped(gesture:UITapGestureRecognizer) {
-        if location != nil {
-           locationTappedHandler?(location!)
-        }
-    }
-    
-    
-    @IBAction func handleClose(_ sender: Any) {
-        closeHandler?()
-
-    }
-    
 
     func cleanUp() {
         user = nil

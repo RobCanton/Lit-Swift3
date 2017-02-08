@@ -46,39 +46,33 @@ class SendViewController: UIViewController, UITableViewDataSource, UITableViewDe
         upload.toStory = selected["story"] as! Bool
         upload.locationKey = selected["location"] as! String
         
-        
         if let videoURL = upload.videoURL {
-//            let documentsURL = FileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-//            let outputUrl = documentsURL.URLByAppendingPathComponent("output.mp4")
-//            
-//            do {
-//                try FileManager.defaultManager().removeItemAtURL(outputUrl)
-//            }
-//            catch let error as NSError {
-//                if error.code != 4 && error.code != 2 {
-//                    return print("Error \(error)")
-//                }
-//            }
-//            upload.videoURL = outputUrl
-//            
-//                .compressVideo(videoURL, outputURL: outputUrl, handler: { session in
-//                /*
-//                 T0D0 - HANDLE COMPRESSION ERRORS
-//                 */
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    FirebaseService.uploadVideo(self.upload, completionHandler: { success in
-//                            self.sent()
-//                    })
-//                    
-//                })
-//            })
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let outputUrl = documentsURL.appendingPathComponent("output.mp4")
+            
+            do {
+                try FileManager.default.removeItem(at: outputUrl)
+            }
+            catch let error as NSError {
+                if error.code != 4 && error.code != 2 {
+                    return print("Error \(error)")
+                }
+            }
+            upload.videoURL = outputUrl
+
+            UploadService.compressVideo(inputURL: videoURL, outputURL: outputUrl, handler: { session in
+                DispatchQueue.main.async {
+                    UploadService.uploadVideo(upload: self.upload, completion: { success in
+                        self.sent()
+                    })
+                }
+            })
+
         } else if upload.image != nil {
             UploadService.sendImage(upload: upload, completion: { success in
                 self.sent()
             })
-        }
-        
-        
+        }    
     }
     
     var activeLocations = [Location]()

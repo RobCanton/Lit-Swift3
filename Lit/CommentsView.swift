@@ -103,9 +103,9 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         let comment = comments[indexPath.row]
         let text = comment.getText()
-        let width = tableView.frame.width - (8 + 8 + 8 + 36)
+        let width = tableView.frame.width - (8 + 8 + 8 + 32)
         let size =  UILabel.size(withText: text, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!)
-        let height2 = size.height + 30  // +8 for some bio padding
+        let height2 = size.height + 24  // +8 for some bio padding
         return height2
     }
     

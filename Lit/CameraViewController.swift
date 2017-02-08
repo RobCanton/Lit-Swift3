@@ -688,7 +688,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             self.textView.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
             self.captionButton.alpha = 0.0
             
-            self.textView.backgroundColor = UIColor(white: 0.0, alpha: 0.3)
+            self.textView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         })
     }
     
@@ -715,7 +715,9 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         if keyboardUp {
             textView.resignFirstResponder()
         } else {
-            textView.becomeFirstResponder()
+            if tap.location(ofTouch: 0, in: view).y < view.frame.height * 0.8 {
+              textView.becomeFirstResponder()
+            }
         }
     }
     
