@@ -200,10 +200,10 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: StoryViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! StoryViewController
         cell.contentView.backgroundColor = UIColor.black
-        cell.story = userStories[indexPath.item]
         cell.optionsTappedHandler = showOptions
         cell.storyCompleteHandler = storyComplete
         cell.showUser = showUser
+        cell.story = userStories[indexPath.item]
         
         if firstCell {
             firstCell = false

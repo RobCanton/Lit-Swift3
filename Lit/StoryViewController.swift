@@ -69,6 +69,10 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             self.story.delegate = self
             story.determineState()
             
+            infoView.authorTappedHandler = showUser
+            authorOverlay.authorTappedHandler = showUser
+            commentsView.userTapped = showUser
+            
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         }
@@ -191,9 +195,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         }
 
         infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - size, width: frame.width, height: size)
-        infoView.authorTappedHandler = showUser
-        authorOverlay.authorTappedHandler = showUser
-        commentsView.userTapped = showUser
         commentsView.commentsInteractionHandler = commentsInteractionHandler
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
         if !looping {

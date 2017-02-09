@@ -16,6 +16,7 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     var keyboardUp = false
     
     var optionsTappedHandler:(()->())?
+    var showUser:((_ uid:String)->())?
     
     func showOptions() {
         pauseVideo()
@@ -78,6 +79,13 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         
         self.contentView.addSubview(self.moreButton)
         
+        /*
+         Info view
+         */
+        infoView.frame = CGRect(x: 0,y: textView.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
+        infoView.backgroundBlur.isHidden = true
+        contentView.addSubview(infoView)
+        
         //activityView = NVActivityIndicatorView(frame: CGRectMake(0,0,50,50), type: .BallScaleMultiple)
         //activityView.center = self.center
         //self.contentView.addSubview(activityView)
@@ -85,7 +93,7 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     
     func setItem() {
         guard let item = storyItem else { return }
-        //self.authorOverlay.setPostMetadata(post: storyItem)
+
         if let image = storyItem.image {
             self.content.image = image
         } else {
@@ -122,12 +130,71 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
             }
         }
         
+        UserService.getUser(item.authorId, completion: { user in
+            if user != nil {
+                self.authorOverlay.setAuthorInfo(user: user!, post: item)
+                self.infoView.setInfo(user: user!, item: item)
+                
+                loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, _ in
+                    if image != nil {
+                        self.authorOverlay.setAuthorImage(image: image!)
+                        self.infoView.setUserImage(image: image!)
+                        
+                    }
+                })
+            }
+        })
+        
+        let caption = item.caption
+        let width = self.frame.width - (8 + 8 + 8 + 32)
+        var size:CGFloat = 0.0
+        
+        if caption != "" {
+            size =  UILabel.size(withText: caption, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!).height + 34
+            infoView.isHidden = false
+        } else {
+            infoView.isHidden = true
+        }
+        
+        infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - size, width: frame.width, height: size)
+        infoView.authorTappedHandler = showUser
+        
         commentsView.setTableComments(comments: item.comments, animated: false)
+        commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
+    }
+    
+    
+    func itemDownloaded() {
+        //activityView?.stopAnimating()
+        setItem()
+    }
+    
+    
+    
+    func setForPlay(){
+        
+        if storyItem.needsDownload() {
+            shouldPlay = true
+            return
+        }
+        
+        shouldPlay = false
+        
+        if storyItem.contentType == .image {
+            videoContent.isHidden = true
+            
+        } else if storyItem.contentType == .video {
+            videoContent.isHidden = false
+            playVideo()
+            loopVideo()
+        }
+        
+        infoView.phaseInCaption()
         
         commentsRef?.removeAllObservers()
-        commentsRef = UserService.ref.child("uploads/\(item.getKey())/comments")
+        commentsRef = UserService.ref.child("uploads/\(storyItem.getKey())/comments")
         
-        if let lastItem = item.comments.last {
+        if let lastItem = storyItem.comments.last {
             let lastKey = lastItem.getKey()
             let ts = lastItem.getDate().timeIntervalSince1970 * 1000
             
@@ -143,8 +210,8 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
                     
                     let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
                     print("ADDING: \(text)")
-                    item.addComment(comment)
-                    self.commentsView.setTableComments(comments: item.comments, animated: true)
+                    self.storyItem.addComment(comment)
+                    self.commentsView.setTableComments(comments: self.storyItem.comments, animated: true)
                 }
             })
         } else {
@@ -155,36 +222,9 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
                 let text = dict["text"] as! String
                 let timestamp = dict["timestamp"] as! Double
                 let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-                item.addComment(comment)
-                self.commentsView.setTableComments(comments: item.comments, animated: true)
+                self.storyItem.addComment(comment)
+                self.commentsView.setTableComments(comments: self.storyItem.comments, animated: true)
             })
-        }
-        
-    }
-    
-    
-    func itemDownloaded() {
-        //activityView?.stopAnimating()
-        setItem()
-    }
-    
-    func setForPlay(){
-        
-        if storyItem.needsDownload() {
-            
-            shouldPlay = true
-            return
-        }
-        
-        shouldPlay = false
-        
-        if storyItem.contentType == .image {
-            videoContent.isHidden = true
-            
-        } else if storyItem.contentType == .video {
-            videoContent.isHidden = false
-            playVideo()
-            loopVideo()
         }
     }
     
@@ -247,6 +287,11 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         }
     }
     
+    func getCommentsViewOriginY() -> CGFloat {
+        return textView.frame.origin.y - infoView.frame.height - commentsView.frame.height
+    }
+    
+    
     func keyboardWillAppear(notification: NSNotification){
         
         keyboardUp = true
@@ -265,12 +310,15 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
             let commentLabelY = height - keyboardFrame.height - commentLabelFrame.height
             self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x,y: commentLabelY,width: commentLabelFrame.width,height: commentLabelFrame.height)
             
-            let commentsViewStart = textViewY - self.commentsView.frame.height
-            self.commentsView.frame = CGRect(x: 0,y: commentsViewStart,width: self.commentsView.frame.width,height: self.commentsView.frame.height)
+            self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
             let moreButtonFrame = self.moreButton.frame
             let moreButtonY = height - keyboardFrame.height - moreButtonFrame.height
             self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: moreButtonY, width: moreButtonFrame.width, height: moreButtonFrame.height)
+            
+            let infoFrame = self.infoView.frame
+            let infoY = textViewY - infoFrame.height
+            self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
             self.authorOverlay.alpha = 0.0
             self.commentPlaceHolderLabel.alpha = 0.0
@@ -291,13 +339,17 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
             let commentLabelY = height - commentLabelFrame.height
             self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x, y: commentLabelY, width: commentLabelFrame.width, height: commentLabelFrame.height)
             
-            let commentsViewStart = textViewStart - self.commentsView.frame.height
-            self.commentsView.frame = CGRect(x: 0,y: commentsViewStart,width: self.commentsView.frame.width,height: self.commentsView.frame.height)
+            self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
             let moreButtonFrame = self.moreButton.frame
             self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: height - moreButtonFrame.height, width: moreButtonFrame.width, height: moreButtonFrame.height)
-
+            
+            let infoFrame = self.infoView.frame
+            let infoY = height - textViewFrame.height - infoFrame.height
+            self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
+            
             self.authorOverlay.alpha = 1.0
+            
             if !self.commentLabelShouldHide() {
                 self.commentPlaceHolderLabel.alpha = 1.0
             }
@@ -335,15 +387,12 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         textView.fitHeightToContent()
         change = textView.frame.height - oldHeight
         
-        
         textView.center = CGPoint(x: textView.center.x, y: textView.center.y - change)
         
-        self.commentsView.frame = CGRect(x: 0,y: textView.frame.origin.y - self.commentsView.frame.height, width: self.commentsView.frame.width, height: self.commentsView.frame.height)
+        self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(), width: self.commentsView.frame.width, height: self.commentsView.frame.height)
+        self.infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - infoView.frame.height, width: infoView.frame.width, height: infoView.frame.height)
     }
 
-    
-    
-    
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -388,7 +437,6 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         var authorView = UINib(nibName: "PostAuthorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! PostAuthorView
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        
         authorView.frame = CGRect(x: margin, y: margin, width: width, height: authorView.frame.height)
         return authorView
     }()
@@ -396,9 +444,16 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     lazy var commentsView: CommentsView = {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        var commentsView = CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.42 ))
+        var commentsView = CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.32 ))
         
         return commentsView
+    }()
+    
+    lazy var infoView: StoryInfoView = {
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        var view: StoryInfoView = UINib(nibName: "StoryInfoView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! StoryInfoView
+        return view
     }()
 
 }

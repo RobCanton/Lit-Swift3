@@ -58,10 +58,6 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         super.viewDidLoad()
         
         itemSideLength = (UIScreen.main.bounds.width - 4.0)/3.0
-        
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         

@@ -63,10 +63,7 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController!.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "Avenir-Medium", size: 18.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
+
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
         let nib2 = UINib(nibName: "UserViewCell", bundle: nil)

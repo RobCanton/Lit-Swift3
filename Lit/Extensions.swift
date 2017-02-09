@@ -88,12 +88,12 @@ extension UILabel {
         self.textAlignment = .center
         
         let str = "\(count)\n\(text)"
-        let font = UIFont(name: "AvenirNext-Regular", size: 12)
+        let font = UIFont.systemFont(ofSize: 12)//(name: "AvenirNext-Regular", size: 12)
         
         let attributes: [String: AnyObject] = [
-            NSFontAttributeName : font!,
+            NSFontAttributeName : font,
             NSForegroundColorAttributeName : color,
-            ]
+        ]
         
         let title = NSMutableAttributedString(string: str, attributes: attributes) //1
         
@@ -101,7 +101,7 @@ extension UILabel {
         if let range = str.range(of: countStr) {// .rangeOfString(countStr) {
             let index = str.distance(from: str.startIndex, to: range.lowerBound)//str.startIndex.distance(fromt:range.lowerBound)
             let a: [String: AnyObject] = [
-                NSFontAttributeName : UIFont(name: "AvenirNext-Medium", size: 16)!,
+                NSFontAttributeName : UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold),//UIFont(name: "AvenirNext-Medium", size: 16)!,
                 NSForegroundColorAttributeName : color2
             ]
             title.addAttributes(a, range: NSRange(location: index, length: countStr.characters.count))

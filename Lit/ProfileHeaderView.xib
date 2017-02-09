@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -36,13 +35,13 @@
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNR-9M-bfd">
                                     <rect key="frame" x="8" y="8" width="174" height="22"/>
-                                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xDH-lw-zf7">
                                     <rect key="frame" x="8" y="30" width="80" height="20"/>
-                                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                     <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -53,7 +52,7 @@
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="KjX-Wh-jSq"/>
                                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="120" id="o1n-e3-hXY"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="16"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                     <state key="normal">
                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
@@ -75,7 +74,7 @@
                                 <constraint firstItem="xDH-lw-zf7" firstAttribute="leading" secondItem="QK9-4C-K4x" secondAttribute="leading" constant="8" id="NAa-5h-Lj8"/>
                                 <constraint firstItem="115-9Q-1uk" firstAttribute="centerY" secondItem="lNR-9M-bfd" secondAttribute="centerY" id="QvM-x0-IMG"/>
                                 <constraint firstItem="xDH-lw-zf7" firstAttribute="width" secondItem="lNR-9M-bfd" secondAttribute="width" id="Sep-1L-0gW"/>
-                                <constraint firstAttribute="bottom" secondItem="xDH-lw-zf7" secondAttribute="bottom" id="X9k-Rt-UWB"/>
+                                <constraint firstAttribute="bottom" secondItem="xDH-lw-zf7" secondAttribute="bottom" constant="2" id="X9k-Rt-UWB"/>
                                 <constraint firstItem="lNR-9M-bfd" firstAttribute="leading" secondItem="QK9-4C-K4x" secondAttribute="leading" constant="8" id="gAz-yz-JFM"/>
                                 <constraint firstItem="lNR-9M-bfd" firstAttribute="top" secondItem="QK9-4C-K4x" secondAttribute="top" constant="8" id="mcU-QP-aHN"/>
                                 <constraint firstItem="lnk-vc-dz6" firstAttribute="centerY" secondItem="QK9-4C-K4x" secondAttribute="centerY" id="qfG-XN-wJ2"/>
@@ -85,7 +84,7 @@
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXa-t2-xf9">
                             <rect key="frame" x="8" y="79" width="384" height="86"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>

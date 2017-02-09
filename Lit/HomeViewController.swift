@@ -24,9 +24,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         

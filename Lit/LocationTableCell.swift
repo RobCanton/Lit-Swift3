@@ -37,6 +37,8 @@ class LocationTableCell: UITableViewCell {
     
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    
     
     @IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!
@@ -71,6 +73,12 @@ class LocationTableCell: UITableViewCell {
         
         titleLabel.superview!.layer.cornerRadius = 1.5
         titleLabel.superview!.clipsToBounds = true
+        
+        distanceLabel.superview!.layer.cornerRadius = 1.5
+        distanceLabel.superview!.clipsToBounds = true
+        
+        addressLabel.superview!.layer.cornerRadius = 1.5
+        addressLabel.superview!.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -83,6 +91,7 @@ class LocationTableCell: UITableViewCell {
     func setCellLocation(_ location:Location) {
         self.location = location
         titleLabel.text = location.getName()
+        addressLabel.text = location.getShortAddress()
         backgroundImage.image = nil
         loadLocationImage(location.getImageURL(), completion: { image, fromCache in
             if !fromCache {
@@ -96,12 +105,12 @@ class LocationTableCell: UITableViewCell {
         
         let distanceBox = distanceLabel.superview!
         if location.isActive() {
-            titleLabel.superview!.backgroundColor = accentColor
+            distanceLabel.superview!.backgroundColor = accentColor
             distanceLabel.text = "Nearby"
-            distanceLabel.font = UIFont(name: "Avenir-Heavy", size: 12.0)
+            distanceLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)//UIFont(name: "Avenir-Heavy", size: 12.0)
         } else {
-            titleLabel.superview!.backgroundColor = UIColor.black
-            distanceLabel.font = UIFont(name: "Avenir-Medium", size: 11.0)
+            distanceLabel.superview!.backgroundColor = UIColor.black
+            distanceLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightLight)//UIFont(name: "Avenir-Medium", size: 11.0)
             if let distance = location.getDistance() {
                 distanceLabel.text = getDistanceString(distance: distance)
                 

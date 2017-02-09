@@ -41,9 +41,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         self.navigationItem.title = location.getName()
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
 
