@@ -37,6 +37,7 @@ class StoryItem: NSObject, NSCoding {
     var toLocation:Bool
     
     var viewers:[String:Double]
+    var likes:[String:Double]
     var comments:[Comment]
     
     var delegate:ItemDelegate?
@@ -46,7 +47,7 @@ class StoryItem: NSObject, NSCoding {
     dynamic var videoData:Data?
     
     init(key: String, authorId: String, caption:String, locationKey:String, downloadUrl: URL, videoURL:URL?, contentType: ContentType, dateCreated: Double, length: Double,
-         toProfile: Bool, toStory: Bool, toLocation:Bool, viewers:[String:Double], comments: [Comment])
+         toProfile: Bool, toStory: Bool, toLocation:Bool, viewers:[String:Double], likes:[String:Double], comments: [Comment])
     {
         
         self.key          = key
@@ -62,7 +63,8 @@ class StoryItem: NSObject, NSCoding {
         self.toStory      = toStory
         self.toLocation   = toLocation
         self.viewers      = viewers
-        self.comments    = comments
+        self.likes        = likes
+        self.comments     = comments
 
     }
     
@@ -86,6 +88,11 @@ class StoryItem: NSObject, NSCoding {
             viewers = _viewers
         }
         
+        var likes = [String:Double]()
+        if let _likes = decoder.decodeObject(forKey: "likes") as? [String:Double] {
+            likes = _likes
+        }
+        
         var comments = [Comment]()
         if let _comments = decoder.decodeObject(forKey: "comments") as? [Comment] {
             comments = _comments
@@ -103,7 +110,7 @@ class StoryItem: NSObject, NSCoding {
             break
         }
         
-        self.init(key: key, authorId: authorId, caption: caption, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
+        self.init(key: key, authorId: authorId, caption: caption, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, likes: likes, comments: comments)
     }
     
     
@@ -119,6 +126,7 @@ class StoryItem: NSObject, NSCoding {
         coder.encode(toStory, forKey: "toStory")
         coder.encode(toLocation, forKey: "toLocation")
         coder.encode(viewers, forKey: "viewers")
+        coder.encode(likes, forKey: "likes")
         coder.encode(comments, forKey: "comments")
         if videoURL != nil {
             coder.encode(videoURL!, forKey: "videoURL")
@@ -199,12 +207,49 @@ class StoryItem: NSObject, NSCoding {
         return viewers[mainStore.state.userState.uid] != nil
     }
     
+    func addView(_ uid:String) {
+        self.viewers[uid] = 0
+        cache()
+    }
+    
     func addComment(_ comment:Comment) {
         for _comment in comments {
             if _comment.getKey() == comment.getKey() { return }
         }
         
         self.comments.append(comment)
+        cache()
+    }
+    
+    
+    
+    func addLike(_ uid:String) {
+       self.likes[uid] = 0
+        cache()
+    }
+    
+    func removeLike(_ uid:String) {
+        self.likes[uid] = nil
+        cache()
+    }
+    
+    func getLikesList() -> [String] {
+        var list = [String]()
+        for (uid, _) in likes {
+            list.append(uid)
+        }
+        return list
+    }
+    
+    func getViewsList() -> [String] {
+        var list = [String]()
+        for (uid, _) in viewers {
+            list.append(uid)
+        }
+        return list
+    }
+    
+    func cache() {
         dataCache.removeObject(forKey: "upload-\(key)" as NSString)
         dataCache.setObject(self, forKey: "upload-\(key)" as NSString)
     }

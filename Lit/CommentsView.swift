@@ -115,11 +115,19 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         cell.setContent(comment: comments[indexPath.row])
         cell.authorTapped = userTapped
         
+        if showTimeStamps {
+            cell.timeLabel.isHidden = false
+        } else {
+            cell.timeLabel.isHidden = true
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("SELECTED! \(indexPath.row)")
+        let cell = tableView.cellForRow(at: indexPath) as! CommentCell
+        cell.toggleTimeStamp()
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     func scrollBottom(animated:Bool) {
@@ -136,4 +144,21 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         //commentsInteractionHandler?(false)
     }
+    
+    var showTimeStamps = false
+    
+    func showTimeLabels(visible:Bool) {
+        showTimeStamps = visible
+        for cell in tableView.visibleCells {
+            let c = cell as! CommentCell
+            if showTimeStamps {
+                c.timeLabel.isHidden = false
+            } else {
+                c.timeLabel.isHidden = true
+            }
+            
+        }
+    }
+    
+    
 }

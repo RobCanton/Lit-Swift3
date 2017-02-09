@@ -22,7 +22,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MSC-g9-ptN">
-                    <rect key="frame" x="8" y="0.0" width="376" height="64"/>
+                    <rect key="frame" x="8" y="0.0" width="313" height="64"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="send"/>
@@ -45,30 +45,45 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kmH-Wb-9L0">
-                    <rect key="frame" x="257" y="0.0" width="63" height="63"/>
+                    <rect key="frame" x="265" y="0.0" width="63" height="63"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="kmH-Wb-9L0" secondAttribute="height" multiplier="1:1" id="VE5-xT-3HR"/>
                     </constraints>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <inset key="imageEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                    <state key="normal" image="fire"/>
+                    <state key="normal" image="like"/>
                     <connections>
                         <action selector="likeTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="i1C-yD-ado"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iy8-lv-81J">
+                    <rect key="frame" x="321" y="0.0" width="63" height="63"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="iy8-lv-81J" secondAttribute="height" multiplier="1:1" id="39m-J6-GGd"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                    <state key="normal" title="Send">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="sendButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="TcN-tW-rmQ"/>
                     </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="iy8-lv-81J" secondAttribute="trailing" constant="8" id="34O-Kl-zbd"/>
                 <constraint firstAttribute="bottom" secondItem="d5d-MK-h1M" secondAttribute="bottom" id="4qw-Gb-FQH"/>
                 <constraint firstAttribute="bottom" secondItem="MSC-g9-ptN" secondAttribute="bottom" id="AOW-Zm-cmF"/>
                 <constraint firstItem="zHt-xi-SwK" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Huu-Yn-1Ra"/>
+                <constraint firstItem="iy8-lv-81J" firstAttribute="leading" secondItem="MSC-g9-ptN" secondAttribute="trailing" id="Oyv-Ia-Fbf"/>
                 <constraint firstItem="zHt-xi-SwK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="StC-ae-wlt"/>
                 <constraint firstItem="MSC-g9-ptN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Utu-2H-plk"/>
                 <constraint firstItem="kmH-Wb-9L0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Z9p-he-7du"/>
+                <constraint firstAttribute="bottom" secondItem="iy8-lv-81J" secondAttribute="bottom" constant="1" id="bYq-Hq-bpb"/>
                 <constraint firstAttribute="bottom" secondItem="kmH-Wb-9L0" secondAttribute="bottom" constant="1" id="cA3-NB-vW5"/>
                 <constraint firstItem="d5d-MK-h1M" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ckg-pz-Eb9"/>
-                <constraint firstAttribute="trailing" secondItem="MSC-g9-ptN" secondAttribute="trailing" constant="8" id="emP-Pc-GqI"/>
-                <constraint firstItem="d5d-MK-h1M" firstAttribute="leading" secondItem="kmH-Wb-9L0" secondAttribute="trailing" constant="8" id="uY4-E4-PKA"/>
+                <constraint firstItem="iy8-lv-81J" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="rE9-cg-gf4"/>
+                <constraint firstItem="d5d-MK-h1M" firstAttribute="leading" secondItem="kmH-Wb-9L0" secondAttribute="trailing" id="uY4-E4-PKA"/>
                 <constraint firstAttribute="trailing" secondItem="d5d-MK-h1M" secondAttribute="trailing" id="v3s-Wj-GZo"/>
                 <constraint firstItem="MSC-g9-ptN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yMo-tC-vse"/>
             </constraints>
@@ -77,13 +92,14 @@
                 <outlet property="commentPlaceHolder" destination="zHt-xi-SwK" id="d4P-8I-kHA"/>
                 <outlet property="likeButton" destination="kmH-Wb-9L0" id="odu-kv-L1d"/>
                 <outlet property="moreButton" destination="d5d-MK-h1M" id="szs-xa-KBa"/>
+                <outlet property="sendButton" destination="iy8-lv-81J" id="6Qi-hO-7Nb"/>
                 <outlet property="textField" destination="MSC-g9-ptN" id="EF0-Ri-o68"/>
             </connections>
             <point key="canvasLocation" x="74" y="-213"/>
         </view>
     </objects>
     <resources>
-        <image name="fire" width="40" height="40"/>
+        <image name="like" width="25" height="25"/>
         <image name="more" width="16" height="16"/>
     </resources>
 </document>

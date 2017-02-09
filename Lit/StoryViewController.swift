@@ -13,7 +13,7 @@ import Firebase
 import NVActivityIndicatorView
 
 
-public class StoryViewController: UICollectionViewCell, StoryProtocol {
+public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHeaderProtocol, CommentBarProtocol {
 
     var viewIndex = 0
     
@@ -30,6 +30,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     var item:StoryItem?
     
     var showUser:((_ uid:String)->())?
+    var showUsersList:((_ uids:[String], _ title:String)->())?
     var optionsTappedHandler:(()->())?
     var storyCompleteHandler:(()->())?
     var viewsTappedHandler:(()->())?
@@ -44,11 +45,46 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             resumeStory()
         }
     }
+
     
+    func showUser(_ uid: String) {
+        showUser?(uid)
+    }
     
-    func showOptions(){
+    func showViewers() {
+        guard let item = self.item else { return }
+        if item.authorId == mainStore.state.userState.uid {
+            showUsersList?(item.getViewsList(), "Views")
+        }
+    }
+    
+    func showLikes() {
+        guard let item = self.item else { return }
+        showUsersList?(item.getLikesList(), "Likes")
+    }
+    
+    func more() {
         pauseStory()
         optionsTappedHandler?()
+    }
+    
+    func sendComment(_ comment: String) {
+        guard let item = self.item else { return }
+        UploadService.addComment(postKey: item.getKey(), comment: comment)
+    }
+    
+    func toggleLike(_ like: Bool) {
+        guard let item = self.item else { return }
+        
+        if like {
+            UploadService.addLike(postKey: item.getKey())
+            item.addLike(mainStore.state.userState.uid)
+        } else {
+            UploadService.removeLike(postKey: item.getKey())
+            item.removeLike(mainStore.state.userState.uid)
+        }
+        authorOverlay.setViews(post: item)
+        authorOverlay.setLikes(post: item)
     }
     
     var playerLayer:AVPlayerLayer?
@@ -70,9 +106,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             story.determineState()
             
             infoView.authorTappedHandler = showUser
-            authorOverlay.authorTappedHandler = showUser
+            authorOverlay.delegate = self
+            commentBar.delegate = self
             commentsView.userTapped = showUser
-            
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         }
@@ -200,6 +236,17 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         if !looping {
             commentsView.setTableComments(comments: item.comments, animated: false)
         }
+        
+        let uid = mainStore.state.userState.uid
+        
+        if !item.hasViewed() && item.authorId != uid{
+            item.addView(uid)
+            UploadService.addView(postKey: item.getKey())
+            authorOverlay.setViews(post: item)
+        }
+
+        commentBar.likedStatus(item.likes[uid] != nil)
+        commentBar.likeButton.isHidden = item.authorId == uid
     }
 
     
@@ -284,12 +331,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
 
         killTimer()
         timer = Timer.scheduledTimer(timeInterval: itemLength, target: self, selector: #selector(nextItem), userInfo: nil, repeats: false)
-        
-        let uid = mainStore.state.userState.uid
-        if !item.hasViewed() && item.authorId != uid{
-            item.viewers[uid] = 1
-            UploadService.addView(postKey: item.getKey())
-        }
         
         if !looping {
 
@@ -387,8 +428,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         progressBar?.resetAllProgressBars()
         progressBar?.removeFromSuperview()
         commentsRef?.removeAllObservers()
-        //textView.isUserInteractionEnabled = false
-        moreButton.isUserInteractionEnabled = false
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -429,10 +468,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     func focusItem() {
         UIView.animate(withDuration: 0.15, animations: {
             self.commentsView.alpha = 0.0
-            self.closeButton.alpha = 0.0
             self.authorOverlay.alpha = 0.0
             self.infoView.alpha = 0.0
-            self.moreButton.alpha = 0.0
             self.commentBar.alpha = 0.0
             self.progressBar?.alpha = 0.0
         })
@@ -441,10 +478,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     func unfocusItem() {
         UIView.animate(withDuration: 0.2, animations: {
             self.commentsView.alpha = 1.0
-            self.closeButton.alpha = 0.5
             self.authorOverlay.alpha = 1.0
             self.infoView.alpha = 1.0
-            self.moreButton.alpha = 1.0
             self.commentBar.alpha = 1.0
             self.progressBar?.alpha = 1.0
         })
@@ -528,26 +563,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         activityView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 44, height: 44), type: .ballScaleRipple, color: UIColor.white, padding: 1.0, speed: 1.0)
         activityView.center = contentView.center
         contentView.addSubview(activityView)
-        
-        
-        /*
-         Close button
-         */
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        contentView.addSubview(closeButton)
-        
-        /*
-         More button
-         */
-        moreButton.isUserInteractionEnabled = true
-        moreButton.addTarget(self, action: #selector(showOptions), for: .touchUpInside)
-        contentView.addSubview(moreButton)
-        
-        /*
-         More button
-         */
-        likeButton.isUserInteractionEnabled = true
-        contentView.addSubview(likeButton)
     }
     
     func keyboardWillAppear(notification: NSNotification){
@@ -560,7 +575,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         
         self.commentBar.likeButton.isUserInteractionEnabled = false
         self.commentBar.moreButton.isUserInteractionEnabled = false
-        
+        self.commentBar.sendButton.isUserInteractionEnabled = true
+        self.commentsView.showTimeLabels(visible: true)
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             let height = self.frame.height
             let textViewFrame = self.commentBar.frame
@@ -569,18 +585,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
-            let moreButtonFrame = self.moreButton.frame
-            let moreButtonY = height - keyboardFrame.height - moreButtonFrame.height
-            self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: moreButtonY, width: moreButtonFrame.width, height: moreButtonFrame.height)
-            
             let infoFrame = self.infoView.frame
             let infoY = textViewY - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
             self.commentBar.likeButton.alpha = 0.0
             self.commentBar.moreButton.alpha = 0.0
+            self.commentBar.sendButton.alpha = 1.0
             self.progressBar?.alpha = 0.0
-            self.closeButton.alpha = 0.0
             self.authorOverlay.alpha = 0.0
 
         })
@@ -592,7 +604,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         
         self.commentBar.likeButton.isUserInteractionEnabled = true
         self.commentBar.moreButton.isUserInteractionEnabled = true
-        
+        self.commentBar.sendButton.isUserInteractionEnabled = false
+        self.commentsView.showTimeLabels(visible: false)
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             
             let height = self.frame.height
@@ -600,39 +613,21 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let textViewStart = height - textViewFrame.height
             self.commentBar.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
             
-
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
-            
-            let moreButtonFrame = self.moreButton.frame
-            self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: height - moreButtonFrame.height, width: moreButtonFrame.width, height: moreButtonFrame.height)
-            
+
             let infoFrame = self.infoView.frame
             let infoY = height - textViewFrame.height - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
             self.commentBar.likeButton.alpha = 1.0
             self.commentBar.moreButton.alpha = 1.0
+            self.commentBar.sendButton.alpha = 0.0
             self.progressBar?.alpha = 1.0
-            self.closeButton.alpha = 0.5
             self.authorOverlay.alpha = 1.0
 
         })
         
     }
-    
-    func sendComment(comment:String) {
-        if item != nil {
-            UploadService.addComment(postKey: item!.getKey(), comment: comment)
-        }
-    }
-//
-//    func commentLabelShouldHide() -> Bool {
-//        if textView.text.isEmpty {
-//            return false
-//        } else {
-//            return true
-//        }
-//    }
     
     func viewsTapped() {
         viewsTappedHandler?()
@@ -704,52 +699,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         let height: CGFloat = (UIScreen.main.bounds.size.height)
         return CommentsView(frame: CGRect(x: 0, y: height / 2, width: width, height: height * 0.32 ))
     }()
-
-    lazy var viewsButton: UIButton = {
-        let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let button = UIButton(frame: CGRect(x: 12,y: height - 36,width: 40,height:40))
-        button.titleLabel!.font = UIFont.init(name: "AvenirNext-Medium", size: 16)
-        button.tintColor = UIColor.white
-        button.alpha = 0.0
-        return button
-    }()
-
-    lazy var moreButton: UIButton = {
-        let width: CGFloat = (UIScreen.main.bounds.size.width)
-        let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let size:CGFloat = 50.0
-        let button = UIButton(frame: CGRect(x: width - size,y: height - size, width: size,height:size))
-        button.setImage(UIImage(named: "more"), for: .normal)
-        button.tintColor = UIColor.white
-        button.alpha = 1.0
-        button.isHidden = true
-        return button
-    }()
-    
-    lazy var likeButton: UIButton = {
-        let width: CGFloat = (UIScreen.main.bounds.size.width)
-        let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let size:CGFloat = 50.0
-        let button = UIButton(frame: CGRect(x: width - 100, y: height - size, width: size,height:size))
-        button.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8)
-        button.setImage(UIImage(named: "fire"), for: .normal)
-        button.tintColor = UIColor.white
-        button.alpha = 1.0
-        button.isHidden = true
-        return button
-    }()
-    
-    lazy var closeButton: UIButton = {
-        let width: CGFloat = (UIScreen.main.bounds.size.width)
-        let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let button = UIButton(frame: CGRect(x: width - 40,y: 8, width: 40,height:40))
-        button.setImage(UIImage(named: "delete"), for: .normal)
-        button.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
-        button.tintColor = UIColor.white
-        button.alpha = 0.5
-        return button
-    }()
-    
+   
     lazy var infoView: StoryInfoView = {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
@@ -770,7 +720,7 @@ extension StoryViewController: UITextFieldDelegate {
         if let text = textField.text {
             if !text.isEmpty {
                 textField.text = ""
-                sendComment(comment: text)
+                sendComment(text)
             }
         }
         return true

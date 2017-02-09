@@ -124,9 +124,11 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longPressGR.minimumPressDuration = 0.5
+        longPressGR.delegate = self
         self.view.addGestureRecognizer(longPressGR)
         
         tapGR = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tapGR.delegate = self
         self.view.addGestureRecognizer(tapGR)
         
     }
@@ -150,22 +152,36 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func handleTap(gestureRecognizer: UITapGestureRecognizer) {
         print("Tapped")
+        
         getCurrentCell()?.tapped(gesture: gestureRecognizer)
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let cell = getCurrentCell() else { return false }
+        let point = gestureRecognizer.location(ofTouch: 0, in: self.view)
+        let authorBottomY = cell.authorOverlay.frame.origin.y + cell.authorOverlay.frame.height
+        let commentsTopY = cell.commentsView.frame.origin.y
+        if cell.keyboardUp {
+            if point.y > commentsTopY {
+                return false
+            }
+        } else {
+            if point.y < authorBottomY || point.y > commentsTopY {
+                return false
+            }
+        }
+        
         
         if let _ = gestureRecognizer as? UILongPressGestureRecognizer  {
             return true
         }
         
-        if let tap = gestureRecognizer as? UITapGestureRecognizer  {
-            let point = tap.location(ofTouch: 0, in: self.view)
-            print("POINT: \(point)")
+        if let _ = gestureRecognizer as? UITapGestureRecognizer  {
             return true
         }
 
         if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            if cell.keyboardUp { return false }
             let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
             let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
             self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
@@ -203,6 +219,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         cell.optionsTappedHandler = showOptions
         cell.storyCompleteHandler = storyComplete
         cell.showUser = showUser
+        cell.showUsersList = showUsersList
         cell.story = userStories[indexPath.item]
         
         if firstCell {
@@ -234,6 +251,15 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         controller.uid = uid
         self.navigationController?.pushViewController(controller, animated: true)
     }
+    
+    func showUsersList(uids:[String], title:String) {
+        self.navigationController?.delegate = self
+        let controller = UsersListViewController()
+        controller.title = title
+        controller.tempIds = uids
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     
     func showLocation(location:Location) {
         self.navigationController?.delegate = self

@@ -61,8 +61,16 @@ class CommentCell: UITableViewCell {
                 self.commentLabel.text = comment.getText()
                 self.commentLabel.sizeToFit()
                 self.userImage.loadImageAsync(user!.getImageUrl(), completion: nil)
+                self.timeLabel.text = comment.getDate().timeStringSinceNow()
             }
         })
+    }
+    
+    
+    
+    @IBOutlet weak var timeLabel: UILabel!
+    func toggleTimeStamp() {
+        
     }
     
 }

@@ -268,6 +268,10 @@ class UploadService {
                     if snapshot.hasChild("views") {
                         viewers = dict["views"] as! [String:Double]
                     }
+                    var likes = [String:Double]()
+                    if snapshot.hasChild("likes") {
+                        likes = dict["likes"] as! [String:Double]
+                    }
                     
                     var comments = [Comment]()
                     if snapshot.hasChild("comments") {
@@ -285,7 +289,7 @@ class UploadService {
                     
                     comments.sort(by: { return $0 < $1 })
                     
-                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, comments: comments)
+                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers,likes:likes, comments: comments)
                     dataCache.setObject(item!, forKey: "upload-\(key)" as NSString)
                 }
             }
@@ -320,10 +324,26 @@ class UploadService {
         
         let postRef = ref.child("uploads/\(postKey)/views/\(uid)")
         postRef.setValue([".sv":"timestamp"])
+    }
+    
+    static func addLike(postKey:String) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
         
+        let postRef = ref.child("uploads/\(postKey)/likes/\(uid)")
+        postRef.setValue([".sv":"timestamp"])
+    }
+    
+    static func removeLike(postKey:String) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
+        
+        let postRef = ref.child("uploads/\(postKey)/likes/\(uid)")
+        postRef.removeValue()
     }
     
     static func addComment(postKey:String, comment:String) {
+        if comment == "" { return }
         let ref = FIRDatabase.database().reference()
         let uid = mainStore.state.userState.uid
         

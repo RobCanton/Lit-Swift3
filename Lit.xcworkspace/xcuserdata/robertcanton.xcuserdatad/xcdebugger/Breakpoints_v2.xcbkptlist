@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryItem.swift"
-            timestampString = "508092628.190369"
+            timestampString = "508357579.48064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
             landmarkName = "download()"
             landmarkType = "7">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508304637.045952"
+            timestampString = "508359314.484193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "StoryViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -666,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508304637.045952"
+            timestampString = "508359314.484193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "stateChange(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -682,11 +682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508321507.590554"
+            timestampString = "508360242.631792"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "setForPlay()"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,11 +698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508304637.045952"
+            timestampString = "508360242.631792"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "prepareVideoContent(item:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -714,11 +714,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508324352.023914"
+            timestampString = "508360242.631792"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "644"
-            endingLineNumber = "644"
+            startingLineNumber = "641"
+            endingLineNumber = "641"
             landmarkName = "StoryViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -729,28 +729,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Lit/StoryViewController.swift"
-            timestampString = "508324352.023914"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "717"
-            endingLineNumber = "717"
-            landmarkName = "moreButton"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Lit/UploadService.swift"
-            timestampString = "508153345.575825"
+            timestampString = "508357579.48064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "434"
-            endingLineNumber = "434"
+            startingLineNumber = "454"
+            endingLineNumber = "454"
             landmarkName = "deleteItem(item:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -768,22 +752,6 @@
             startingLineNumber = "192"
             endingLineNumber = "192"
             landmarkName = "uploadVideoStill(url:postKey:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../lit/Lit/StoryViewController.swift"
-            timestampString = "508324352.023914"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "531"
-            endingLineNumber = "531"
-            landmarkName = "init(frame:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1626,11 +1594,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoriesViewController.swift"
-            timestampString = "508291815.423285"
+            timestampString = "508360767.254271"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "collectionView(_:didEndDisplaying:forItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1681,6 +1649,22 @@
             endingLineNumber = "717"
             landmarkName = "handleTapGesture(tap:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lit/StoryViewController.swift"
+            timestampString = "508359001.185633"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "StoryViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

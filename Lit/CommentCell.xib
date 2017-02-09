@@ -39,11 +39,18 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="5m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mFH-ly-0OP">
+                        <rect key="frame" x="130" y="8" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="K8S-yc-OWp" firstAttribute="top" secondItem="6WB-zi-X86" secondAttribute="top" id="8ve-Eb-K1c"/>
                     <constraint firstItem="6WB-zi-X86" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="CmB-fF-YJt"/>
                     <constraint firstItem="J7m-wK-Gyg" firstAttribute="top" secondItem="K8S-yc-OWp" secondAttribute="bottom" constant="-7" id="Jpk-vK-S5l"/>
+                    <constraint firstItem="mFH-ly-0OP" firstAttribute="centerY" secondItem="K8S-yc-OWp" secondAttribute="centerY" id="Oj2-41-7jV"/>
                     <constraint firstItem="K8S-yc-OWp" firstAttribute="leading" secondItem="6WB-zi-X86" secondAttribute="trailing" constant="8" id="Oqa-Tt-WtU"/>
                     <constraint firstItem="K8S-yc-OWp" firstAttribute="leading" secondItem="6WB-zi-X86" secondAttribute="trailing" id="PUU-OY-2X7"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6WB-zi-X86" secondAttribute="bottom" id="S0O-MB-PSP"/>
@@ -53,6 +60,7 @@
                     <constraint firstItem="K8S-yc-OWp" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ZRJ-d6-Yoj"/>
                     <constraint firstItem="J7m-wK-Gyg" firstAttribute="leading" secondItem="6WB-zi-X86" secondAttribute="trailing" constant="8" id="abw-Ux-o1W"/>
                     <constraint firstItem="J7m-wK-Gyg" firstAttribute="bottom" secondItem="6WB-zi-X86" secondAttribute="bottom" id="faJ-Wu-9Tm"/>
+                    <constraint firstItem="mFH-ly-0OP" firstAttribute="leading" secondItem="K8S-yc-OWp" secondAttribute="trailing" constant="8" id="hsh-cT-SpU"/>
                     <constraint firstAttribute="trailingMargin" secondItem="J7m-wK-Gyg" secondAttribute="trailing" id="lJQ-BD-wq1"/>
                     <constraint firstItem="6WB-zi-X86" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="lhO-9v-5ri"/>
                     <constraint firstItem="K8S-yc-OWp" firstAttribute="top" secondItem="6WB-zi-X86" secondAttribute="top" id="oYp-xV-tVw"/>
@@ -84,6 +92,7 @@
             <connections>
                 <outlet property="authorLabel" destination="K8S-yc-OWp" id="9Tt-2U-zEs"/>
                 <outlet property="commentLabel" destination="J7m-wK-Gyg" id="arC-nc-WKN"/>
+                <outlet property="timeLabel" destination="mFH-ly-0OP" id="vSt-1w-lkN"/>
                 <outlet property="userImage" destination="6WB-zi-X86" id="OU2-qT-EL3"/>
             </connections>
             <point key="canvasLocation" x="471" y="346"/>
