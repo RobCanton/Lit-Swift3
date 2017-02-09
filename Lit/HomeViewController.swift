@@ -95,8 +95,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             return $0.getVisitorsCount() > $1.getVisitorsCount()
         })
         
-        
-        
         for _ in 0..<activeLocations.count {
             templocations.remove(at: 0)
         }
@@ -131,7 +129,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             location = locations[indexPath.item]
         }
-        cell.setCellLocation(location)
+        cell.setCellLocation(location: location)
         
         return cell
     }

@@ -71,24 +71,16 @@ class LocationTableCell: UITableViewCell {
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
         
-        titleLabel.superview!.layer.cornerRadius = 1.5
-        titleLabel.superview!.clipsToBounds = true
         
-        distanceLabel.superview!.layer.cornerRadius = 1.5
-        distanceLabel.superview!.clipsToBounds = true
-        
-        addressLabel.superview!.layer.cornerRadius = 1.5
-        addressLabel.superview!.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
     }
     
-    
-    func setCellLocation(_ location:Location) {
+    func setCellLocation(location:Location) {
+        
         self.location = location
         titleLabel.text = location.getName()
         addressLabel.text = location.getShortAddress()

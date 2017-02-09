@@ -64,6 +64,8 @@
 		B09405E41E4834FB00CE0068 /* WDResizableCropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */; };
 		B09405EA1E4A7C3F00CE0068 /* StoryInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */; };
 		B09405EC1E4A7C4F00CE0068 /* StoryInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405EB1E4A7C4F00CE0068 /* StoryInfoView.swift */; };
+		B09405EE1E4C570D00CE0068 /* CommentBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09405ED1E4C570C00CE0068 /* CommentBar.xib */; };
+		B09405F01E4C57AC00CE0068 /* CommentBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09405EF1E4C57AC00CE0068 /* CommentBar.swift */; };
 		B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */; };
 		B0B0430F1E40A83500D50DA7 /* UserStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */; };
 		B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043101E40AED300D50DA7 /* LocationFooterView.swift */; };
@@ -178,6 +180,8 @@
 		B09405DE1E4834F800CE0068 /* WDResizableCropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WDResizableCropOverlayView.swift; sourceTree = "<group>"; };
 		B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StoryInfoView.xib; sourceTree = "<group>"; };
 		B09405EB1E4A7C4F00CE0068 /* StoryInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryInfoView.swift; sourceTree = "<group>"; };
+		B09405ED1E4C570C00CE0068 /* CommentBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentBar.xib; sourceTree = "<group>"; };
+		B09405EF1E4C57AC00CE0068 /* CommentBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentBar.swift; sourceTree = "<group>"; };
 		B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStoryTableViewCell.swift; sourceTree = "<group>"; };
 		B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserStoryTableViewCell.xib; sourceTree = "<group>"; };
 		B0B043101E40AED300D50DA7 /* LocationFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFooterView.swift; sourceTree = "<group>"; };
@@ -507,6 +511,8 @@
 				B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */,
 				B0E59E031E409444007B4762 /* InfoTableViewCell.swift */,
 				B0E59E041E409444007B4762 /* InfoTableViewCell.xib */,
+				B09405EF1E4C57AC00CE0068 /* CommentBar.swift */,
+				B09405ED1E4C570C00CE0068 /* CommentBar.xib */,
 				B0B043101E40AED300D50DA7 /* LocationFooterView.swift */,
 				B0B043121E40AEDE00D50DA7 /* LocationFooterView.xib */,
 				B09405CA1E44B18400CE0068 /* MapViewController.swift */,
@@ -609,6 +615,7 @@
 				B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */,
 				B087C75E1E41C27100234715 /* ProfileHeaderView.xib in Resources */,
 				B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */,
+				B09405EE1E4C570D00CE0068 /* CommentBar.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +689,7 @@
 				B087C7891E41F82200234715 /* ProgressIndicator.swift in Sources */,
 				B09405CB1E44B18400CE0068 /* MapViewController.swift in Sources */,
 				B09405E31E4834FB00CE0068 /* WDImagePicker.swift in Sources */,
+				B09405F01E4C57AC00CE0068 /* CommentBar.swift in Sources */,
 				B0E59DF31E406678007B4762 /* GPSService.swift in Sources */,
 				B09405E21E4834FB00CE0068 /* WDImageCropViewController.swift in Sources */,
 				B087C77C1E41E6AE00234715 /* SendLocationViewCell.swift in Sources */,

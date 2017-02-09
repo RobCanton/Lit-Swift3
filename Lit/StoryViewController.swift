@@ -188,13 +188,13 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         var size:CGFloat = 0.0
 
         if caption != "" {
-            size =  UILabel.size(withText: caption, forWidth: width, withFont: UIFont(name: "AvenirNext-Medium", size: 15.0)!).height + 34
+            size =  UILabel.size(withText: caption, forWidth: width, withFont: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular)).height + 34
             infoView.isHidden = false
         } else {
             infoView.isHidden = true
         }
 
-        infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - size, width: frame.width, height: size)
+        infoView.frame = CGRect(x: 0, y: commentBar.frame.origin.y - size, width: frame.width, height: size)
         commentsView.commentsInteractionHandler = commentsInteractionHandler
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
         if !looping {
@@ -204,7 +204,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
 
     
     func getCommentsViewOriginY() -> CGFloat {
-        return textView.frame.origin.y - infoView.frame.height - commentsView.frame.height
+        return commentBar.frame.origin.y - infoView.frame.height - commentsView.frame.height
     }
     
     func prepareImageContent(item:StoryItem) {
@@ -281,8 +281,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         infoView.phaseInCaption()
         
         progressBar?.activateIndicator(itemIndex: viewIndex)
-        textView.isUserInteractionEnabled = true
-        moreButton.isUserInteractionEnabled = true
+
         killTimer()
         timer = Timer.scheduledTimer(timeInterval: itemLength, target: self, selector: #selector(nextItem), userInfo: nil, repeats: false)
         
@@ -379,7 +378,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     }
 
     func cleanUp() {
-        print("CLEAN UP")
         shouldPlay = false
         content.image = nil
         authorOverlay.cleanUp()
@@ -389,13 +387,12 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         progressBar?.resetAllProgressBars()
         progressBar?.removeFromSuperview()
         commentsRef?.removeAllObservers()
-        textView.isUserInteractionEnabled = false
+        //textView.isUserInteractionEnabled = false
         moreButton.isUserInteractionEnabled = false
         NotificationCenter.default.removeObserver(self)
     }
     
     func reset() {
-        print("RESET")
         killTimer()
         progressBar?.resetActiveIndicator()
         pauseVideo()
@@ -436,8 +433,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             self.authorOverlay.alpha = 0.0
             self.infoView.alpha = 0.0
             self.moreButton.alpha = 0.0
-            self.textView.alpha = 0.0
-            self.commentPlaceHolderLabel.alpha = 0.0
+            self.commentBar.alpha = 0.0
             self.progressBar?.alpha = 0.0
         })
     }
@@ -449,8 +445,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             self.authorOverlay.alpha = 1.0
             self.infoView.alpha = 1.0
             self.moreButton.alpha = 1.0
-            self.textView.alpha = 1.0
-            self.commentPlaceHolderLabel.alpha = 1.0
+            self.commentBar.alpha = 1.0
             self.progressBar?.alpha = 1.0
         })
     }
@@ -477,7 +472,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     func tapped(gesture:UITapGestureRecognizer) {
         guard let _ = item else { return }
         if keyboardUp {
-            dismissKeyboard()
+            commentBar.textField.resignFirstResponder()
         } else {
             let tappedPoint = gesture.location(in: self)
             let width = self.bounds.width
@@ -498,12 +493,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    var textView:UITextView!
-    var commentPlaceHolderLabel:UILabel!
+
     var keyboardUp = false
-    var change:CGFloat = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -514,43 +505,20 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         contentView.addSubview(authorOverlay)
         contentView.addSubview(prevView)
         
-        /*
-         Text view
-         */
-        textView = UITextView(frame: CGRect(x: 0,y: frame.height - 44 ,width: frame.width - 26,height: 44))
-        textView.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
-        textView.textColor = UIColor.white
-        textView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
-        textView.isHidden = false
-        textView.keyboardAppearance = .dark
-        textView.returnKeyType = .send
-        textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
-        textView.text = "Send a message"
-        textView.delegate = self
-        textView.fitHeightToContent()
-        textView.text = ""
-        contentView.addSubview(textView)
         
-        /*
-         Comment place holder label
-         */
-        commentPlaceHolderLabel = UILabel(frame: CGRect(x: 10,y: textView.frame.origin.y,width: textView.frame.width,height: textView.frame.height))
-        commentPlaceHolderLabel.textColor = UIColor(white: 1.0, alpha: 0.5)
-        commentPlaceHolderLabel.text = "Comment"
-        commentPlaceHolderLabel.font = UIFont(name: "AvenirNext-Medium", size: 14.0)
-        contentView.addSubview(commentPlaceHolderLabel)
+        commentBar.textField.delegate = self
+        contentView.addSubview(commentBar)
         
         /*
          Comments view
          */
-        commentsView.frame = CGRect(x: 0,y: textView.frame.origin.y - commentsView.frame.height,width: commentsView.frame.width,height: commentsView.frame.height)
+        commentsView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - commentsView.frame.height,width: commentsView.frame.width,height: commentsView.frame.height)
         contentView.addSubview(commentsView)
         
         /*
          Info view
          */
-        infoView.frame = CGRect(x: 0,y: textView.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
+        infoView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
         infoView.backgroundBlur.isHidden = true
         contentView.addSubview(infoView)
         
@@ -574,6 +542,12 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         moreButton.isUserInteractionEnabled = true
         moreButton.addTarget(self, action: #selector(showOptions), for: .touchUpInside)
         contentView.addSubview(moreButton)
+        
+        /*
+         More button
+         */
+        likeButton.isUserInteractionEnabled = true
+        contentView.addSubview(likeButton)
     }
     
     func keyboardWillAppear(notification: NSNotification){
@@ -584,15 +558,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
+        self.commentBar.likeButton.isUserInteractionEnabled = false
+        self.commentBar.moreButton.isUserInteractionEnabled = false
+        
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             let height = self.frame.height
-            let textViewFrame = self.textView.frame
+            let textViewFrame = self.commentBar.frame
             let textViewY = height - keyboardFrame.height - textViewFrame.height
-            self.textView.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
-            
-            let commentLabelFrame = self.commentPlaceHolderLabel.frame
-            let commentLabelY = height - keyboardFrame.height - commentLabelFrame.height
-            self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x,y: commentLabelY,width: commentLabelFrame.width,height: commentLabelFrame.height)
+            self.commentBar.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
             
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
@@ -604,10 +577,12 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let infoY = textViewY - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
+            self.commentBar.likeButton.alpha = 0.0
+            self.commentBar.moreButton.alpha = 0.0
             self.progressBar?.alpha = 0.0
             self.closeButton.alpha = 0.0
             self.authorOverlay.alpha = 0.0
-            self.commentPlaceHolderLabel.alpha = 0.0
+
         })
     }
     
@@ -615,17 +590,17 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         keyboardUp = false
         looping = false
         
+        self.commentBar.likeButton.isUserInteractionEnabled = true
+        self.commentBar.moreButton.isUserInteractionEnabled = true
+        
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             
             let height = self.frame.height
-            let textViewFrame = self.textView.frame
+            let textViewFrame = self.commentBar.frame
             let textViewStart = height - textViewFrame.height
-            self.textView.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
+            self.commentBar.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
             
-            let commentLabelFrame = self.commentPlaceHolderLabel.frame
-            let commentLabelY = height - commentLabelFrame.height
-            self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x, y: commentLabelY, width: commentLabelFrame.width, height: commentLabelFrame.height)
-            
+
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
             
             let moreButtonFrame = self.moreButton.frame
@@ -635,36 +610,29 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             let infoY = height - textViewFrame.height - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
+            self.commentBar.likeButton.alpha = 1.0
+            self.commentBar.moreButton.alpha = 1.0
             self.progressBar?.alpha = 1.0
             self.closeButton.alpha = 0.5
             self.authorOverlay.alpha = 1.0
-            
-            if !self.commentLabelShouldHide() {
-                self.commentPlaceHolderLabel.alpha = 1.0
-            }
+
         })
         
     }
     
-    func dismissKeyboard() {
-        textView.resignFirstResponder()
-    }
-    
     func sendComment(comment:String) {
-        textView.text = ""
-        updateTextAndCommentViews()
         if item != nil {
             UploadService.addComment(postKey: item!.getKey(), comment: comment)
         }
     }
-    
-    func commentLabelShouldHide() -> Bool {
-        if textView.text.isEmpty {
-            return false
-        } else {
-            return true
-        }
-    }
+//
+//    func commentLabelShouldHide() -> Bool {
+//        if textView.text.isEmpty {
+//            return false
+//        } else {
+//            return true
+//        }
+//    }
     
     func viewsTapped() {
         viewsTappedHandler?()
@@ -672,17 +640,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
 
     func closeTapped(button:UIButton) {
         storyCompleteHandler?()
-    }
-    
-    func updateTextAndCommentViews() {
-        let oldHeight = textView.frame.size.height
-        textView.fitHeightToContent()
-        change = textView.frame.height - oldHeight
-        
-        textView.center = CGPoint(x: textView.center.x, y: textView.center.y - change)
-        
-        self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(), width: self.commentsView.frame.width, height: self.commentsView.frame.height)
-        self.infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - infoView.frame.height, width: infoView.frame.width, height: infoView.frame.height)
     }
     
     public lazy var content: UIImageView = {
@@ -760,10 +717,25 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     lazy var moreButton: UIButton = {
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let button = UIButton(frame: CGRect(x: width - 40,y: height - 40, width: 40,height:40))
+        let size:CGFloat = 50.0
+        let button = UIButton(frame: CGRect(x: width - size,y: height - size, width: size,height:size))
         button.setImage(UIImage(named: "more"), for: .normal)
         button.tintColor = UIColor.white
         button.alpha = 1.0
+        button.isHidden = true
+        return button
+    }()
+    
+    lazy var likeButton: UIButton = {
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        let size:CGFloat = 50.0
+        let button = UIButton(frame: CGRect(x: width - 100, y: height - size, width: size,height:size))
+        button.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8)
+        button.setImage(UIImage(named: "fire"), for: .normal)
+        button.tintColor = UIColor.white
+        button.alpha = 1.0
+        button.isHidden = true
         return button
     }()
     
@@ -784,21 +756,45 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         var view: StoryInfoView = UINib(nibName: "StoryInfoView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! StoryInfoView
         return view
     }()
+    
+    lazy var commentBar: CommentBar = {
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        var view: CommentBar = UINib(nibName: "CommentBar", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! CommentBar
+        view.frame = CGRect(x: 0, y: height - 50.0, width: width, height: 50.0)
+        return view
+    }()
 }
-
-extension StoryViewController: UITextViewDelegate {
-    public func textViewDidChange(_ textView: UITextView) {
-        updateTextAndCommentViews()
+extension StoryViewController: UITextFieldDelegate {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            if !text.isEmpty {
+                textField.text = ""
+                sendComment(comment: text)
+            }
+        }
+        return true
     }
     
-    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-
-        if(text == "\n") {
-            if textView.text.characters.count > 0 {
-                sendComment(comment: textView.text)
-            }
-            return false
-        }
-        return textView.text.characters.count + (text.characters.count - range.length) <= 140
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        let newLength = text.characters.count + string.characters.count - range.length
+        return newLength <= 140 // Bool
     }
+}
+extension StoryViewController: UITextViewDelegate {
+//    public func textViewDidChange(_ textView: UITextView) {
+//        updateTextAndCommentViews()
+//    }
+//    
+//    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//
+//        if(text == "\n") {
+//            if textView.text.characters.count > 0 {
+//                sendComment(comment: textView.text)
+//            }
+//            return false
+//        }
+//        return textView.text.characters.count + (text.characters.count - range.length) <= 140
+//    }
 }

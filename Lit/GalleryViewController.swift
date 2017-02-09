@@ -45,6 +45,9 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.delegate = transitionController
         
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         if let cell = getCurrentCell() {
             cell.setForPlay()
         }
@@ -289,10 +292,7 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let xOffset = scrollView.contentOffset.x
         
         
@@ -304,15 +304,23 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! PostViewController
-        cell.cleanUp()
+        cell.reset()
     }
     
     override var prefersStatusBarHidden: Bool {
         get {
             return true
         }
+    }
+    
+    func keyboardWillAppear() {
+        collectionView.isScrollEnabled = false
+    }
+    
+    func keyboardWillDisappear() {
+        collectionView.isScrollEnabled = true
     }
     
 }

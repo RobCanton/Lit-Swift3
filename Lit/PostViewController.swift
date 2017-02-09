@@ -266,6 +266,13 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         destroyVideoPlayer()
     }
     
+    func reset() {
+        pauseVideo()
+        commentsRef?.removeAllObservers()
+        infoView.backgroundBlur.isHidden = true
+        infoView.backgroundBlur.removeAnimation()
+    }
+    
     func destroyVideoPlayer() {
         self.playerLayer?.removeFromSuperlayer()
         self.playerLayer?.player = nil
