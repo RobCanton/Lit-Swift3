@@ -21,15 +21,10 @@ class PostAuthorView: UIView {
     
     @IBOutlet weak var timeLabel: UILabel!
     
-    var user:User?
+    var uid:String?
     var authorTap:UITapGestureRecognizer!
     var authorTappedHandler:((_ uid:String)->())?
-    
-    var location:Location?
 
-    
-    var margin:CGFloat = 16
-    
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -44,15 +39,13 @@ class PostAuthorView: UIView {
         authorImageView.layer.cornerRadius = authorImageView.frame.width/2
         authorImageView.clipsToBounds = true
         authorTap = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
-        
-        _ = CGRect(x: 0, y: 0, width: authorImageView.frame.width + margin, height: authorImageView.frame.height + margin)
-        
+
     }
     
     func setAuthorInfo(user:User, post:StoryItem) {
        
         self.authorUsernameLabel.text = user.getDisplayName()
-        self.user = user
+        self.uid = user.getUserId()
         self.timeLabel.text = post.getDateCreated()!.timeStringSinceNow()
     }
     
@@ -68,14 +61,13 @@ class PostAuthorView: UIView {
     }
     
     func authorTapped(gesture:UITapGestureRecognizer) {
-        if user != nil {
-            authorTappedHandler?(user!.getUserId())
+        if uid != nil {
+            authorTappedHandler?(uid!)
         }
     }
 
     func cleanUp() {
-        user = nil
-        location = nil
+        uid = nil
         authorImageView.image = nil
         authorUsernameLabel.text = nil
         locationLabel.text = nil

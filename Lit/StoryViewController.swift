@@ -29,7 +29,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
     
     var item:StoryItem?
     
-    var authorTappedHandler:((_ uid:String)->())?
+    var showUser:((_ uid:String)->())?
     var optionsTappedHandler:(()->())?
     var storyCompleteHandler:(()->())?
     var viewsTappedHandler:(()->())?
@@ -191,45 +191,13 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         }
 
         infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - size, width: frame.width, height: size)
-    
+        infoView.authorTappedHandler = showUser
+        authorOverlay.authorTappedHandler = showUser
+        commentsView.userTapped = showUser
         commentsView.commentsInteractionHandler = commentsInteractionHandler
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
         if !looping {
-            
             commentsView.setTableComments(comments: item.comments, animated: false)
-            
-            commentsRef?.removeAllObservers()
-            commentsRef = UserService.ref.child("uploads/\(item.getKey())/comments")
-        
-            if let lastItem = item.comments.last {
-                let lastKey = lastItem.getKey()
-                let ts = lastItem.getDate().timeIntervalSince1970 * 1000
-                commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
-                    
-                    let dict = snapshot.value as! [String:Any]
-                    let key = snapshot.key
-                    if key != lastKey {
-                        let author = dict["author"] as! String
-                        let text = dict["text"] as! String
-                        let timestamp = dict["timestamp"] as! Double
-                        
-                        let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-                        item.addComment(comment)
-                        self.commentsView.setTableComments(comments: item.comments, animated: true)
-                    }
-                })
-            } else {
-                commentsRef?.observe(.childAdded, with: { snapshot in
-                    let dict = snapshot.value as! [String:Any]
-                    let key = snapshot.key
-                    let author = dict["author"] as! String
-                    let text = dict["text"] as! String
-                    let timestamp = dict["timestamp"] as! Double
-                    let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-                    item.addComment(comment)
-                    self.commentsView.setTableComments(comments: item.comments, animated: true)
-                })
-            }
         }
     }
 
@@ -322,6 +290,42 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
             item.viewers[uid] = 1
             UploadService.addView(postKey: item.getKey())
         }
+        
+        if !looping {
+
+            commentsRef?.removeAllObservers()
+            commentsRef = UserService.ref.child("uploads/\(item.getKey())/comments")
+            
+            if let lastItem = item.comments.last {
+                let lastKey = lastItem.getKey()
+                let ts = lastItem.getDate().timeIntervalSince1970 * 1000
+                commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
+                    
+                    let dict = snapshot.value as! [String:Any]
+                    let key = snapshot.key
+                    if key != lastKey {
+                        let author = dict["author"] as! String
+                        let text = dict["text"] as! String
+                        let timestamp = dict["timestamp"] as! Double
+                        
+                        let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
+                        item.addComment(comment)
+                        self.commentsView.setTableComments(comments: item.comments, animated: true)
+                    }
+                })
+            } else {
+                commentsRef?.observe(.childAdded, with: { snapshot in
+                    let dict = snapshot.value as! [String:Any]
+                    let key = snapshot.key
+                    let author = dict["author"] as! String
+                    let text = dict["text"] as! String
+                    let timestamp = dict["timestamp"] as! Double
+                    let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
+                    item.addComment(comment)
+                    self.commentsView.setTableComments(comments: item.comments, animated: true)
+                })
+            }
+        }
     }
     
     func nextItem() {
@@ -394,6 +398,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         killTimer()
         progressBar?.resetActiveIndicator()
         pauseVideo()
+        commentsRef?.removeAllObservers()
         infoView.backgroundBlur.isHidden = true
         infoView.backgroundBlur.removeAnimation()
     }
@@ -427,6 +432,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         UIView.animate(withDuration: 0.15, animations: {
             self.commentsView.alpha = 0.0
             self.closeButton.alpha = 0.0
+            self.authorOverlay.alpha = 0.0
             self.infoView.alpha = 0.0
             self.moreButton.alpha = 0.0
             self.textView.alpha = 0.0
@@ -439,6 +445,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         UIView.animate(withDuration: 0.2, animations: {
             self.commentsView.alpha = 1.0
             self.closeButton.alpha = 0.5
+            self.authorOverlay.alpha = 1.0
             self.infoView.alpha = 1.0
             self.moreButton.alpha = 1.0
             self.textView.alpha = 1.0
@@ -730,9 +737,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol {
         var authorView = UINib(nibName: "PostAuthorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! PostAuthorView
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-        
         authorView.frame = CGRect(x: margin, y: margin + 8.0, width: width, height: authorView.frame.height)
-        authorView.authorTappedHandler = self.authorTappedHandler
         return authorView
     }()
     

@@ -159,7 +159,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
             return true
         }
         
-        if let _ = gestureRecognizer as? UITapGestureRecognizer  {
+        if let tap = gestureRecognizer as? UITapGestureRecognizer  {
+            let point = tap.location(ofTouch: 0, in: self.view)
+            print("POINT: \(point)")
             return true
         }
 
@@ -201,7 +203,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         cell.story = userStories[indexPath.item]
         cell.optionsTappedHandler = showOptions
         cell.storyCompleteHandler = storyComplete
-        cell.commentsView.userTapped = showAuthor
+        cell.showUser = showUser
         
         if firstCell {
             firstCell = false
@@ -226,7 +228,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         popStoryController(animated: true)
     }
     
-    func showAuthor(uid:String) {
+    func showUser(uid:String) {
         self.navigationController?.delegate = self
         let controller = UserProfileViewController()
         controller.uid = uid

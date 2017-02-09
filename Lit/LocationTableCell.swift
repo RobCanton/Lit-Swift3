@@ -69,7 +69,7 @@ class LocationTableCell: UITableViewCell {
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
         
-        titleLabel.superview!.layer.cornerRadius = 0.0
+        titleLabel.superview!.layer.cornerRadius = 1.5
         titleLabel.superview!.clipsToBounds = true
     }
 

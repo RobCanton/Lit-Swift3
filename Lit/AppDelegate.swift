@@ -12,6 +12,7 @@ import FBSDKLoginKit
 import ReSwift
 import Firebase
 import UserNotifications
+import AVFoundation
 
 let mainStore = Store<AppState>(
     reducer: AppReducer(),
@@ -48,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
         UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
-
+        
         
         if #available(iOS 10.0, *) {
             let center  = UNUserNotificationCenter.current()
@@ -62,6 +63,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         else {
             UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
             UIApplication.shared.registerForRemoteNotifications()
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+            //print("AVAudioSession Category Playback OK")
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                //print("AVAudioSession is Active")
+            } catch _ as NSError {
+                //print(error.localizedDescription)
+            }
+        } catch _ as NSError {
+            //print(error.localizedDescription)
         }
         
         return true

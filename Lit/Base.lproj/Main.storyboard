@@ -31,11 +31,20 @@
                                     <action selector="handleLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4q2-3N-CGo"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RIOT" translatesAutoresizingMaskIntoConstraints="NO" id="vMI-NQ-fCt">
+                                <rect key="frame" x="149.5" y="271.5" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="6j0-0T-YIe"/>
+                                    <constraint firstAttribute="width" secondItem="vMI-NQ-fCt" secondAttribute="height" multiplier="1:1" id="kTJ-Rk-WBZ"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kuf-SF-hr2" secondAttribute="bottom" constant="16" id="XKF-ir-iKh"/>
+                            <constraint firstItem="vMI-NQ-fCt" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fSB-z7-cDN"/>
                             <constraint firstItem="kuf-SF-hr2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jeG-8V-2lM"/>
+                            <constraint firstItem="vMI-NQ-fCt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="omf-Zl-yY7"/>
                         </constraints>
                     </view>
                     <connections>
@@ -902,6 +911,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="RIOT" width="60" height="60"/>
         <image name="activity" width="25" height="25"/>
         <image name="bluedot" width="16" height="16"/>
         <image name="collapse" width="25" height="25"/>

@@ -74,6 +74,11 @@ class UserService {
         }
     }
     
+    static func getUserWithCancel(_ uid:String) {
+        let userRef = ref.child("users/profile/basic/\(uid)")
+        
+    }
+    
     static func getUserFullProfile(user:User, completion: @escaping (_ user:User)->()) {
         if user.bio != nil && user.largeImageURL != nil {
             completion(user)
