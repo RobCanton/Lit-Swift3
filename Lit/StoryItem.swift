@@ -249,6 +249,11 @@ class StoryItem: NSObject, NSCoding {
         return list
     }
     
+    func editCaption(caption:String) {
+        self.caption = caption
+        cache()
+    }
+    
     func cache() {
         dataCache.removeObject(forKey: "upload-\(key)" as NSString)
         dataCache.setObject(self, forKey: "upload-\(key)" as NSString)

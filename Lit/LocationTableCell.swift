@@ -59,6 +59,8 @@ class LocationTableCell: UITableViewCell {
     
     var gradient:CAGradientLayer?
     
+    var check = 0
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -121,6 +123,11 @@ class LocationTableCell: UITableViewCell {
     
     func setMultipleGuests() {
         
+        check += 1
+        if check > 5 {
+            check = 0
+        }
+        
         let visitors = location!.getVisitors()
         if currentVisitors != nil {
             if currentVisitors! == visitors {
@@ -148,10 +155,10 @@ class LocationTableCell: UITableViewCell {
 
             for visitor in visitors {
                 
-                UserService.getUser(visitor, completion: { user in
-                    if user != nil {
-                        loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, fromCache in
-                            if image != nil {
+                UserService.getUser(visitor, check: check, completion: { user, check in
+                    if user != nil && self.check == check {
+                        loadImageCheckingCache(withUrl: user!.getImageUrl(), check: check, completion: { image, fromCache, check in
+                            if image != nil && self.check == check {
                                 self.addNewGuest(image!)
                             }
                         })

@@ -59,6 +59,8 @@ class PostAuthorView: UIView {
         authorTap = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
         likesTap = UITapGestureRecognizer(target: self, action: #selector(likesTapped))
         viewsTap = UITapGestureRecognizer(target: self, action: #selector(viewsTapped))
+        
+        authorUsernameLabel.applyShadow(radius: 0.25, opacity: 0.5, height: 0.25, shouldRasterize: true)
 
     }
     

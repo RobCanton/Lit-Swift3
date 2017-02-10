@@ -91,6 +91,15 @@ class CommentsView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func getTableHeight() -> CGFloat {
+        let containerHeight = self.bounds.height
+        let tableHeight = tableView.contentSize.height
+        if tableHeight > containerHeight {
+            return containerHeight
+        }
+        return tableHeight
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

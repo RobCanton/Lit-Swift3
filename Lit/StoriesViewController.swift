@@ -151,8 +151,6 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func handleTap(gestureRecognizer: UITapGestureRecognizer) {
-        print("Tapped")
-        
         getCurrentCell()?.tapped(gesture: gestureRecognizer)
     }
     
@@ -160,7 +158,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         guard let cell = getCurrentCell() else { return false }
         let point = gestureRecognizer.location(ofTouch: 0, in: self.view)
         let authorBottomY = cell.authorOverlay.frame.origin.y + cell.authorOverlay.frame.height
-        let commentsTopY = cell.commentsView.frame.origin.y
+        let commentsTableHeight = cell.commentsView.getTableHeight()
+        let commentsTopY = cell.infoView.frame.origin.y - commentsTableHeight
         if cell.keyboardUp {
             if point.y > commentsTopY {
                 return false
@@ -173,7 +172,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         
         if let _ = gestureRecognizer as? UILongPressGestureRecognizer  {
-            return true
+            
+            return !cell.keyboardUp
         }
         
         if let _ = gestureRecognizer as? UITapGestureRecognizer  {
@@ -181,13 +181,23 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
 
         if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            if cell.keyboardUp { return false }
             let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
             let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! IndexPath
             self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
             self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
 
             let translate: CGPoint = panGestureRecognizer.translation(in: self.view)
+            
+            if cell.keyboardUp {
+                if translate.y > 0 {
+                    cell.commentBar.textField.resignFirstResponder()
+                }
+                return false
+            }
+            
+            if translate.y < 0 {
+                cell.commentBar.textField.becomeFirstResponder()
+            }
 
             return Double(abs(translate.y)/abs(translate.x)) > M_PI_4 && translate.y > 0
         }
@@ -284,6 +294,36 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                 cell.resumeStory()
             }
             actionSheet.addAction(cancelActionButton)
+            
+            let captionActionButton: UIAlertAction = UIAlertAction(title: "Edit Caption", style: .default) { action -> Void in
+                //cell.resumeStory()
+                let alert = UIAlertController(title: "Edit Caption", message: nil, preferredStyle: .alert)
+                alert.addTextField(configurationHandler: {(textField) -> Void in
+                    textField.text = item.caption
+                    textField.keyboardAppearance = .dark
+                    textField.autocapitalizationType = .sentences
+                })
+                
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) -> Void in
+                    let textF = alert.textFields![0]
+                    var text = textF.text
+                    if text == nil {
+                        text = ""
+                    }
+                    item.editCaption(caption: text!)
+                    UploadService.editCaption(postKey: item.getKey(), caption: text!)
+                    cell.shouldPlay = true
+                    cell.setupItem()
+                    cell.resumeStory()
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+                    cell.resumeStory()
+                }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            actionSheet.addAction(captionActionButton)
             
             let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive) { action -> Void in
                 

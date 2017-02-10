@@ -355,6 +355,12 @@ class UploadService {
         ])
     }
     
+    static func editCaption(postKey:String, caption:String) {
+        let ref = FIRDatabase.database().reference()
+        let uploadRef = ref.child("uploads/\(postKey)/meta/caption")
+        uploadRef.setValue(caption)
+    }
+    
     
     static func reportItem(item:StoryItem, type:ReportType, showNotification:Bool, completion:@escaping ((_ success:Bool)->())) {
         let ref = FIRDatabase.database().reference()

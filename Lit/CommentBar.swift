@@ -34,37 +34,41 @@ class CommentBar: UIView {
     
     override func awakeFromNib() {
         sendButton.alpha = 0.0
+        
+        textField.autocapitalizationType = .sentences
+        textField.applyShadow(radius: 0.25, opacity: 0.5, height: 0.25, shouldRasterize: false)
+        sendButton.applyShadow(radius: 0.25, opacity: 0.5, height: 0.25, shouldRasterize: false)
     }
     
 
     @IBAction func likeTapped(_ sender: Any) {
-        likedStatus(!self.liked)
+        setLikedStatus(!self.liked, animated: true)
         delegate?.toggleLike(liked)
     }
     
-    func likedStatus(_ _liked:Bool) {
+    func setLikedStatus(_ _liked:Bool, animated: Bool) {
         self.liked = _liked
         
         if self.liked  {
-            
             likeButton.setImage(UIImage(named: "liked"), for: .normal)
-            self.likeButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-            
-            UIView.animate(withDuration: 0.5, delay: 0.0,
-                           usingSpringWithDamping: 0.5,
-                           initialSpringVelocity: 1.5,
-                           options: .curveEaseOut,
-                           animations: {
-                            self.likeButton.transform = CGAffineTransform.identity
-            },
-                           completion: nil)
+            if animated {
+                likeButton.setImage(UIImage(named: "liked"), for: .normal)
+                self.likeButton.transform = CGAffineTransform(scaleX: 1.6, y: 1.6)
+                
+                UIView.animate(withDuration: 0.5, delay: 0.0,
+                               usingSpringWithDamping: 0.5,
+                               initialSpringVelocity: 1.6,
+                               options: .curveEaseOut,
+                               animations: {
+                                self.likeButton.transform = CGAffineTransform.identity
+                },
+                               completion: nil)
+            }
+
         } else {
             likeButton.setImage(UIImage(named:"like"), for: .normal)
         }
-        
-        
     }
-    
     
     
     @IBAction func moreTapped(_ sender: Any) {

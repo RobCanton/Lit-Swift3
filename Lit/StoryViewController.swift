@@ -114,6 +114,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         }
     }
     
+    func observeKeyboard() {
+        
+    }
+    
+    func removeObserver() {
+        
+    }
+    
     func stateChange(_ state:UserStoryState) {
         switch state {
         case .notLoaded:
@@ -189,6 +197,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
     }
     
     func setupItem() {
+        killTimer()
         pauseVideo()
         
         guard let items = story.items else { return }
@@ -245,7 +254,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
             authorOverlay.setViews(post: item)
         }
 
-        commentBar.likedStatus(item.likes[uid] != nil)
+        commentBar.setLikedStatus(item.likes[uid] != nil, animated: false)
         commentBar.likeButton.isHidden = item.authorId == uid
     }
 
@@ -328,8 +337,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         infoView.phaseInCaption()
         
         progressBar?.activateIndicator(itemIndex: viewIndex)
-
-        killTimer()
         timer = Timer.scheduledTimer(timeInterval: itemLength, target: self, selector: #selector(nextItem), userInfo: nil, repeats: false)
         
         if !looping {
@@ -398,6 +405,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         shouldPlay = true
         setupItem()
     }
+
     
     func createVideoPlayer() {
         if playerLayer == nil {

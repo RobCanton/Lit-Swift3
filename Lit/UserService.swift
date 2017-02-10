@@ -19,11 +19,13 @@ class UserService {
     
     static func login(_ user:User) {
         mainStore.dispatch(UserIsAuthenticated(user: user))
+        LocationService.getUserRadiusSetting()
+        sendFCMToken()
         Listeners.startListeningToResponses()
         Listeners.startListeningToConversations()
         Listeners.startListeningToFollowers()
         Listeners.startListeningToFollowing()
-        sendFCMToken()
+        
     }
     
     static func logout() {
@@ -70,6 +72,31 @@ class UserService {
                 }
                 
                 completion(user)
+            })
+        }
+    }
+    
+    static func getUser(_ uid:String, check:Int, completion: @escaping (_ user:User?, _ check:Int) -> Void) {
+        if let cachedUser = dataCache.object(forKey: "user-\(uid)" as NSString as NSString) as? User {
+            completion(cachedUser, check)
+        } else {
+            ref.child("users/profile/basic/\(uid)").observe(.value, with: { snapshot in
+                var user:User?
+                if snapshot.exists() {
+                    let dict = snapshot.value as! [String:AnyObject]
+                    let name        = dict["name"] as! String
+                    let displayName = dict["username"] as! String
+                    let imageURL    = dict["profileImageURL"] as! String
+                    
+                    var verified = false
+                    if snapshot.hasChild("verified") {
+                        verified = true
+                    }
+                    user = User(uid: uid, displayName: displayName, name: name, imageURL: imageURL, largeImageURL: nil, bio: nil, verified: verified)
+                    dataCache.setObject(user!, forKey: "user-\(uid)" as NSString)
+                }
+                
+                completion(user, check)
             })
         }
     }

@@ -28,7 +28,7 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U7g-vC-OIO">
                             <rect key="frame" x="8" y="8" width="32" height="32"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="55d-Nc-O0z"/>
                                 <constraint firstAttribute="width" secondItem="U7g-vC-OIO" secondAttribute="height" multiplier="1:1" id="6XO-ct-J4z"/>

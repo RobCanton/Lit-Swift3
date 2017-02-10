@@ -16,13 +16,24 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var privacyPolicy: UITableViewCell!
     @IBOutlet weak var suggestLocation: UITableViewCell!
     
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var report: UITableViewCell!
     
     @IBOutlet weak var logout: UITableViewCell!
     
+    let maxRadius = 200
     
     var notificationsRef:FIRDatabaseReference?
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let loc = GPSService.sharedInstance.lastLocation else { return }
+
+        LocationService.requestNearbyLocations(loc.coordinate.latitude, longitude: loc.coordinate.longitude)
+    }
+    
+    var radiusChanged = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,7 +61,15 @@ class SettingsViewController: UITableViewController {
                 self.notificationsSwitch.setOn(true, animated: false)
             }
         })
-
+        
+        let radius = LocationService.radius
+        
+        distanceSlider.minimumValue = 0.05
+        
+        let progress:Float = Float(radius) / Float(maxRadius)
+        distanceSlider.setValue(progress, animated: false)
+        distanceLabel.text = "\(radius) km"
+        
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -79,6 +98,18 @@ class SettingsViewController: UITableViewController {
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         }
     }
+    
+    
+    @IBAction func sliderChanged(_ sender: Any) {
+        let radius = Int(Double(distanceSlider.value) * Double(maxRadius))
+        LocationService.radius = radius
+        distanceLabel.text = "\(radius) km"
+        let uid = mainStore.state.userState.uid
+        let ref = UserService.ref.child("users/settings/\(uid)/search_radius")
+        ref.setValue(radius)
+        radiusChanged = true
+    }
+    
     
     
     @IBAction func toggleNotificationsSwitch(sender: UISwitch) {

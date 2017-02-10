@@ -156,7 +156,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let _ = self.tableView.indexPathsForVisibleRows, (self.tableView.indexPathsForVisibleRows?.count)! > 0 {
             var count = 0
             for indexPath in self.tableView.indexPathsForVisibleRows! {
-                let cell = self.tableView.cellForRow(at: indexPath) as! LocationTableCell
+                if let cell = self.tableView.cellForRow(at: indexPath) as?  LocationTableCell {
                 cell.setImageViewOffSet(tableView, indexPath: indexPath)
                 
                 if count == tableView.indexPathsForVisibleRows!.count - 1 {
@@ -168,6 +168,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     let alpha = 1 - (cellY - bottomPoint) / rectOfCellInSuperview.height
                     cell.alpha = max(0,alpha)
+                }
                 }
                 count += 1
             }

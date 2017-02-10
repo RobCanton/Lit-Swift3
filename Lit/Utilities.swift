@@ -23,6 +23,15 @@ func loadImageUsingCacheWithURL(_ _url:String, completion: @escaping (_ image:UI
     }
 }
 
+func loadImageCheckingCache(withUrl _url:String, check:Int, completion: @escaping (_ image:UIImage?, _ fromCache:Bool, _ check:Int)->()) {
+    // Check for cached image
+    if let cachedImage = imageCache.object(forKey: _url as NSString) {
+        return completion(cachedImage, true, check)
+    } else {
+        downloadImage(withUrl: _url, check: check, completion: completion)
+    }
+}
+
 func downloadImageWithURLString(_ _url:String, completion: @escaping (_ image:UIImage?, _ fromCache:Bool)->()) {
 
     let url = URL(string: _url)
@@ -45,6 +54,33 @@ func downloadImageWithURLString(_ _url:String, completion: @escaping (_ image:UI
                 
                 let image = UIImage(data: data!)
                 return completion(image!, false)
+            }
+            
+    }).resume()
+}
+
+func downloadImage(withUrl _url:String, check:Int, completion: @escaping (_ image:UIImage?, _ fromCache:Bool, _ check:Int)->()) {
+    
+    let url = URL(string: _url)
+    
+    URLSession.shared.dataTask(with: url!, completionHandler:
+        { (data, response, error) in
+            
+            //error
+            if error != nil {
+                if error?._code == -999 {
+                    return
+                }
+                //print(error?.code)
+                return completion(nil, false, check)
+            }
+            DispatchQueue.main.async {
+                if let downloadedImage = UIImage(data: data!) {
+                    imageCache.setObject(downloadedImage, forKey: _url as NSString)
+                }
+                
+                let image = UIImage(data: data!)
+                return completion(image!, false, check)
             }
             
     }).resume()

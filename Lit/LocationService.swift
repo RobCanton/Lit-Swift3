@@ -20,6 +20,8 @@ class LocationService {
     
     static var shouldCalculateNearbyArea:Bool = true
     
+    static var radius = 50
+    
     static func requestNearbyLocations(_ latitude:Double, longitude:Double) {
         
         let uid = mainStore.state.userState.uid
@@ -27,7 +29,7 @@ class LocationService {
         apiRef.setValue([
             "lat": latitude,
             "lon": longitude,
-            "rad": 125
+            "rad": radius
             ])
         
     }
@@ -114,6 +116,17 @@ class LocationService {
             }
             
             completion(location)
+        })
+    }
+    
+    static func getUserRadiusSetting() {
+        let uid = mainStore.state.userState.uid
+        let settingsRef = ref.child("users/settings/\(uid)/search_radius")
+        settingsRef.observeSingleEvent(of: .value, with: { snapshot in
+            if snapshot.exists() {
+                radius = snapshot.value! as! Int
+                print("User radius setting: \(radius)")
+            }
         })
     }
 

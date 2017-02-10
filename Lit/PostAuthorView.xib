@@ -35,7 +35,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob0-0G-ySD">
                             <rect key="frame" x="163" y="15" width="64" height="22"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textColor" white="1" alpha="0.50457802547770703" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
@@ -78,7 +78,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Sjh-93-Ys5" secondAttribute="trailing" constant="8" id="Cb5-Gg-MvX"/>
                         <constraint firstItem="0gj-v5-WAi" firstAttribute="leading" secondItem="aQi-yY-1pS" secondAttribute="leading" constant="8" id="Kr5-fM-U9C"/>
@@ -106,7 +106,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="TCW-eM-k8S" firstAttribute="leading" secondItem="uUd-ZI-kNs" secondAttribute="leading" constant="8" id="O1W-rf-9qy"/>
                         <constraint firstItem="ctx-df-vqw" firstAttribute="leading" secondItem="TCW-eM-k8S" secondAttribute="trailing" constant="8" id="ca2-eG-F9B"/>
