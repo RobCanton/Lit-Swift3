@@ -68,7 +68,7 @@ class UserViewCell: UITableViewCell {
             break
         case .None:
             followButton.isHidden = false
-            followButton.backgroundColor = accentColor
+            followButton.backgroundColor = positiveColor
             followButton.layer.borderColor = UIColor.clear.cgColor
             followButton.setTitle("Follow", for: .normal)
             break

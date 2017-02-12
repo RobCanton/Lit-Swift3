@@ -84,7 +84,12 @@ class LocationService {
                 let imageURL     = dict["imageURL"] as! String
                 let address      = dict["address"] as! String
                 
-                location = Location(key: locationKey, name: name, latitude: lat, longitude: lon, imageURL: imageURL, address: address,
+                var radius = 125.0
+                if dict["radius"] != nil {
+                    radius = dict["radius"] as! Double
+                }
+                
+                location = Location(key: locationKey, name: name, latitude: lat, longitude: lon, radius: radius, imageURL: imageURL, address: address,
                                     phone: nil, email: nil, website: nil, desc: nil)
                 locationsCache.setObject(location!, forKey: locationKey as NSString)
             }

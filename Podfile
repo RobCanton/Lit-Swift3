@@ -16,7 +16,7 @@ pod 'ReSwift', '3.0.0'
 pod 'View2ViewTransition'
 pod 'NVActivityIndicatorView'
 pod 'Whisper'
-pod "DynamicBlurView"
+pod 'SwiftMessages', '3.1.4'
 
 end
 

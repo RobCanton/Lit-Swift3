@@ -12,6 +12,7 @@ import ReSwift
 import CoreLocation
 import Firebase
 import NVActivityIndicatorView
+import SwiftMessages
 
 class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarControllerDelegate, GPSServiceDelegate {
     typealias StoreSubscriberStateType = AppState
@@ -77,31 +78,62 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         }
         
         if activeLocations.count > 0 {
-            activateLocation()
-            var title:String!
-            if activeLocations.count == 1 {
-                title = "You are near \(activeLocations[0].getName())"
-            } else {
-                title = "You are near \(activeLocations.count) locations"
-            }
-            //let whisper = Murmur(title: title, backgroundColor: accentColor, titleColor: UIColor.whiteColor(), font: UIFont(name: "AvenirNext-Medium", size: 12.0)!)
-            
-            //show(whistle: whisper, action: .Present)
+            activateLocations(activeLocations: activeLocations)
             
         } else {
             deactivateLocation()
-            //hide()
         }
     }
     
     var isActive = false
     
-    func activateLocation() {
+    func activateLocations(activeLocations:[Location]) {
         if isActive { return }
         isActive = true
         
         cameraActivity?.startAnimating()
+        var title:String!
+        if activeLocations.count == 1 {
+            title = "You are near \(activeLocations[0].getName())!"
+        } else {
+            title = "You are near \(activeLocations.count) places!"
+        }
         
+        // Instantiate a message view from the provided card view layout. SwiftMessages searches for nib
+        // files in the main bundle first, so you can easily copy them into your project and make changes.
+        let view: TacoDialogView = try! SwiftMessages.viewFromNib()
+        view.configureDropShadow()
+        view.setMessage()
+        view.tappedAction = {
+            SwiftMessages.hide()
+            self.presentCamera()
+        }
+        
+        
+        var config = SwiftMessages.Config()
+        
+        // Slide up from the bottom.
+        config.presentationStyle = .top
+        
+        // Display in a window at the specified window level: UIWindowLevelStatusBar
+        // displays over the status bar while UIWindowLevelNormal displays under.
+        config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
+        
+        // Disable the default auto-hiding behavior.
+        config.duration = .forever
+        
+        // Dim the background like a popover view. Hide when the background is tapped.
+        config.dimMode = .color(color: UIColor(white: 0.0, alpha: 0.5), interactive: true)//.gray(interactive: false)
+        
+        // Enable the interactive pan-to-hide gesture.
+        config.interactiveHide = true
+        
+        // Specify a status bar style to if the message is displayed directly under the status bar.
+        config.preferredStatusBarStyle = .lightContent
+        
+        config.ignoreDuplicates = true
+        
+        SwiftMessages.show(config: config, view: view)
     }
     
     func deactivateLocation() {
@@ -168,6 +200,15 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         self.performSegue(withIdentifier: "showCamera", sender: self)
     }
     
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let _ = viewController as? DummyViewController {
+            presentCamera()
+            return false
+        }
+        return true
+    }
+    
     @IBAction func unwindFromViewController(sender: UIStoryboardSegue) {
     }
     
@@ -223,3 +264,5 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         
     }
 }
+
+class DummyViewController:UIViewController{}

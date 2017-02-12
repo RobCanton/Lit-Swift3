@@ -23,6 +23,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var longPressGR:UILongPressGestureRecognizer!
     var tapGR:UITapGestureRecognizer!
     
+    var returnIndex:Int?
+    
     var firstCell = true
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -230,8 +232,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         cell.storyCompleteHandler = storyComplete
         cell.showUser = showUser
         cell.showUsersList = showUsersList
-        cell.story = userStories[indexPath.item]
-        
+        print("user return index: \(returnIndex)")
+        cell.prepareStory(withStory: userStories[indexPath.item], atIndex: returnIndex)
+        returnIndex = nil
         if firstCell {
             firstCell = false
             //cell.captionView.backgroundView!.isHidden = true
@@ -256,6 +259,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func showUser(uid:String) {
+        guard let cell = getCurrentCell() else { return }
+        returnIndex = cell.viewIndex
+        print("set return index: \(returnIndex)")
         self.navigationController?.delegate = self
         let controller = UserProfileViewController()
         controller.uid = uid
@@ -409,6 +415,10 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         return nil
     }
     
+    func getCurrentCellIndex() -> IndexPath {
+        return collectionView.indexPathsForVisibleItems[0]
+    }
+    
     func stopPreviousItem() {
         if let cell = getCurrentCell() {
             cell.pauseVideo()
@@ -430,7 +440,6 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let xOffset = scrollView.contentOffset.x
-        
         
         let newItem = Int(xOffset / self.collectionView.frame.width)
         currentIndex = IndexPath(item: newItem, section: 0)

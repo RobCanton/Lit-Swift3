@@ -99,11 +99,13 @@ class LocationTableCell: UITableViewCell {
         
         let distanceBox = distanceLabel.superview!
         if location.isActive() {
-            distanceLabel.superview!.backgroundColor = accentColor
+            distanceLabel.superview!.backgroundColor = UIColor.white
             distanceLabel.text = "Nearby"
+            distanceLabel.textColor = UIColor.black
             distanceLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)//UIFont(name: "Avenir-Heavy", size: 12.0)
         } else {
             distanceLabel.superview!.backgroundColor = UIColor.black
+            distanceLabel.textColor = UIColor.white
             distanceLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightLight)//UIFont(name: "Avenir-Medium", size: 11.0)
             if let distance = location.getDistance() {
                 distanceLabel.text = getDistanceString(distance: distance)
@@ -123,10 +125,7 @@ class LocationTableCell: UITableViewCell {
     
     func setMultipleGuests() {
         
-        check += 1
-        if check > 5 {
-            check = 0
-        }
+        
         
         let visitors = location!.getVisitors()
         if currentVisitors != nil {
@@ -134,6 +133,13 @@ class LocationTableCell: UITableViewCell {
                 return
             }
         }
+        
+        check += 1
+        if check > 5 {
+            check = 0
+            
+        }
+        print("Check set: \(check)")
         
         currentVisitors = visitors
         
@@ -156,9 +162,13 @@ class LocationTableCell: UITableViewCell {
             for visitor in visitors {
                 
                 UserService.getUser(visitor, check: check, completion: { user, check in
+                    print(" * user -> check_carried: \(check) | current_check: \(self.check)")
                     if user != nil && self.check == check {
+                        
                         loadImageCheckingCache(withUrl: user!.getImageUrl(), check: check, completion: { image, fromCache, check in
+                            print(" * imag -> check_carried: \(check) | current_check: \(self.check)")
                             if image != nil && self.check == check {
+                                
                                 self.addNewGuest(image!)
                             }
                         })

@@ -16,6 +16,7 @@ import NVActivityIndicatorView
 public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHeaderProtocol, CommentBarProtocol {
 
     var viewIndex = 0
+    var returnIndex:Int?
     
     func validIndex() -> Bool {
         if let items = story.items {
@@ -48,6 +49,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
 
     
     func showUser(_ uid: String) {
+        returnIndex = viewIndex
         showUser?(uid)
     }
     
@@ -98,20 +100,21 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
     var shouldPlay = false
     
     var story:UserStory!
-        {
-        didSet {
 
-            shouldPlay = false
-            self.story.delegate = self
-            story.determineState()
-            
-            infoView.authorTappedHandler = showUser
-            authorOverlay.delegate = self
-            commentBar.delegate = self
-            commentsView.userTapped = showUser
-            NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-            NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        }
+    
+    func prepareStory(withStory story:UserStory, atIndex index:Int?) {
+        self.story = story
+        self.story.delegate = self
+        shouldPlay = false
+
+        story.determineState()
+        
+        infoView.authorTappedHandler = showUser
+        authorOverlay.delegate = self
+        commentBar.delegate = self
+        commentsView.userTapped = showUser
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func observeKeyboard() {
@@ -178,33 +181,63 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         progressBar!.createProgressIndicator(_story: story)
         contentView.addSubview(progressBar!)
         
-        viewIndex = 0
-        
-        for item in story.items! {
-        
-            totalTime += item.getLength()
-            
-            if item.hasViewed() {
-                viewIndex += 1
-            }
-        }
-        
-        if viewIndex >= story.items!.count{
+        if returnIndex != nil {
+            viewIndex = returnIndex!
+            returnIndex = nil
+        } else {
             viewIndex = 0
+    
+            for item in story.items! {
+    
+                totalTime += item.getLength()
+    
+                if item.hasViewed() {
+                    viewIndex += 1
+                }
+            }
+            
+            if viewIndex >= story.items!.count{
+                viewIndex = 0
+            }
+            
+            
         }
         
+        print("VIEW INDEX: \(viewIndex)")
         self.setupItem()
     }
     
     func setupItem() {
+        
         killTimer()
         pauseVideo()
+        
+        let uid = mainStore.state.userState.uid
+        
+        if let prevItem = self.item {
+            if !prevItem.hasViewed() && prevItem.authorId != uid{
+                prevItem.addView(uid)
+                UploadService.addView(postKey: prevItem.getKey())
+            }
+        }
+        
+
         
         guard let items = story.items else { return }
         if viewIndex >= items.count { return }
         
+        
+        
         let item = items[viewIndex]
         self.item = item
+        
+        if viewIndex == items.count - 1 {
+            if !item.hasViewed() && item.authorId != uid{
+                item.addView(uid)
+                UploadService.addView(postKey: item.getKey())
+            }
+        }
+        
         itemSetHandler?(item)
         
         if item.contentType == .image {
@@ -244,14 +277,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
         if !looping {
             commentsView.setTableComments(comments: item.comments, animated: false)
-        }
-        
-        let uid = mainStore.state.userState.uid
-        
-        if !item.hasViewed() && item.authorId != uid{
-            item.addView(uid)
-            UploadService.addView(postKey: item.getKey())
-            authorOverlay.setViews(post: item)
         }
 
         commentBar.setLikedStatus(item.likes[uid] != nil, animated: false)
@@ -505,6 +530,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         if isPresenting {
             
         } else {
+            story.delegate = nil
             killTimer()
             resetVideo()
             progressBar?.resetActiveIndicator()

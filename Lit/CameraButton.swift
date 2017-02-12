@@ -54,7 +54,7 @@ class CameraButton: UIView {
         
         progresser.angle = 0
 
-        progresser.progressColors = [UIColor.white, accentColor]
+        progresser.progressColors = [UIColor.white]
         progresser.layer.addSublayer(ring.layer)
         progresser.layer.mask = ring.layer
         progresser.layer.masksToBounds = true

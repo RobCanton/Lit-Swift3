@@ -91,9 +91,9 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
                 
                 
                 // Load in image to avoid blip in story view
-//                loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, fromCache in
-//                    self.contentImageView.image = image
-//                })
+                loadImageUsingCacheWithURL(user!.getImageUrl(), completion: { image, fromCache in
+                    //self.contentImageView.image = image
+                })
                 
                 UploadService.getUpload(key: story.getPostKeys().last!, completion: { item in
                     if item != nil {

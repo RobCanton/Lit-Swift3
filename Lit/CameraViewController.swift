@@ -58,7 +58,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         button.setImage(UIImage(named: "delete"), for: .normal)
         button.center = CGPoint(x: button.frame.width * 0.60, y: definiteBounds.height - button.frame.height * 0.60)
         button.tintColor = UIColor.white
-        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
+        button.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         return button
         
     }()
@@ -68,11 +68,11 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 54, height: 54))
         button.setImage(UIImage(named: "right_arrow"), for: .normal)
         button.center = CGPoint(x: definiteBounds.width - button.frame.width * 0.75, y: definiteBounds.height - button.frame.height * 0.75)
-        button.tintColor = UIColor.white
-        button.backgroundColor = accentColor
+        button.tintColor = UIColor.black
+        button.backgroundColor = UIColor.white
         button.layer.cornerRadius = button.frame.width / 2
         button.clipsToBounds = true
-        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
+        button.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         return button
     }()
     
@@ -83,7 +83,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         button.setImage(UIImage(named: "type"), for: .normal)
         button.tintColor = UIColor.white
         button.clipsToBounds = true
-        button.applyShadow(radius: 1.0, opacity: 0.75, height: 0.0, shouldRasterize: false)
+        button.applyShadow(radius: 0.5, opacity: 0.75, height: 0.0, shouldRasterize: false)
         return button
     }()
     
@@ -149,9 +149,9 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGesture))
         
         
-        textView = UITextView(frame: CGRect(x: 0,y: view.frame.height - 72,width: view.frame.width,height: 44))
+        textView = UITextView(frame: CGRect(x: 0,y: view.frame.height - 84,width: view.frame.width,height: 44))
         
-        textView.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
+        textView.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightRegular)
         textView.textColor = UIColor.white
         textView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
         textView.isHidden = false
@@ -699,7 +699,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             let height = self.view.frame.height
             let textViewFrame = self.textView.frame
-            let textViewStart = height - textViewFrame.height - 72
+            let textViewStart = height - textViewFrame.height - 84
             self.textView.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
             self.captionButton.alpha = 1.0
             
@@ -715,7 +715,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         if keyboardUp {
             textView.resignFirstResponder()
         } else {
-            if tap.location(ofTouch: 0, in: view).y < view.frame.height * 0.8 {
+            if tap.location(ofTouch: 0, in: view).y < view.frame.height * 0.75 {
               textView.becomeFirstResponder()
             }
         }

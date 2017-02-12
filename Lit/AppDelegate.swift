@@ -20,6 +20,7 @@ let mainStore = Store<AppState>(
 )
 
 let accentColor = UIColor(red: 0, green: 128/255, blue: 1, alpha: 1)
+let positiveColor = UIColor(red: 0, green: 128/255, blue: 1, alpha: 1)
 let errorColor  = UIColor(red: 1, green: 80/255, blue: 50/255, alpha: 1)
 
 let usernameLengthLimit = 16

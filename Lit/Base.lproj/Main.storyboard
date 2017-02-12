@@ -32,7 +32,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RIOT" translatesAutoresizingMaskIntoConstraints="NO" id="vMI-NQ-fCt">
-                                <rect key="frame" x="149.5" y="271.5" width="75" height="75"/>
+                                <rect key="frame" x="150" y="272" width="75" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="6j0-0T-YIe"/>
                                     <constraint firstAttribute="width" secondItem="vMI-NQ-fCt" secondAttribute="height" multiplier="1:1" id="kTJ-Rk-WBZ"/>
@@ -380,10 +380,10 @@
             </objects>
             <point key="canvasLocation" x="2665" y="98"/>
         </scene>
-        <!--View Controller-->
+        <!--Dummy View Controller-->
         <scene sceneID="E5d-1Q-bRI">
             <objects>
-                <viewController id="leC-Mc-cuv" sceneMemberID="viewController">
+                <viewController id="leC-Mc-cuv" customClass="DummyViewController" customModule="Lit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WT8-gh-6cN"/>
                         <viewControllerLayoutGuide type="bottom" id="e8e-UB-uuU"/>

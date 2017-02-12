@@ -175,7 +175,7 @@ class ProfileHeaderView: UICollectionReusableView {
             followButton.setTitle("Edit Profile", for: .normal)
             break
         case .None:
-            followButton.backgroundColor = accentColor
+            followButton.backgroundColor = positiveColor
             followButton.layer.borderColor = UIColor.clear.cgColor
             followButton.setTitle("Follow", for: .normal)
             break

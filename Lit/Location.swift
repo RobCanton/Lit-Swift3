@@ -16,11 +16,13 @@ class Location:NSObject, NSCoding {
     fileprivate var coordinates:CLLocation
     fileprivate var imageURL:String
     fileprivate var address:String
+    fileprivate var radius:Double
     
     var phone:String?
     var email:String?
     var website:String?
     var desc:String?
+    
     
     fileprivate var distance:Double?
     
@@ -32,11 +34,12 @@ class Location:NSObject, NSCoding {
     var imageOnDiskURL:URL?
     
     
-    init(key:String, name:String, latitude:Double, longitude: Double, imageURL:String, address:String, phone:String?, email:String?, website:String?, desc:String?)
+    init(key:String, name:String, latitude:Double, longitude: Double, radius: Double, imageURL:String, address:String, phone:String?, email:String?, website:String?, desc:String?)
     {
         self.key          = key
         self.name         = name
         self.coordinates  = CLLocation(latitude: latitude, longitude: longitude)
+        self.radius       = radius
         self.imageURL     = imageURL
         self.address      = address
         self.phone        = phone
@@ -52,6 +55,7 @@ class Location:NSObject, NSCoding {
         let name = decoder.decodeObject(forKey: "name") as! String
         let latitude = decoder.decodeObject(forKey: "latitude") as! Double
         let longitude = decoder.decodeObject(forKey: "longitude") as! Double
+        let radius = decoder.decodeObject(forKey: "radius") as! Double
         let imageURL = decoder.decodeObject(forKey: "imageURL") as! String
         let address = decoder.decodeObject(forKey: "address") as! String
         let phone = decoder.decodeObject(forKey: "phone") as? String
@@ -59,7 +63,7 @@ class Location:NSObject, NSCoding {
         let website = decoder.decodeObject(forKey: "website") as? String
         let desc = decoder.decodeObject(forKey: "desc") as? String
         
-        self.init(key:key, name:name, latitude:latitude, longitude: longitude, imageURL:imageURL, address:address, phone: phone, email: email, website: website, desc: desc)
+        self.init(key:key, name:name, latitude:latitude, longitude: longitude, radius: radius, imageURL:imageURL, address:address, phone: phone, email: email, website: website, desc: desc)
     }
     
     
@@ -68,6 +72,7 @@ class Location:NSObject, NSCoding {
         coder.encode(name, forKey: "name")
         coder.encode(coordinates.coordinate.latitude, forKey: "latitude")
         coder.encode(coordinates.coordinate.longitude, forKey: "longitude")
+        coder.encode(radius, forKey: "radius")
         coder.encode(imageURL, forKey: "imageURL")
         coder.encode(address, forKey: "address")
         coder.encode(phone, forKey: "phone")
@@ -91,6 +96,10 @@ class Location:NSObject, NSCoding {
     func getCoordinates() -> CLLocation
     {
         return coordinates
+    }
+    
+    func getRadius() -> Double {
+        return radius
     }
     
     func getImageURL() -> String
@@ -177,7 +186,7 @@ class Location:NSObject, NSCoding {
     
     func isActive() -> Bool {
         if distance != nil {
-            if distance! < inRangeDistance {
+            if distance! < radius / 1000 {
                 return true
             }
         }
