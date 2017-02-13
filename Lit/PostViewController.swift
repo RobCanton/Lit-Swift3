@@ -1,13 +1,14 @@
 import UIKit
 import AVFoundation
 import Firebase
+import NVActivityIndicatorView
 
 public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeaderProtocol,  CommentBarProtocol {
     
     
     var tap:UITapGestureRecognizer!
     var playerLayer:AVPlayerLayer?
-    //var activityView:NVActivityIndicatorView!
+    var activityView:NVActivityIndicatorView!
     
     var commentsRef:FIRDatabaseReference?
     
@@ -24,6 +25,7 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     
     var storyItem:StoryItem! {
         didSet {
+            storyItem.delegate = self
             shouldPlay = false
             infoView.authorTappedHandler = showUser
             authorOverlay.delegate = self
@@ -75,6 +77,30 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
         authorOverlay.setViews(post: item)
         authorOverlay.setLikes(post: item)
     }
+    var animateInitiated = false
+    
+    var shouldAnimate = false
+    func animateIndicator() {
+        shouldAnimate = true
+        if !animateInitiated {
+            animateInitiated = true
+            DispatchQueue.main.async {
+                if self.shouldAnimate {
+                    self.activityView.startAnimating()
+                }
+            }
+        }
+    }
+    
+    func stopIndicator() {
+        shouldAnimate = false
+        if activityView.animating {
+            DispatchQueue.main.async {
+                self.activityView.stopAnimating()
+                self.animateInitiated = false
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -101,25 +127,29 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
         infoView.backgroundBlur.isHidden = true
         contentView.addSubview(infoView)
         
-        //activityView = NVActivityIndicatorView(frame: CGRectMake(0,0,50,50), type: .BallScaleMultiple)
-        //activityView.center = self.center
-        //self.contentView.addSubview(activityView)
+        /* Activity view */
+        activityView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 44, height: 44), type: .ballScaleRipple, color: UIColor.white, padding: 1.0, speed: 1.0)
+        activityView.center = contentView.center
+        contentView.addSubview(activityView)
     }
     
     func setItem() {
         guard let item = storyItem else { return }
 
         if let image = storyItem.image {
+            stopIndicator()
             self.content.image = image
         } else {
             NotificationCenter.default.removeObserver(self)
-            //activityView?.startAnimating()
+            animateIndicator()
             storyItem.download()
         }
         
         if item.contentType == .video {
-            createVideoPlayer()
+            
             if let videoURL = UploadService.readVideoFromFile(withKey: item.getKey()) {
+                stopIndicator()
+                createVideoPlayer()
                 let asset = AVAsset(url: videoURL)
                 asset.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: {
                     DispatchQueue.main.async {
@@ -132,7 +162,7 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
                     }
                 })
             } else {
-                //activityView?.startAnimating()
+                animateIndicator()
                 storyItem.download()
             }
         }
