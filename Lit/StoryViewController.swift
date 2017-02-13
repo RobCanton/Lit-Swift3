@@ -17,57 +17,31 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
 
     var viewIndex = 0
     var returnIndex:Int?
-    
-    func validIndex() -> Bool {
-        if let items = story.items {
-            return viewIndex >= 0 && viewIndex < items.count
-        } else {
-            return false
-        }
-    }
-    
-    var commentsRef:FIRDatabaseReference?
-    
     var item:StoryItem?
-    
-    var showUser:((_ uid:String)->())?
-    var showUsersList:((_ uids:[String], _ title:String)->())?
-    var optionsTappedHandler:(()->())?
-    var storyCompleteHandler:(()->())?
-    var viewsTappedHandler:(()->())?
-    var itemSetHandler:((_ item:StoryItem)->())?
-    
+    var delegate:PopupProtocol?
+    var commentsRef:FIRDatabaseReference?
     var activityView:NVActivityIndicatorView!
-    
-    func commentsInteractionHandler(interacting:Bool) {
-        if interacting || keyboardUp {
-            pauseStory()
-        } else {
-            resumeStory()
-        }
-    }
 
-    
     func showUser(_ uid: String) {
         returnIndex = viewIndex
-        showUser?(uid)
+        delegate?.showUser(uid)
     }
     
     func showViewers() {
         guard let item = self.item else { return }
         if item.authorId == mainStore.state.userState.uid {
-            showUsersList?(item.getViewsList(), "Views")
+            delegate?.showUsersList(item.getViewsList(), "Views")
         }
     }
     
     func showLikes() {
         guard let item = self.item else { return }
-        showUsersList?(item.getLikesList(), "Likes")
+        delegate?.showUsersList(item.getLikesList(), "Likes")
     }
     
     func more() {
         pauseStory()
-        optionsTappedHandler?()
+        delegate?.showOptions()
     }
     
     func sendComment(_ comment: String) {
@@ -238,8 +212,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
             }
         }
         
-        itemSetHandler?(item)
-        
         if item.contentType == .image {
             prepareImageContent(item: item)
         } else if item.contentType == .video {
@@ -255,7 +227,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
                     if image != nil {
                         self.authorOverlay.setAuthorImage(image: image!)
                         self.infoView.setUserImage(image: image!)
-                        
                     }
                 })
             }
@@ -273,7 +244,6 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         }
 
         infoView.frame = CGRect(x: 0, y: commentBar.frame.origin.y - size, width: frame.width, height: size)
-        commentsView.commentsInteractionHandler = commentsInteractionHandler
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
         if !looping {
             commentsView.setTableComments(comments: item.comments, animated: false)
@@ -310,15 +280,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
             return story.downloadStory()
         }
         createVideoPlayer()
-        if let videoData = loadVideoFromCache(key: item.key) {
-            
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let filePath = documentsURL.appendingPathComponent("temp/\(item.key).mp4")
-            
-            try! videoData.write(to: filePath, options: NSData.WritingOptions.atomic)
-            
-            
-            let asset = AVAsset(url: filePath)
+        if let videoURL = UploadService.readVideoFromFile(withKey: item.getKey()) {
+
+            let asset = AVAsset(url: videoURL)
             asset.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: {
                 DispatchQueue.main.async {
                     let item = AVPlayerItem(asset: asset)
@@ -408,7 +372,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         }
         
         if viewIndex >= items.count {
-            storyCompleteHandler?()
+            delegate?.dismissPopup(true)
         } else {
             shouldPlay = true
             setupItem()
@@ -461,7 +425,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         progressBar?.resetAllProgressBars()
         progressBar?.removeFromSuperview()
         commentsRef?.removeAllObservers()
+        delegate = nil
         NotificationCenter.default.removeObserver(self)
+        
     }
     
     func reset() {
@@ -574,26 +540,19 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         contentView.addSubview(authorOverlay)
         contentView.addSubview(prevView)
         
-        
         commentBar.textField.delegate = self
         contentView.addSubview(commentBar)
         
-        /*
-         Comments view
-         */
+        /* Comments view */
         commentsView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - commentsView.frame.height,width: commentsView.frame.width,height: commentsView.frame.height)
         contentView.addSubview(commentsView)
         
-        /*
-         Info view
-         */
+        /* Info view */
         infoView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
         infoView.backgroundBlur.isHidden = true
         contentView.addSubview(infoView)
         
-        /*
-         Activity view
-         */
+        /* Activity view */
         activityView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 44, height: 44), type: .ballScaleRipple, color: UIColor.white, padding: 1.0, speed: 1.0)
         activityView.center = contentView.center
         contentView.addSubview(activityView)
@@ -658,17 +617,8 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
             self.commentBar.sendButton.alpha = 0.0
             self.progressBar?.alpha = 1.0
             self.authorOverlay.alpha = 1.0
-
         })
         
-    }
-    
-    func viewsTapped() {
-        viewsTappedHandler?()
-    }
-
-    func closeTapped(button:UIButton) {
-        storyCompleteHandler?()
     }
     
     public lazy var content: UIImageView = {
@@ -766,19 +716,4 @@ extension StoryViewController: UITextFieldDelegate {
         return newLength <= 140 // Bool
     }
 }
-extension StoryViewController: UITextViewDelegate {
-//    public func textViewDidChange(_ textView: UITextView) {
-//        updateTextAndCommentViews()
-//    }
-//    
-//    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//
-//        if(text == "\n") {
-//            if textView.text.characters.count > 0 {
-//                sendComment(comment: textView.text)
-//            }
-//            return false
-//        }
-//        return textView.text.characters.count + (text.characters.count - range.length) <= 140
-//    }
-}
+

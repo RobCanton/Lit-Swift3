@@ -62,9 +62,6 @@ class UserStory: ItemDelegate {
         return true
     }
     
-    
-    
-    
     func determineState() {
         if needsDownload() {
             if items == nil {

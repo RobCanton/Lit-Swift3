@@ -2,7 +2,7 @@ import UIKit
 import AVFoundation
 import Firebase
 
-public class PostViewController: UICollectionViewCell, ItemDelegate {
+public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeaderProtocol,  CommentBarProtocol {
     
     
     var tap:UITapGestureRecognizer!
@@ -11,12 +11,12 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     
     var commentsRef:FIRDatabaseReference?
     
-    var textView:UITextView!
-    var commentPlaceHolderLabel:UILabel!
     var keyboardUp = false
+    
     
     var optionsTappedHandler:(()->())?
     var showUser:((_ uid:String)->())?
+    var showUsersList:((_ uids:[String], _ title:String)->())?
     
     func showOptions() {
         pauseVideo()
@@ -29,11 +29,51 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         didSet {
             shouldPlay = false
             storyItem.delegate = self
+            commentBar.delegate = self
             setItem()
             
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         }
+    }
+    
+    func showUser(_ uid: String) {
+        showUser?(uid)
+    }
+    
+    func showViewers() {
+        guard let item = self.storyItem else { return }
+        if item.authorId == mainStore.state.userState.uid {
+            showUsersList?(item.getViewsList(), "Views")
+        }
+    }
+    
+    func showLikes() {
+        guard let item = self.storyItem else { return }
+        showUsersList?(item.getLikesList(), "Likes")
+    }
+    
+    func more() {
+        optionsTappedHandler?()
+    }
+    
+    func sendComment(_ comment: String) {
+        guard let item = self.storyItem else { return }
+        UploadService.addComment(postKey: item.getKey(), comment: comment)
+    }
+    
+    func toggleLike(_ like: Bool) {
+        guard let item = self.storyItem else { return }
+        
+        if like {
+            UploadService.addLike(postKey: item.getKey())
+            item.addLike(mainStore.state.userState.uid)
+        } else {
+            UploadService.removeLike(postKey: item.getKey())
+            item.removeLike(mainStore.state.userState.uid)
+        }
+        authorOverlay.setViews(post: item)
+        authorOverlay.setLikes(post: item)
     }
     
     override init(frame: CGRect) {
@@ -48,41 +88,16 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         enableTap()
         videoContent.isHidden = true
         
-        self.moreButton.addTarget(self, action: #selector(showOptions), for: .touchUpInside)
+        commentBar.textField.delegate = self
+        contentView.addSubview(commentBar)
         
-        textView = UITextView(frame: CGRect(x: 0,y: frame.height - 44 ,width: frame.width - 26,height: 44))
+        commentsView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - commentsView.frame.height,width: commentsView.frame.width,height: commentsView.frame.height)
         
-        textView.font = UIFont(name: "AvenirNext-Medium", size: 16.0)
-        textView.textColor = UIColor.white
-        textView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
-        textView.isHidden = false
-        textView.keyboardAppearance = .dark
-        textView.returnKeyType = .send
-        textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
-        textView.text = "Send a message"
-        textView.delegate = self
-        textView.fitHeightToContent()
-        textView.text = ""
-        
-        commentPlaceHolderLabel = UILabel(frame: CGRect(x: 10,y: textView.frame.origin.y,width: textView.frame.width,height: textView.frame.height))
-        
-        commentPlaceHolderLabel.textColor = UIColor(white: 1.0, alpha: 0.5)
-        commentPlaceHolderLabel.text = "Comment"
-        commentPlaceHolderLabel.font = UIFont(name: "AvenirNext-Medium", size: 14.0)
-        
-        self.addSubview(commentPlaceHolderLabel)
-        
-        self.contentView.addSubview(textView)
-        
-        commentsView.frame = CGRect(x: 0,y: textView.frame.origin.y - commentsView.frame.height,width: commentsView.frame.width,height: commentsView.frame.height)
-        
-        self.contentView.addSubview(self.moreButton)
         
         /*
          Info view
          */
-        infoView.frame = CGRect(x: 0,y: textView.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
+        infoView.frame = CGRect(x: 0,y: commentBar.frame.origin.y - infoView.frame.height,width: self.frame.width,height: infoView.frame.height)
         infoView.backgroundBlur.isHidden = true
         contentView.addSubview(infoView)
         
@@ -103,16 +118,9 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         }
         
         if item.contentType == .video {
-            
-            if let videoData = loadVideoFromCache(key: storyItem.key) {
-                createVideoPlayer()
-                
-                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let filePath = documentsURL.appendingPathComponent("temp/\(storyItem.key).mp4")
-                
-                try! videoData.write(to: filePath, options: NSData.WritingOptions.atomic)
-                
-                let asset = AVAsset(url: filePath)
+            createVideoPlayer()
+            if let videoURL = UploadService.readVideoFromFile(withKey: item.getKey()) {
+                let asset = AVAsset(url: videoURL)
                 asset.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: {
                     DispatchQueue.main.async {
                         let item = AVPlayerItem(asset: asset)
@@ -123,7 +131,6 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
                         }
                     }
                 })
-                
             } else {
                 //activityView?.startAnimating()
                 storyItem.download()
@@ -156,11 +163,14 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
             infoView.isHidden = true
         }
         
-        infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - size, width: frame.width, height: size)
+        infoView.frame = CGRect(x: 0, y: commentBar.frame.origin.y - size, width: frame.width, height: size)
         infoView.authorTappedHandler = showUser
         
         commentsView.setTableComments(comments: item.comments, animated: false)
         commentsView.frame = CGRect(x: 0, y: getCommentsViewOriginY(), width: commentsView.frame.width, height: commentsView.frame.height)
+        let uid = mainStore.state.userState.uid
+        commentBar.setLikedStatus(item.likes[uid] != nil, animated: false)
+        commentBar.likeButton.isHidden = item.authorId == uid
     }
     
     
@@ -290,12 +300,30 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
     
     func tapped(gesture:UITapGestureRecognizer) {
         if keyboardUp {
-            dismissKeyboard()
+            commentBar.textField.resignFirstResponder()
         }
     }
     
     func getCommentsViewOriginY() -> CGFloat {
-        return textView.frame.origin.y - infoView.frame.height - commentsView.frame.height
+        return commentBar.frame.origin.y - infoView.frame.height - commentsView.frame.height
+    }
+    
+    func focusItem() {
+        UIView.animate(withDuration: 0.15, animations: {
+            self.commentsView.alpha = 0.0
+            self.authorOverlay.alpha = 0.0
+            self.infoView.alpha = 0.0
+            self.commentBar.alpha = 0.0
+        })
+    }
+    
+    func unfocusItem() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.commentsView.alpha = 1.0
+            self.authorOverlay.alpha = 1.0
+            self.infoView.alpha = 1.0
+            self.commentBar.alpha = 1.0
+        })
     }
     
     
@@ -307,99 +335,66 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
+        self.commentBar.likeButton.isUserInteractionEnabled = false
+        self.commentBar.moreButton.isUserInteractionEnabled = false
+        self.commentBar.sendButton.isUserInteractionEnabled = true
+        self.commentsView.showTimeLabels(visible: true)
+        
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             let height = self.frame.height
-            let textViewFrame = self.textView.frame
+            let textViewFrame = self.commentBar.frame
             let textViewY = height - keyboardFrame.height - textViewFrame.height
-            self.textView.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
+            self.commentBar.frame = CGRect(x: 0,y: textViewY,width: textViewFrame.width,height: textViewFrame.height)
             
-            let commentLabelFrame = self.commentPlaceHolderLabel.frame
-            let commentLabelY = height - keyboardFrame.height - commentLabelFrame.height
-            self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x,y: commentLabelY,width: commentLabelFrame.width,height: commentLabelFrame.height)
-            
+
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
-            
-            let moreButtonFrame = self.moreButton.frame
-            let moreButtonY = height - keyboardFrame.height - moreButtonFrame.height
-            self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: moreButtonY, width: moreButtonFrame.width, height: moreButtonFrame.height)
             
             let infoFrame = self.infoView.frame
             let infoY = textViewY - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
+            self.commentBar.likeButton.alpha = 0.0
+            self.commentBar.moreButton.alpha = 0.0
+            self.commentBar.sendButton.alpha = 1.0
+            
             self.authorOverlay.alpha = 0.0
-            self.commentPlaceHolderLabel.alpha = 0.0
+
         })
     }
     
     func keyboardWillDisappear(notification: NSNotification){
         keyboardUp = false
         
+        self.commentBar.likeButton.isUserInteractionEnabled = true
+        self.commentBar.moreButton.isUserInteractionEnabled = true
+        self.commentBar.sendButton.isUserInteractionEnabled = false
+        self.commentsView.showTimeLabels(visible: false)
+        
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             
             let height = self.frame.height
-            let textViewFrame = self.textView.frame
+            let textViewFrame = self.commentBar.frame
             let textViewStart = height - textViewFrame.height
-            self.textView.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
-            
-            let commentLabelFrame = self.commentPlaceHolderLabel.frame
-            let commentLabelY = height - commentLabelFrame.height
-            self.commentPlaceHolderLabel.frame = CGRect(x: commentLabelFrame.origin.x, y: commentLabelY, width: commentLabelFrame.width, height: commentLabelFrame.height)
+            self.commentBar.frame = CGRect(x: 0,y: textViewStart,width: textViewFrame.width, height: textViewFrame.height)
             
             self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(),width: self.commentsView.frame.width,height: self.commentsView.frame.height)
-            
-            let moreButtonFrame = self.moreButton.frame
-            self.moreButton.frame = CGRect(x: moreButtonFrame.origin.x,y: height - moreButtonFrame.height, width: moreButtonFrame.width, height: moreButtonFrame.height)
             
             let infoFrame = self.infoView.frame
             let infoY = height - textViewFrame.height - infoFrame.height
             self.infoView.frame = CGRect(x: infoFrame.origin.x,y: infoY, width: infoFrame.width, height: infoFrame.height)
             
-            self.authorOverlay.alpha = 1.0
+            self.commentBar.likeButton.alpha = 1.0
+            self.commentBar.moreButton.alpha = 1.0
+            self.commentBar.sendButton.alpha = 0.0
             
-            if !self.commentLabelShouldHide() {
-                self.commentPlaceHolderLabel.alpha = 1.0
-            }
+            self.authorOverlay.alpha = 1.0
+
             
         }, completion:  { result in
             
         })
         
     }
-    
-    func dismissKeyboard() {
-        textView.resignFirstResponder()
-    }
-    
-    func sendComment(comment:String) {
-        
-        textView.text = ""
-        updateTextAndCommentViews()
-        if storyItem != nil {
-            UploadService.addComment(postKey: storyItem!.getKey(), comment: comment)
-        }
-    }
-    
-    func commentLabelShouldHide() -> Bool {
-        if textView.text.isEmpty {
-            return false
-        } else {
-            return true
-        }
-    }
-    var change:CGFloat = 0
-    
-    func updateTextAndCommentViews() {
-        let oldHeight = textView.frame.size.height
-        textView.fitHeightToContent()
-        change = textView.frame.height - oldHeight
-        
-        textView.center = CGPoint(x: textView.center.x, y: textView.center.y - change)
-        
-        self.commentsView.frame = CGRect(x: 0,y: self.getCommentsViewOriginY(), width: self.commentsView.frame.width, height: self.commentsView.frame.height)
-        self.infoView.frame = CGRect(x: 0, y: textView.frame.origin.y - infoView.frame.height, width: infoView.frame.width, height: infoView.frame.height)
-    }
-
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -429,16 +424,6 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         return view
     }()
     
-    lazy var moreButton: UIButton = {
-        let width: CGFloat = (UIScreen.main.bounds.size.width)
-        let height: CGFloat = (UIScreen.main.bounds.size.height)
-        let button = UIButton(frame: CGRect(x:width - 40,y: height - 40,width: 40,height: 40))
-        button.setImage(UIImage(named: "more2"), for: .normal)
-        button.tintColor = UIColor.white
-        button.alpha = 1.0
-        return button
-    }()
-    
     lazy var authorOverlay: PostAuthorView = {
         let margin:CGFloat = 2.0
         var authorView = UINib(nibName: "PostAuthorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! PostAuthorView
@@ -462,24 +447,31 @@ public class PostViewController: UICollectionViewCell, ItemDelegate {
         var view: StoryInfoView = UINib(nibName: "StoryInfoView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! StoryInfoView
         return view
     }()
+    
+    lazy var commentBar: CommentBar = {
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        var view: CommentBar = UINib(nibName: "CommentBar", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! CommentBar
+        view.frame = CGRect(x: 0, y: height - 50.0, width: width, height: 50.0)
+        return view
+    }()
 
 }
 
-extension PostViewController: UITextViewDelegate {
-    public func textViewDidChange(_ textView: UITextView) {
-        updateTextAndCommentViews()
+extension PostViewController: UITextFieldDelegate {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            if !text.isEmpty {
+                textField.text = ""
+                sendComment(text)
+            }
+        }
+        return true
     }
     
-    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        if(text == "\n") {
-            if textView.text.characters.count > 0 {
-                sendComment(comment: textView.text)
-            } else {
-                //dismissKeyboard()
-            }
-            return false
-        }
-        return textView.text.characters.count + (text.characters.count - range.length) <= 140
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        let newLength = text.characters.count + string.characters.count - range.length
+        return newLength <= 140 // Bool
     }
 }

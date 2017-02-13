@@ -26,7 +26,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     var headerView:UIImageView!
     
-     var returningCell:UserStoryTableViewCell?
+    var returningCell:UserStoryTableViewCell?
     
     var statusBarShouldHide = false
     
@@ -82,9 +82,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         headerView.contentMode = .scaleAspectFill
         headerView.clipsToBounds = true
         
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURL = documentsURL.appendingPathComponent("location_images").appendingPathComponent("\(self.location.getKey()).jpg")
-
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("location-\(self.location!.getKey()).jpg"))
+        
         if let imageFile = UIImage(contentsOfFile: fileURL.path) {
             self.headerView.image = imageFile
         } else {
@@ -126,6 +125,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidAppear(animated)
         tableView.isUserInteractionEnabled = true
         
+        statusBarShouldHide = false
+        self.setNeedsStatusBarAppearanceUpdate()
         
         if let tabBar = self.tabBarController as? MasterTabBarController {
             tabBar.setTabBarVisible(_visible: true, animated: true)
@@ -178,7 +179,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             }
             
             self.crossCheckStories(tempDictionary, timestamps: timestamps)
-        
         })
     }
 
@@ -199,7 +199,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             stories.sort(by: {
                 return $0 > $1
             })
-            
             
             for i in 0..<stories.count {
                 let story = stories[i]

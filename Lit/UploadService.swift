@@ -27,6 +27,98 @@ class Upload {
 }
 
 class UploadService {
+    
+    static func writeImageToFile(withKey key:String, image:UIImage) {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("upload_image-\(key).jpg"))//uploadsFileURL.appendingPathComponent("\(key).jpg")
+        if let jpgData = UIImageJPEGRepresentation(image, 1.0) {
+            try! jpgData.write(to: fileURL, options: [.atomic])
+        }
+    }
+    
+    static func readImageFromFile(withKey key:String) -> UIImage? {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("upload_image-\(key).jpg"))
+        return UIImage(contentsOfFile: fileURL.path)
+    }
+    
+    fileprivate static func downloadImage(withUrl url:URL, completion: @escaping (_ image:UIImage?)->()) {
+        
+        URLSession.shared.dataTask(with: url, completionHandler:
+            { (data, response, error) in
+                if error != nil {
+                    if error?._code == -999 {
+                        return
+                    }
+                    return completion(nil)
+                }
+                
+                DispatchQueue.main.async {
+                    
+                    let image = UIImage(data: data!)
+                    return completion(image!)
+                }
+                
+        }).resume()
+    }
+    
+    static func retrieveImage(byKey key: String, withUrl url:URL, completion: @escaping (_ image:UIImage?, _ fromFile:Bool)->()) {
+        if let image = readImageFromFile(withKey: key) {
+            completion(image, true)
+        } else {
+            downloadImage(withUrl: url, completion: { image in
+                if image != nil {
+                    writeImageToFile(withKey: key, image: image!)
+                }
+                completion(image, false)
+            })
+        }
+    }
+    
+    static func writeVideoToFile(withKey key:String, video:Data) -> URL {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("upload_video-\(key).mp4"))
+        try! video.write(to: fileURL, options: [.atomic])
+        return fileURL
+    }
+    
+    static func readVideoFromFile(withKey key:String) -> URL? {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("upload_video-\(key).mp4"))
+        do {
+            let _ = try Data(contentsOf: fileURL)
+            
+            return fileURL
+        } catch let error as Error{
+            print("ERROR: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    
+    fileprivate static func downloadVideo(byAuthor author:String, withKey key:String, completion: @escaping (_ data:Data?)->()) {
+        let videoRef = FIRStorage.storage().reference().child("user_uploads/videos/\(author)/\(key)")
+        
+        // Download in memory with a maximum allowed size of 2MB (2 * 1024 * 1024 bytes)
+        videoRef.data(withMaxSize: 2 * 1024 * 1024) { (data, error) -> Void in
+            if (error != nil) {
+                print("Error - \(error!.localizedDescription)")
+                completion(nil)
+            } else {
+                return completion(data!)
+            }
+        }
+    }
+    
+    static func retrieveVideo(byAuthor author:String, withKey key:String, completion: @escaping (_ videoUrl:URL?, _ fromFile:Bool)->()) {
+        if let data = readVideoFromFile(withKey: key) {
+            completion(data, true)
+        } else {
+            downloadVideo(byAuthor: author, withKey: key, completion: { data in
+                if data != nil {
+                    let url = writeVideoToFile(withKey: key, video: data!)
+                    completion(url, false)
+                }
+                completion(nil, false)
+            })
+        }
+    }
 
     static func sendImage(upload:Upload, completion:(()->())) {
         
@@ -122,7 +214,6 @@ class UploadService {
         completion(true)
         
         uploadVideoStill(url: url, postKey: postKey, completion: { thumbURL in
-            
             
             let data = NSData(contentsOf: url)
             

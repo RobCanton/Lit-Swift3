@@ -243,9 +243,7 @@ class LocationTableCell: UITableViewCell {
             task = nil
         }
         
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURL = documentsURL.appendingPathComponent("location_images").appendingPathComponent("\(self.location!.getKey()).jpg")
-        
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("location-\(self.location!.getKey()).jpg"))
         if let imageFile = UIImage(contentsOfFile: fileURL.path) {
             completion(imageFile, true)
         } else {

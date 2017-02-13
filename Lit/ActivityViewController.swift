@@ -25,25 +25,25 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
     var myStoryRef:FIRDatabaseReference?
     var responseRef:FIRDatabaseReference?
     
+    var statusBarShouldHide = false
+    
+    override var prefersStatusBarHidden: Bool
+        {
+        get{
+            return statusBarShouldHide
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         requestActivity()
         listenToMyStory()
         listenToActivityResponse()
         
-        if statusBarShouldHide {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.statusBarShouldHide = false
-                self.setNeedsStatusBarAppearanceUpdate()
-            })
-        }
-        
         NotificationCenter.default.addObserver(self, selector:#selector(handleEnterForeground), name:
             NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         
     }
-    
-    var statusBarShouldHide = false
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -63,6 +63,9 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        statusBarShouldHide = false
+        self.setNeedsStatusBarAppearanceUpdate()
         
         if let tabBar = self.tabBarController as? MasterTabBarController {
             tabBar.setTabBarVisible(_visible: true, animated: true)
@@ -150,7 +153,6 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
             }
             
             self.crossCheckStories(tempDictionary: tempDictionary, timestamps: timestamps)
-
         })
     }
     
@@ -193,8 +195,6 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.automaticallyAdjustsScrollViewInsets = false
-        
-
         
         let nib = UINib(nibName: "UserStoryTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "UserStoryCell")
@@ -309,6 +309,10 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
     func presentStory(indexPath:IndexPath) {
         self.selectedIndexPath = indexPath
         
+        if let tabBar = self.tabBarController as? MasterTabBarController {
+            tabBar.setTabBarVisible(_visible: false, animated: true)
+        }
+        
         let presentedViewController: StoriesViewController = StoriesViewController()
         presentedViewController.tabBarRef = self.tabBarController! as! MasterTabBarController
         if indexPath.section == 0 {
@@ -346,8 +350,11 @@ extension ActivityViewController: View2ViewTransitionPresenting {
 
             let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
 
-            let y = cell.frame.origin.y + 12 + navHeight
-
+            var y = cell.frame.origin.y + 12 + navHeight
+            if !isPresenting {
+                y += 20.0
+            }
+            
             let rect = CGRect(x: x, y: y, width: image_height, height: image_height)
             return self.tableView.convert(rect, to: self.tableView.superview)
 
@@ -359,7 +366,10 @@ extension ActivityViewController: View2ViewTransitionPresenting {
 
             let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
 
-            let y = cell.frame.origin.y + 12 + navHeight
+            var y = cell.frame.origin.y + 12 + navHeight
+            if !isPresenting {
+                y += 20.0
+            }
             
             
             let rect = CGRect(x: x, y: y, width: image_height, height: image_height)
@@ -400,7 +410,12 @@ extension ActivityViewController: View2ViewTransitionPresenting {
     
     func dismissInteractionEnded(completed: Bool) {
         if completed {
+            statusBarShouldHide = false
+            self.setNeedsStatusBarAppearanceUpdate()
             
+            if let tabBar = self.tabBarController as? MasterTabBarController {
+                tabBar.setTabBarVisible(_visible: true, animated: true)
+            }
         }
     }
 }

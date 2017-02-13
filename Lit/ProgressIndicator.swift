@@ -24,7 +24,7 @@ class ProgressIndicator: UIView {
         
         progress = UIView()
         resetProgress()
-        progress.backgroundColor = UIColor(white: 1.0, alpha: 0.7)
+        progress.backgroundColor = UIColor(white: 1.0, alpha: 0.65)
         addSubview(progress)
     }
     

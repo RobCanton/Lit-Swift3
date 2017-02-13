@@ -54,6 +54,18 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         }
     }
     
+    
+    var statusBarShouldHide = false
+    
+    override var prefersStatusBarHidden: Bool
+        {
+        get{
+            return statusBarShouldHide
+        }
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -120,14 +132,22 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         })
     }
     
-    var largeImageURL:String?
-    var bio:String?
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        //navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        if let nav = navigationController as? MasterNavigationController {
+            if nav.delegate !== transitionController {
+                if let nav = navigationController as? MasterNavigationController {
+                    nav.setNavigationBarHidden(false, animated: true)
+                    nav.delegate = nav
+                }
+            }
+        }
         
         
     }
@@ -136,12 +156,15 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         super.viewDidAppear(animated)
         navigationController?.delegate = self
         
+        statusBarShouldHide = false
+        self.setNeedsStatusBarAppearanceUpdate()
+        
         if let tabBar = self.tabBarController as? MasterTabBarController {
             tabBar.setTabBarVisible(_visible: true, animated: true)
         }
         
         if let nav = navigationController as? MasterNavigationController {
-            
+            nav.setNavigationBarHidden(false, animated: true)
             nav.delegate = nav
         }
         listenToPosts()
@@ -387,10 +410,11 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
          // Otherwise, present another view controller
          if let navigationController = self.navigationController {
          
-         // Set transitionController as a navigation controller delegate and push.
-         navigationController.delegate = transitionController
-         transitionController.push(viewController: galleryViewController, on: self, attached: galleryViewController)
-         
+            statusBarShouldHide = true
+            
+            // Set transitionController as a navigation controller delegate and push.
+            navigationController.delegate = transitionController
+            transitionController.push(viewController: galleryViewController, on: self, attached: galleryViewController)
          }
     }
 
@@ -412,7 +436,12 @@ extension UserProfileViewController: View2ViewTransitionPresenting {
             return CGRect.zero
         }
         let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-        let rect = CGRect(x: attributes.frame.origin.x, y: attributes.frame.origin.y + navHeight, width: attributes.frame.width, height: attributes.frame.height)
+        var y = attributes.frame.origin.y + navHeight
+        if !isPresenting {
+            y += 20.0
+        }
+        
+        let rect = CGRect(x: attributes.frame.origin.x, y: y, width: attributes.frame.width, height: attributes.frame.height)
         return self.collectionView!.convert(rect, to: self.collectionView!.superview)
     }
     
@@ -437,7 +466,12 @@ extension UserProfileViewController: View2ViewTransitionPresenting {
     
     func dismissInteractionEnded(completed: Bool) {
         if completed {
+            statusBarShouldHide = false
+            self.setNeedsStatusBarAppearanceUpdate()
             
+            if let tabBar = self.tabBarController as? MasterTabBarController {
+                tabBar.setTabBarVisible(_visible: true, animated: true)
+            }
         }
     }
 }

@@ -24,11 +24,24 @@ class PhotoCell: UICollectionViewCell {
 
     }
     
+    var itemKey:String?
+    
     func setPhoto(item:StoryItem) {
-        imageView.image = nil
-        
-        imageView.loadImageAsync(item.getDownloadUrl().absoluteString, completion: { fromCache in
-            
+        if itemKey != nil && itemKey != item.getKey() {
+            imageView.image = nil
+            itemKey = item.getKey()
+        }
+    
+        UploadService.retrieveImage(byKey: item.getKey(), withUrl: item.getDownloadUrl(), completion: { image, fromFile in
+            if !fromFile {
+                self.imageView.alpha = 0.0
+                UIView.animate(withDuration: 0.15, animations: {
+                    self.imageView.alpha = 1.0
+                })
+            } else {
+                self.imageView.alpha = 1.0
+            }
+            self.imageView.image = image
         })
     }
     

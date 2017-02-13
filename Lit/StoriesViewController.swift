@@ -10,7 +10,14 @@ import Foundation
 import UIKit
 import View2ViewTransition
 
-class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+protocol PopupProtocol {
+    func showUser(_ uid:String)
+    func showUsersList(_ uids:[String], _ title:String)
+    func showOptions()
+    func dismissPopup(_ animated:Bool)
+}
+
+class StoriesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate, PopupProtocol {
     
     weak var transitionController: TransitionController!
     
@@ -24,8 +31,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var tapGR:UITapGestureRecognizer!
     
     var returnIndex:Int?
-    
     var firstCell = true
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -136,7 +143,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func appMovedToBackground() {
-        popStoryController(animated: false)
+        dismissPopup(false)
     }
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
@@ -171,10 +178,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                 return false
             }
         }
-        
+
         
         if let _ = gestureRecognizer as? UILongPressGestureRecognizer  {
-            
             return !cell.keyboardUp
         }
         
@@ -228,10 +234,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: StoryViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! StoryViewController
         cell.contentView.backgroundColor = UIColor.black
-        cell.optionsTappedHandler = showOptions
-        cell.storyCompleteHandler = storyComplete
-        cell.showUser = showUser
-        cell.showUsersList = showUsersList
+        cell.delegate = self
         print("user return index: \(returnIndex)")
         cell.prepareStory(withStory: userStories[indexPath.item], atIndex: returnIndex)
         returnIndex = nil
@@ -243,22 +246,20 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         return cell
     }
     
-    func popStoryController(animated:Bool) {
+    func dismissPopup(_ animated:Bool) {
         getCurrentCell()?.pauseVideo()
         getCurrentCell()?.destroyVideoPlayer()
-        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
-        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
-        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
-        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
-        navigationController?.popViewController(animated: animated)
+        if let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as? IndexPath {
+            let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
+            self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+            self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+            navigationController?.popViewController(animated: animated)
+        }
     }
     
     
-    func storyComplete() {
-        popStoryController(animated: true)
-    }
     
-    func showUser(uid:String) {
+    func showUser(_ uid:String) {
         guard let cell = getCurrentCell() else { return }
         returnIndex = cell.viewIndex
         print("set return index: \(returnIndex)")
@@ -268,7 +269,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
-    func showUsersList(uids:[String], title:String) {
+    func showUsersList(_ uids:[String], _ title:String) {
         self.navigationController?.delegate = self
         let controller = UsersListViewController()
         controller.title = title
@@ -343,14 +344,14 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                     let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
                     { action -> Void in
                         UploadService.removeItemFromStory(item: item, completion: {
-                            self.popStoryController(animated: true)
+                            self.dismissPopup(true)
                         })
                     }
                     deleteController.addAction(storyAction)
                     
                     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                         UploadService.deleteItem(item: item, completion: {
-                            self.popStoryController(animated: true)
+                            self.dismissPopup(true)
                         })
                     }
                     deleteController.addAction(deleteAction)
@@ -358,7 +359,7 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                     self.present(deleteController, animated: true, completion: nil)
                 } else {
                     UploadService.deleteItem(item: item, completion: {
-                        self.popStoryController(animated: true)
+                        self.dismissPopup(true)
                     })
                 }
             }

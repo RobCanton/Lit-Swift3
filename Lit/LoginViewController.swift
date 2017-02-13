@@ -35,6 +35,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         
         createDirectory("location_images")
         createDirectory("temp")
+        createDirectory("user_uploads")
         
         self.deactivateLoginButton()
         

@@ -21,11 +21,14 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     var currentIndex:IndexPath!
     var collectionView:UICollectionView!
     
+    var statusBarShouldHide = false
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         tabBarRef.setTabBarVisible(_visible: false, animated: true)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name:NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         
         if self.navigationController!.delegate !== transitionController {

@@ -162,6 +162,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         textView.fitHeightToContent()
         textView.delegate = self
         textView.backgroundColor = UIColor.clear
+        textView.isUserInteractionEnabled = false
         
         let gradient = CAGradientLayer()
         gradient.frame = gradientView.bounds
@@ -676,7 +677,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         
         keyboardUp = true
         
-        
+        textView.isUserInteractionEnabled = true
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         captionButton.isUserInteractionEnabled = false
@@ -694,7 +695,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     func keyboardWillDisappear(notification: NSNotification){
         keyboardUp = false
-        
+        textView.isUserInteractionEnabled = false
         captionButton.isUserInteractionEnabled = true
         UIView.animate(withDuration: 0.1, animations: { () -> Void in
             let height = self.view.frame.height

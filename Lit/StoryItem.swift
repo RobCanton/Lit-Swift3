@@ -167,14 +167,17 @@ class StoryItem: NSObject, NSCoding {
     
     func needsDownload() -> Bool{
         if contentType == .image {
-            if let cachedImage = imageCache.object(forKey: downloadUrl.absoluteString as NSString) {
-                image = cachedImage
+            if image != nil {
+                return false
+            }
+            if let savedImage = UploadService.readImageFromFile(withKey: key) {
+                image = savedImage
                 return false
             }
         }
         
         if contentType == .video {
-            if let _ = loadVideoFromCache(key: key) {
+            if let _ = UploadService.readVideoFromFile(withKey: key) {
                 return false
             }
         }  
@@ -182,23 +185,25 @@ class StoryItem: NSObject, NSCoding {
     }
     
     func download() {
-            
-        loadImageUsingCacheWithURL(downloadUrl.absoluteString, completion: { image, fromCache in
+//        if !needsDownload() {
+//            self.delegate?.itemDownloaded()
+//            return
+//        }
+        
+        UploadService.retrieveImage(byKey: key, withUrl: downloadUrl, completion: { image, fromFile in
             self.image = image
-
-            if self.contentType == .video {
-                
-                if let _ = loadVideoFromCache(key: self.key) {
+            if self.contentType == .image {
+                self.delegate?.itemDownloaded()
+            } else if self.contentType == .video {
+                if let _ = UploadService.readVideoFromFile(withKey: self.key) {
                     self.delegate?.itemDownloaded()
                 } else {
-                    downloadVideoWithKey(key: self.key, author: self.authorId, completion: { data in
-                        saveVideoInCache(key: self.key, data: data)
+                    UploadService.retrieveVideo(byAuthor: self.authorId, withKey: self.key, completion: { data in
                         self.delegate?.itemDownloaded()
                     })
                 }
                 
-            } else {
-                self.delegate?.itemDownloaded()
+                
             }
         })
     }
