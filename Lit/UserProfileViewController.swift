@@ -457,7 +457,7 @@ extension UserProfileViewController: View2ViewTransitionPresenting {
         
         let indexPath: IndexPath = userInfo!["initialIndexPath"] as! IndexPath
         
-        if !isPresenting && !self.collectionView!.indexPathsForVisibleItems.contains(indexPath) {
+        if !isPresenting {
             self.collectionView!.reloadData()
             self.collectionView!.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
             self.collectionView!.layoutIfNeeded()

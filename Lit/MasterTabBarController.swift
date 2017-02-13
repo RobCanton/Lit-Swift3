@@ -91,6 +91,8 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         if isActive { return }
         isActive = true
         
+        print("New Active Location(s)")
+        
         cameraActivity?.startAnimating()
         var title:String!
         if activeLocations.count == 1 {
@@ -132,8 +134,9 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         config.preferredStatusBarStyle = .lightContent
         
         config.ignoreDuplicates = true
-        
-        SwiftMessages.show(config: config, view: view)
+        if self.visible {
+            SwiftMessages.show(config: config, view: view)
+        }
     }
     
     func deactivateLocation() {

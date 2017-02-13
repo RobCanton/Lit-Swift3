@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import View2ViewTransition
 
-class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate, PopupProtocol {
     
     weak var transitionController: TransitionController!
     
@@ -79,7 +79,6 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewDidDisappear(animated)
         
         tabBarRef.setTabBarVisible(_visible: true, animated: true)
-        clearDirectory(name: "temp")
         
         for cell in collectionView.visibleCells as! [PostViewController] {
             cell.cleanUp()
@@ -129,8 +128,9 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func appMovedToBackground() {
-        popStoryController(animated: false)
+        dismissPopup(false)
     }
+    
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let cell = getCurrentCell() else { return false }
@@ -166,19 +166,40 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PostViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! PostViewController
         cell.storyItem = posts[indexPath.item]
+        cell.delegate = self
         return cell
     }
     
-    func popStoryController(animated:Bool) {
-        let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as IndexPath
-        let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
-        self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
-        self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
-        navigationController?.popViewController(animated: animated)
+    func dismissPopup(_ animated:Bool) {
+        getCurrentCell()?.pauseVideo()
+        getCurrentCell()?.destroyVideoPlayer()
+        if let indexPath: IndexPath = self.collectionView.indexPathsForVisibleItems.first! as? IndexPath {
+            let initialPath = self.transitionController.userInfo!["initialIndexPath"] as! NSIndexPath
+            self.transitionController.userInfo!["destinationIndexPath"] = indexPath as AnyObject?
+            self.transitionController.userInfo!["initialIndexPath"] = IndexPath(item: indexPath.item, section: initialPath.section) as AnyObject?
+            navigationController?.popViewController(animated: animated)
+        }
     }
     
+    func showUser(_ uid:String) {
+        if self.uid == uid {
+            dismissPopup(true)
+        } else {
+            guard let cell = getCurrentCell() else { return }
+            self.navigationController?.delegate = self
+            let controller = UserProfileViewController()
+            controller.uid = uid
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
     
-    
+    func showUsersList(_ uids:[String], _ title:String) {
+        self.navigationController?.delegate = self
+        let controller = UsersListViewController()
+        controller.title = title
+        controller.tempIds = uids
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
     
     func showOptions() {
         guard let cell = getCurrentCell() else { return }
@@ -193,6 +214,34 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             actionSheet.addAction(cancelActionButton)
             
+            let captionActionButton: UIAlertAction = UIAlertAction(title: "Edit Caption", style: .default) { action -> Void in
+                //cell.resumeStory()
+                let alert = UIAlertController(title: "Edit Caption", message: nil, preferredStyle: .alert)
+                alert.addTextField(configurationHandler: {(textField) -> Void in
+                    textField.text = item.caption
+                    textField.keyboardAppearance = .dark
+                    textField.autocapitalizationType = .sentences
+                })
+                
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) -> Void in
+                    let textF = alert.textFields![0]
+                    var text = textF.text
+                    if text == nil {
+                        text = ""
+                    }
+                    item.editCaption(caption: text!)
+                    UploadService.editCaption(postKey: item.getKey(), caption: text!)
+                    cell.setItem()
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+                    
+                }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            actionSheet.addAction(captionActionButton)
+            
             let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive) { action -> Void in
                 
                 if item.postPoints() > 1 {
@@ -202,17 +251,17 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
 
                     }
                     deleteController.addAction(cancelAction)
-                    let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
+                    let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my profile", style: .destructive)
                     { action -> Void in
-                        UploadService.removeItemFromStory(item: item, completion: {
-                            self.popStoryController(animated: true)
+                        UploadService.removeItemFromProfile(item: item, completion: {
+                            self.dismissPopup(true)
                         })
                     }
                     deleteController.addAction(storyAction)
                     
                     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                         UploadService.deleteItem(item: item, completion: {
-                            self.popStoryController(animated: true)
+                            self.dismissPopup(true)
                         })
                     }
                     deleteController.addAction(deleteAction)
@@ -220,7 +269,7 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
                     self.present(deleteController, animated: true, completion: nil)
                 } else {
                     UploadService.deleteItem(item: item, completion: {
-                        self.popStoryController(animated: true)
+                        self.dismissPopup(true)
                     })
                 }
             }

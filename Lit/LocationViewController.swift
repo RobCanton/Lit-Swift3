@@ -337,7 +337,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         let presentedViewController: StoriesViewController = StoriesViewController()
         presentedViewController.tabBarRef   = self.tabBarController! as! MasterTabBarController
         presentedViewController.userStories = userStories
-        //presentedViewController.location    = location
+        presentedViewController.location    = location
         presentedViewController.transitionController = self.transitionController
         let i = IndexPath(item: indexPath.row, section: 0)
         self.transitionController.userInfo = ["destinationIndexPath": i as AnyObject, "initialIndexPath": i as AnyObject]
@@ -483,7 +483,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
                 returningCell!.deactivate()
             }
         }
-        if !isPresenting && !self.tableView!.indexPathsForVisibleRows!.contains(i) {
+        if !isPresenting {
             self.tableView!.reloadData()
             self.tableView!.scrollToRow(at: i, at: .middle, animated: false)
             self.tableView!.layoutIfNeeded()
@@ -491,7 +491,6 @@ extension LocationViewController: View2ViewTransitionPresenting {
     }
     
     func dismissInteractionEnded(completed: Bool) {
-        //print("Dismiss Interaction Ended: \(completed)")
         if completed {
             statusBarShouldHide = false
             self.setNeedsStatusBarAppearanceUpdate()
@@ -499,11 +498,6 @@ extension LocationViewController: View2ViewTransitionPresenting {
             if let tabBar = self.tabBarController as? MasterTabBarController {
                 tabBar.setTabBarVisible(_visible: true, animated: true)
             }
-            
-//            if let nav = navigationController as? MasterNavigationController {
-//                nav.setNavigationBarHidden(false, animated: true)
-//                nav.delegate = nav
-//            }
         }
     }
 

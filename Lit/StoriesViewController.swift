@@ -30,7 +30,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var longPressGR:UILongPressGestureRecognizer!
     var tapGR:UITapGestureRecognizer!
     
-    var returnIndex:Int?
+    var location:Location?
+
     var firstCell = true
     
     override func viewWillAppear(_ animated: Bool) {
@@ -235,12 +236,9 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell: StoryViewController = collectionView.dequeueReusableCell(withReuseIdentifier: "presented_cell", for: indexPath as IndexPath) as! StoryViewController
         cell.contentView.backgroundColor = UIColor.black
         cell.delegate = self
-        print("user return index: \(returnIndex)")
-        cell.prepareStory(withStory: userStories[indexPath.item], atIndex: returnIndex)
-        returnIndex = nil
+        cell.prepareStory(withStory: userStories[indexPath.item], atIndex: nil)
         if firstCell {
             firstCell = false
-            //cell.captionView.backgroundView!.isHidden = true
         }
         
         return cell
@@ -260,9 +258,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     
     func showUser(_ uid:String) {
+        
         guard let cell = getCurrentCell() else { return }
-        returnIndex = cell.viewIndex
-        print("set return index: \(returnIndex)")
         self.navigationController?.delegate = self
         let controller = UserProfileViewController()
         controller.uid = uid
@@ -274,15 +271,6 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         let controller = UsersListViewController()
         controller.title = title
         controller.tempIds = uids
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    
-    func showLocation(location:Location) {
-        self.navigationController?.delegate = self
-        let controller = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
-        controller.location = location
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -341,13 +329,25 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                         cell.resumeStory()
                     }
                     deleteController.addAction(cancelAction)
-                    let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
-                    { action -> Void in
-                        UploadService.removeItemFromStory(item: item, completion: {
-                            self.dismissPopup(true)
-                        })
+                    
+                    if let location = self.location {
+                        let storyAction: UIAlertAction = UIAlertAction(title: "Remove from \(location.getName())", style: .destructive)
+                        { action -> Void in
+                            UploadService.removeItemFromLocation(item: item, completion: {
+                                self.dismissPopup(true)
+                            })
+                        }
+                        deleteController.addAction(storyAction)
+                    } else{
+                        let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
+                        { action -> Void in
+                            UploadService.removeItemFromStory(item: item, completion: {
+                                self.dismissPopup(true)
+                            })
+                        }
+                        deleteController.addAction(storyAction)
                     }
-                    deleteController.addAction(storyAction)
+                    
                     
                     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                         UploadService.deleteItem(item: item, completion: {

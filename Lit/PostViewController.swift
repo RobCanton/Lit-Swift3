@@ -13,14 +13,11 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     
     var keyboardUp = false
     
-    
-    var optionsTappedHandler:(()->())?
-    var showUser:((_ uid:String)->())?
-    var showUsersList:((_ uids:[String], _ title:String)->())?
+    var delegate:PopupProtocol?
     
     func showOptions() {
         pauseVideo()
-        optionsTappedHandler?()
+        delegate?.showOptions()
     }
     
     var shouldPlay = false
@@ -28,8 +25,10 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     var storyItem:StoryItem! {
         didSet {
             shouldPlay = false
-            storyItem.delegate = self
+            infoView.authorTappedHandler = showUser
+            authorOverlay.delegate = self
             commentBar.delegate = self
+            commentsView.userTapped = showUser
             setItem()
             
             NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillAppear), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -38,23 +37,24 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     }
     
     func showUser(_ uid: String) {
-        showUser?(uid)
+        print("SHOW USER: \(uid)")
+        delegate?.showUser(uid)
     }
     
     func showViewers() {
         guard let item = self.storyItem else { return }
         if item.authorId == mainStore.state.userState.uid {
-            showUsersList?(item.getViewsList(), "Views")
+            delegate?.showUsersList(item.getViewsList(), "Views")
         }
     }
     
     func showLikes() {
         guard let item = self.storyItem else { return }
-        showUsersList?(item.getLikesList(), "Likes")
+        delegate?.showUsersList(item.getLikesList(), "Likes")
     }
     
     func more() {
-        optionsTappedHandler?()
+        delegate?.showOptions()
     }
     
     func sendComment(_ comment: String) {
