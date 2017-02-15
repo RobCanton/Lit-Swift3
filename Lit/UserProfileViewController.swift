@@ -168,6 +168,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
             nav.delegate = nav
         }
         listenToPosts()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

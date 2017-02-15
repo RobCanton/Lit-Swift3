@@ -450,11 +450,11 @@ extension LocationViewController: View2ViewTransitionPresenting {
         let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: i)! as! UserStoryTableViewCell
         let image_frame = cell.contentImageView.frame
         let image_height = image_frame.height
-        let x = cell.frame.origin.x + 20
+        let x = cell.frame.origin.x + 19
         
         let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
         
-        var y = cell.frame.origin.y + 12 + navHeight
+        var y = cell.frame.origin.y + 11 + navHeight
         if !isPresenting {
             y += 20.0
         }

@@ -72,8 +72,6 @@ class LocationTableCell: UITableViewCell {
         
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
-        
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

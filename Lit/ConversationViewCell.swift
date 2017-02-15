@@ -33,11 +33,11 @@ class ConversationViewCell: UITableViewCell, GetUserProtocol {
             }
             
             if !conversation!.seen {
-                usernameLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 16.0)
+                usernameLabel.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightSemibold)
                 unread_dot.isHidden = false
             } else {
 
-                usernameLabel.font = UIFont(name: "AvenirNext-Regular", size: 16.0)
+                usernameLabel.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightMedium)
                 unread_dot.isHidden = true
             }
             

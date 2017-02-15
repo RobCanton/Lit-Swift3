@@ -26,7 +26,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         imageContainer.layer.cornerRadius = imageContainer.frame.width/2
         imageContainer.clipsToBounds = true
         imageContainer.layer.borderColor = UIColor.clear.cgColor
-        imageContainer.layer.borderWidth = 1.8
+        imageContainer.layer.borderWidth = 1.5
         
         contentImageView.layer.cornerRadius = contentImageView.frame.width/2
         contentImageView.clipsToBounds = true
@@ -110,7 +110,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
                         })
                     }
                 })
-                self.timeLabel.text = "\(story.getDate().timeStringSinceNowWithAgo())"
+                self.setSubtitle()
             }
         })
     }
@@ -154,10 +154,24 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         }
     }
     
+    var numComments = 0
+    var numLikes = 0
+    var numViews = 0
     func itemsLoaded() {
         guard let items = userStory?.items else { return }
         if items.count > 0 {
-
+            
+            
+            numComments = 0
+            numLikes = 0
+            numViews = 0
+            for item in items {
+                numComments += item.comments.count
+                numLikes += item.likes.count
+                numViews += item.viewers.count
+            }
+            
+            
             activate(false)
             /*loadImageUsingCacheWithURL(lastItem.getDownloadUrl().absoluteString, completion: { image, fromCache in
                 
@@ -179,8 +193,34 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
     }
     
     func contentLoaded() {
-        guard let story = userStory else { return }
-        timeLabel.text = "\(story.getDate().timeStringSinceNowWithAgo())"
+        setSubtitle()
         
+    }
+    
+    func setSubtitle() {
+        guard let story = userStory else { return }
+        var commentsStr = ""
+        var likesStr = ""
+        var viewsStr = ""
+        
+        if numComments == 1 {
+            commentsStr = " · 1 comment"
+        } else if numComments > 0 {
+            commentsStr = " · \(getNumericShorthandString(numComments)) comments"
+        }
+        
+        if numLikes == 1 {
+            likesStr = " · 1 like"
+        } else if numLikes > 0 {
+            likesStr = " · \(getNumericShorthandString(numLikes)) likes"
+        }
+        
+//        if numViews == 1 {
+//            viewsStr = " · 1 view"
+//        } else if numViews > 0 {
+//            viewsStr = " · \(numViews) views"
+//        }
+        
+        timeLabel.text = "\(story.getDate().timeStringSinceNowWithAgo())\(commentsStr)\(likesStr)\(viewsStr)"
     }
 }

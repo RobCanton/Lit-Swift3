@@ -174,7 +174,9 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
                 viewIndex = 0
             }
             
-            
+            if viewIndex > 0 {
+                viewIndex -= 1
+            }
         }
         
         print("VIEW INDEX: \(viewIndex)")
@@ -186,32 +188,21 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         killTimer()
         pauseVideo()
         
-        let uid = mainStore.state.userState.uid
         
-        if let prevItem = self.item {
-            if !prevItem.hasViewed() && prevItem.authorId != uid{
-                prevItem.addView(uid)
-                UploadService.addView(postKey: prevItem.getKey())
-            }
-        }
-        
-
         
         guard let items = story.items else { return }
         if viewIndex >= items.count { return }
         
-        
+        let uid = mainStore.state.userState.uid
         
         let item = items[viewIndex]
         self.item = item
         
-        if viewIndex == items.count - 1 {
-            if !item.hasViewed() && item.authorId != uid{
-                item.addView(uid)
-                UploadService.addView(postKey: item.getKey())
-            }
+        if !item.hasViewed() && item.authorId != uid{
+            item.addView(uid)
+            UploadService.addView(postKey: item.getKey())
         }
-        
+
         if item.contentType == .image {
             prepareImageContent(item: item)
         } else if item.contentType == .video {

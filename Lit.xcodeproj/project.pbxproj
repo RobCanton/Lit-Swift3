@@ -82,6 +82,7 @@
 		B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */; };
 		B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043331E41599100D50DA7 /* CameraViewController.swift */; };
 		B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043351E4159B800D50DA7 /* CameraTransition.swift */; };
+		B0BD94911E53A3F500C45BE3 /* LocationStoriesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */; };
 		B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */; };
 		B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44E11E4318440078FFFE /* UserViewCell.swift */; };
 		B0CC44E41E4318440078FFFE /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0CC44E21E4318440078FFFE /* UserViewCell.xib */; };
@@ -200,6 +201,7 @@
 		B0B043301E40DB0E00D50DA7 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		B0B043331E41599100D50DA7 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		B0B043351E4159B800D50DA7 /* CameraTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTransition.swift; sourceTree = "<group>"; };
+		B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationStoriesHeader.xib; sourceTree = "<group>"; };
 		B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
 		B0CC44E11E4318440078FFFE /* UserViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
 		B0CC44E21E4318440078FFFE /* UserViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				B09405E91E4A7C3F00CE0068 /* StoryInfoView.xib */,
 				B087C7831E41EE8600234715 /* ListHeaderView.swift */,
 				B087C7841E41EE8600234715 /* ListHeaderView.xib */,
+				B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */,
 				B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */,
 				B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */,
 				B0E59E031E409444007B4762 /* InfoTableViewCell.swift */,
@@ -623,6 +626,7 @@
 				B087C75E1E41C27100234715 /* ProfileHeaderView.xib in Resources */,
 				B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */,
 				B09405EE1E4C570D00CE0068 /* CommentBar.xib in Resources */,
+				B0BD94911E53A3F500C45BE3 /* LocationStoriesHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

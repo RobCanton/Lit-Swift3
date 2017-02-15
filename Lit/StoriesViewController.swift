@@ -133,7 +133,8 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         label.textAlignment = .center
         
         longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        longPressGR.minimumPressDuration = 0.5
+        longPressGR.minimumPressDuration = 0.33
+        
         longPressGR.delegate = self
         self.view.addGestureRecognizer(longPressGR)
         

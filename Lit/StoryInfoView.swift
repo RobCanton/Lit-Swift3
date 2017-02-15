@@ -73,7 +73,7 @@ class StoryInfoView: UIView {
                 self.backgroundBlur.effect = UIBlurEffect(style: .light)
             })
             
-            backgroundBlur.pauseAnimation(delay: 0.42)
+            backgroundBlur.pauseAnimation(delay: 0.35)
             backgroundBlur.resumeAnimation()
             
         } else {
