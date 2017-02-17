@@ -260,15 +260,19 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func showUser(_ uid:String) {
         
-        guard let cell = getCurrentCell() else { return }
-        self.navigationController?.delegate = self
+        guard let _ = getCurrentCell() else { return }
+        if let nav = self.navigationController as? MasterNavigationController {
+            nav.delegate = nav
+        }
         let controller = UserProfileViewController()
         controller.uid = uid
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
     func showUsersList(_ uids:[String], _ title:String) {
-        self.navigationController?.delegate = self
+        if let nav = self.navigationController as? MasterNavigationController {
+            nav.delegate = nav
+        }
         let controller = UsersListViewController()
         controller.title = title
         controller.tempIds = uids

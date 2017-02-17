@@ -22,10 +22,9 @@ class LoginViewController: UIViewController, StoreSubscriber {
     var dict : [String : AnyObject]!
     
     func newState(state:AppState) {
+
         if state.supportedVersion && state.userState.isAuth && state.userState.user != nil {
-            print("supportedVersion \(state.supportedVersion)")
-            print("isAuth \(state.userState.isAuth)")
-            print("user \(state.userState.user != nil)")
+            
             self.performSegue(withIdentifier: "showLit", sender: self)
         }
     }
@@ -33,11 +32,15 @@ class LoginViewController: UIViewController, StoreSubscriber {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("Login view did load")
         createDirectory("location_images")
         createDirectory("temp")
         createDirectory("user_uploads")
         
         self.deactivateLoginButton()
+        
+        loginButton.layer.borderWidth = 2.0
+        loginButton.layer.borderColor = UIColor.white.cgColor
         
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -45,7 +48,6 @@ class LoginViewController: UIViewController, StoreSubscriber {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
-        
         if !mainStore.state.supportedVersion {
             checkVersionSupport({ supported in
                 if supported {
@@ -66,8 +68,9 @@ class LoginViewController: UIViewController, StoreSubscriber {
     }
     
     func setupLoginScreen() {
+        print("setupLoginScreen")
         if let user = FIRAuth.auth()?.currentUser {
-            print("print user already authenticated.")
+            print("user already authenticated.")
             
             checkUserAgainstDatabase({ success in
                 if success {
@@ -86,6 +89,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             })
             
         } else {
+            print("user not authenticated.")
             UserService.logoutOfFirebase()
             self.activateLoginButton()
         }
@@ -103,7 +107,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
 
     @IBAction func handleLoginButton(_ sender: Any) {
         loginButton.isEnabled = false
-
+        
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
         fbLoginManager.logIn(withReadPermissions: ["public_profile", "email", "user_friends"], from: self) { (result, error) in
             if (error == nil){
@@ -200,6 +204,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         let currentVersion = Int(appId.replacingOccurrences(of: ".", with: ""))!
         
         let versionRef = UserService.ref.child("config/client/minimum_supported_version")
+        print("Observing current version")
         versionRef.observeSingleEvent(of: .value, with: { snapshot in
             let versionString = snapshot.value as! String
             let minimum_supported_version = Int(versionString.replacingOccurrences(of: ".", with: ""))!

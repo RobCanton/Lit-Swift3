@@ -92,7 +92,7 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
         self.downloadMessages()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name:NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     func startActivityIndicator() {
@@ -130,16 +130,19 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
                 var messageBatch = [JSQMessage]()
                 let dict = snapshot.value as! [String:AnyObject]
                 
-                for (_, obj) in dict {
-                    let senderId  = obj["senderId"] as! String
-                    let text      = obj["text"] as! String
-                    let timestamp = obj["timestamp"] as! Double
-                    
+                for message in snapshot.children {
+                    let messageSnap = message as! FIRDataSnapshot
+                    let value = messageSnap.value as! [String: Any]
+                    let senderId  = value["senderId"] as! String
+                    let text      = value["text"] as! String
+                    let timestamp = value["timestamp"] as! Double
+
                     if timestamp != endTimestamp {
                         let date = Date(timeIntervalSince1970: timestamp/1000)
                         let message = JSQMessage(senderId: senderId, senderDisplayName: "", date: date, text: text)
                         messageBatch.append(message!)
                     }
+
                 }
 
                 if messageBatch.count > 0 {
@@ -160,8 +163,12 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
     }
     
     func appMovedToBackground() {
-        downloadRef?.removeAllObservers()
-        conversation.listenToConversation()
+        //downloadRef?.removeAllObservers()
+        //conversation.listenToConversation()
+    }
+    
+    func appWillEnterForeground() {
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

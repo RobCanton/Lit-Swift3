@@ -61,14 +61,14 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     
     func sendComment(_ comment: String) {
         guard let item = self.storyItem else { return }
-        UploadService.addComment(postKey: item.getKey(), comment: comment)
+        UploadService.addComment(post: item, comment: comment)
     }
     
     func toggleLike(_ like: Bool) {
         guard let item = self.storyItem else { return }
         
         if like {
-            UploadService.addLike(postKey: item.getKey())
+            UploadService.addLike(post: item)
             item.addLike(mainStore.state.userState.uid)
         } else {
             UploadService.removeLike(postKey: item.getKey())

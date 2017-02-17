@@ -97,9 +97,10 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
                 
                 UploadService.getUpload(key: story.getPostKeys().last!, completion: { item in
                     if item != nil {
-                        loadImageUsingCacheWithURL(item!.getDownloadUrl().absoluteString, completion: { image, fromCache in
+                        
+                        UploadService.retrieveImage(byKey: item!.getKey(), withUrl: item!.getDownloadUrl(), completion: { image, fromFile in
                             self.contentImageView.image = image
-                            if !fromCache {
+                            if !fromFile {
                                 self.contentImageView.alpha = 0.0
                                 UIView.animate(withDuration: 0.25, animations: {
                                     self.contentImageView.alpha = 1.0

@@ -101,10 +101,6 @@ class UserService {
         }
     }
     
-    static func getUserWithCancel(_ uid:String) {
-        let userRef = ref.child("users/profile/basic/\(uid)")
-        
-    }
     
     static func getUserFullProfile(user:User, completion: @escaping (_ user:User)->()) {
         if user.bio != nil && user.largeImageURL != nil {
@@ -149,26 +145,13 @@ class UserService {
         let messageRef = ref.child("conversations/\(conversation.getKey())/messages").childByAutoId()
         let uid = mainStore.state.userState.uid
         
-        var payload:[String:AnyObject] = [
-            "senderId": uid as AnyObject,
-            "recipientId": conversation.getPartnerId() as AnyObject,
-            "text": message as AnyObject,
-            "timestamp": [".sv":"timestamp"] as AnyObject
-        ]
-        
-        if uploadKey != nil {
-            payload["upload"] = uploadKey! as AnyObject?
-        }
-        
-        messageRef.setValue(payload, withCompletionBlock: { error, ref in
-            completion?(error == nil)
-        })
-        
         let requestRef = ref.child("api/requests/message").childByAutoId()
         requestRef.setValue([
-            "sender": uid,
             "conversation": conversation.getKey(),
-            "messageID": messageRef.key,
+            "sender": uid as AnyObject,
+            "recipient": conversation.getPartnerId() as AnyObject,
+            "text": message as AnyObject,
+            "timestamp": [".sv":"timestamp"] as AnyObject
             ])
     }
     

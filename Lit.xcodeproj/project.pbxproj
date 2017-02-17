@@ -83,6 +83,7 @@
 		B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043331E41599100D50DA7 /* CameraViewController.swift */; };
 		B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043351E4159B800D50DA7 /* CameraTransition.swift */; };
 		B0BD94911E53A3F500C45BE3 /* LocationStoriesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */; };
+		B0BD94931E5496DE00C45BE3 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BD94921E5496DE00C45BE3 /* NotificationService.swift */; };
 		B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */; };
 		B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44E11E4318440078FFFE /* UserViewCell.swift */; };
 		B0CC44E41E4318440078FFFE /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0CC44E21E4318440078FFFE /* UserViewCell.xib */; };
@@ -202,6 +203,7 @@
 		B0B043331E41599100D50DA7 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		B0B043351E4159B800D50DA7 /* CameraTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTransition.swift; sourceTree = "<group>"; };
 		B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationStoriesHeader.xib; sourceTree = "<group>"; };
+		B0BD94921E5496DE00C45BE3 /* NotificationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
 		B0CC44E11E4318440078FFFE /* UserViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
 		B0CC44E21E4318440078FFFE /* UserViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 				B0E59DF21E406678007B4762 /* GPSService.swift */,
 				B0E59DF61E406D50007B4762 /* LocationService.swift */,
 				B0383C221E43256B002FD893 /* FacebookGraph.swift */,
+				B0BD94921E5496DE00C45BE3 /* NotificationService.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -714,6 +717,7 @@
 				B0E59DFC1E40765D007B4762 /* LocationTableCell.swift in Sources */,
 				B01EE5441E435D450049BCBF /* JiroTextField.swift in Sources */,
 				B087C77A1E41E6AE00234715 /* SendLocationHeaderView.swift in Sources */,
+				B0BD94931E5496DE00C45BE3 /* NotificationService.swift in Sources */,
 				B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */,
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
 				B087C77E1E41E6AE00234715 /* SendProfileViewCell.swift in Sources */,

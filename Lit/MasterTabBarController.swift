@@ -13,6 +13,7 @@ import CoreLocation
 import Firebase
 import NVActivityIndicatorView
 import SwiftMessages
+import UserNotifications
 
 class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarControllerDelegate, GPSServiceDelegate {
     typealias StoreSubscriberStateType = AppState
@@ -83,6 +84,8 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         } else {
             deactivateLocation()
         }
+        
+        messageNotifications()
     }
     
     var isActive = false
@@ -158,6 +161,24 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     func tracingLocationDidFailWithError(_ error: NSError) {
         
     }
+    
+    
+    func messageNotifications() {
+        var count = 0
+        for conversation in mainStore.state.conversations {
+            if !conversation.seen {
+                count += 1
+            }
+        }
+        if count > 0 {
+            tabBar.items?[3].badgeValue = "\(count)"
+        } else {
+            tabBar.items?[3].badgeValue = nil
+        }
+        NotificationService.shared.setMessageBadgeNumber(count)
+    }
+    
+    
     
     var cameraButton:UIButton!
     let cameraDefaultWidth:CGFloat = 2.2

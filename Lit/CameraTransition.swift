@@ -77,13 +77,12 @@ class CameraTransition: UIStoryboardSegue {
         fromViewController.cameraButton.isHidden = true
         
         
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {
             //toViewController.view.frame = finalToFrame
             fromViewController.view.frame = finalFromFrame
             cameraButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
             cameraButton.center = recordButtonCenter
             cameraButton.backgroundColor = UIColor.clear
-            
         
         }, completion: { finished in
                 cameraButton.removeFromSuperview()
@@ -113,10 +112,11 @@ class CameraUnwindTransition: UIStoryboardSegue {
         let fromViewController = source as! CameraViewController
 
         let containerView = fromViewController.view.superview
-        let screenBounds = fromViewController.view.bounds
-        
-        
+        let screenBounds = toViewController.view.bounds
+        containerView!.insertSubview(fromViewController.view, at: 0)
+        //containerView!.sendSubview(toBack: fromViewController.view)
         let cameraBtnFrame = toViewController.cameraButton.frame
+        
         
         let cameraButton = UIButton(frame: CGRect(x: 0, y: 0, width: 56, height: 56))
         
@@ -166,6 +166,7 @@ class CameraUnwindTransition: UIStoryboardSegue {
         
         toViewController.view.frame = finalToFrame.offsetBy(dx: 0, dy: screenBounds.size.height)
         containerView?.addSubview(toViewController.view)
+        let cameraViewControllerFrame = fromViewController.view.frame
 
         let finalCameraFrame = CGRect(x: screenBounds.width/2 - cameraBtnFrame.size.width/2, y: screenBounds.height - cameraBtnFrame.height - 8, width: cameraBtnFrame.width, height: cameraBtnFrame.height)
         
@@ -180,12 +181,14 @@ class CameraUnwindTransition: UIStoryboardSegue {
         fromViewController.recordBtn.isHidden = true
         containerView?.addSubview(cameraButton)
         
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveEaseOut], animations: {
+            
             cameraButton.transform = CGAffineTransform.identity
             cameraButton.frame = finalCameraFrame
             cameraButton.backgroundColor = UIColor.black
             toViewController.view.frame = finalToFrame
             fromViewController.view.alpha = 0.0
+//            fromViewController.view.frame = containerView!.bounds
             }, completion: { finished in
                 cameraButton.removeFromSuperview()
                 toViewController.cameraButton.isHidden = false
@@ -194,6 +197,79 @@ class CameraUnwindTransition: UIStoryboardSegue {
 
         })
     }
-    
-    
 }
+
+//
+//  CustomSegueTransition.swift
+//  CustomSegueTest
+//
+//  Created by Robert Canton on 2017-02-15.
+//  Copyright © 2017 Robert Canton. All rights reserved.
+//
+
+import UIKit
+
+class CustomSegueTransition: UIStoryboardSegue {
+    override func perform() {
+        
+        //set the ViewControllers for the animation
+        
+        let sourceView = self.source.view as! UIView
+        let destinationView = self.destination.view as! UIView
+        print("PRESENT TRANSITION")
+        
+        let window = UIApplication.shared.delegate?.window!
+        //set the destination View center
+        //destinationView.frame = CGRect(x: 0, y: sourceView.frame.height, width: destinationView.frame.width, height: destinationView.frame.height)
+        
+        // the Views must be in the Window hierarchy, so insert as a subview the destionation above the source
+        window?.insertSubview(destinationView, belowSubview: sourceView)
+        
+        //create UIAnimation- change the views's position when present it
+        UIView.animate(withDuration: 3.0, animations: {
+            sourceView.frame = CGRect(x: 0, y: sourceView.frame.height, width: destinationView.frame.width, height: destinationView.frame.height)
+            //sourceView?.center = CGPoint(x: (sourceView?.center.x)!, y: 0 + 2 * (destinationView?.center.y)!)
+            
+        }, completion: {
+            (value: Bool) in
+            self.source.present(self.destination, animated: false, completion: nil)
+            
+            
+        })
+    }
+}
+
+class CustomUnwindSegueTransition: UIStoryboardSegue {
+    override func perform() {
+        //set the ViewControllers for the animation
+        print("like wut")
+        let sourceView = self.source.view as! UIView
+        let destinationView = self.destination.view as! UIView
+        let window = UIApplication.shared.delegate?.window!
+        
+        // 1. beloveSubview
+        window?.insertSubview(destinationView, aboveSubview: sourceView)
+        
+        
+        //2. y cordinate change
+        destinationView.frame = CGRect(x: 0, y: sourceView.frame.height, width: destinationView.frame.width, height: destinationView.frame.height)
+        
+        
+        //3. create UIAnimation- change the views's position when present it
+        UIView.animate(withDuration: 0.4,
+                       animations: {
+                        destinationView.frame = CGRect(x: 0, y: 0, width: destinationView.frame.width, height: destinationView.frame.height)
+                        //sourceView?.center = CGPoint(x: (sourceView?.center.x)!, y: 0 - 2 * (destinationView?.center.y)!)
+        }, completion: {
+            (value: Bool) in
+            //4. dismiss
+            
+            destinationView.removeFromSuperview()
+            
+            self.source.dismiss(animated: false, completion: nil)
+            
+        })
+        
+    }
+}
+

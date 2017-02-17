@@ -190,6 +190,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
+    
+    override var prefersStatusBarHidden: Bool{
+        get {
+            return false
+        }
+    }
 }
 
 extension HomeViewController: UISearchBarDelegate {

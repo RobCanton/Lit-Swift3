@@ -141,11 +141,12 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         //navigationController?.setNavigationBarHidden(false, animated: true)
         
         if let nav = navigationController as? MasterNavigationController {
-            if nav.delegate !== transitionController {
-                if let nav = navigationController as? MasterNavigationController {
-                    nav.setNavigationBarHidden(false, animated: true)
-                    nav.delegate = nav
-                }
+            if nav.delegate !== nav {
+                print("Nav delegate is transtion")
+            } else {
+                print("Nav delegate is nav")
+                listenToPosts()
+                nav.setNavigationBarHidden(false, animated: true)
             }
         }
         
@@ -154,6 +155,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("viewDidAppear")
         navigationController?.delegate = self
         
         statusBarShouldHide = false
@@ -164,10 +166,17 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         }
         
         if let nav = navigationController as? MasterNavigationController {
-            nav.setNavigationBarHidden(false, animated: true)
-            nav.delegate = nav
+            if nav.delegate !== nav {
+                print("Nav delegate is transtion")
+                nav.setNavigationBarHidden(false, animated: true)
+                nav.delegate = nav
+                listenToPosts()
+            } else {
+                print("Nav delegate is nav")
+            }
         }
-        listenToPosts()
+        
+        
         
     }
     
@@ -341,6 +350,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
             UploadService.downloadStory(postKeys: postKeys, completion: { story in
                 
                 self.posts = story.sorted(by: { return $0 > $1 })
+                
                 self.collectionView!.reloadData()
             })
         } else {

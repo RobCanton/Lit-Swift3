@@ -137,7 +137,6 @@ class LocationTableCell: UITableViewCell {
             check = 0
             
         }
-        print("Check set: \(check)")
         
         currentVisitors = visitors
         
@@ -160,11 +159,9 @@ class LocationTableCell: UITableViewCell {
             for visitor in visitors {
                 
                 UserService.getUser(visitor, check: check, completion: { user, check in
-                    print(" * user -> check_carried: \(check) | current_check: \(self.check)")
                     if user != nil && self.check == check {
                         
                         loadImageCheckingCache(withUrl: user!.getImageUrl(), check: check, completion: { image, fromCache, check in
-                            print(" * imag -> check_carried: \(check) | current_check: \(self.check)")
                             if image != nil && self.check == check {
                                 
                                 self.addNewGuest(image!)

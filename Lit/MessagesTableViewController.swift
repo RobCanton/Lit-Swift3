@@ -101,4 +101,33 @@ class MessagesViewController: UITableViewController, StoreSubscriber {
         })
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let cell = tableView.cellForRow(at: indexPath) as! ConversationViewCell
+            let name = cell.usernameLabel.text!
+            
+            let actionSheet = UIAlertController(title: "Delete conversation with \(name)?", message: "Further messages from \(name) will be muted until you reply.", preferredStyle: .alert)
+            
+            let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+            }
+            
+            actionSheet.addAction(cancelActionButton)
+            
+            let saveActionButton: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive)
+            { action -> Void in
+                let partner = self.conversations[indexPath.row].getPartnerId()
+                let uid = mainStore.state.userState.uid
+                
+                let userRef = UserService.ref.child("users/conversations/\(uid)/\(partner)")
+                
+                userRef.removeValue(completionBlock: { error, ref in
+                    mainStore.dispatch(RemoveConversation(index: indexPath.row))
+                })
+            }
+            actionSheet.addAction(saveActionButton)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+        }
+    }
+    
 }

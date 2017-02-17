@@ -91,10 +91,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         return true
     }
     
-    @IBAction func handleDismiss(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -179,6 +175,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         UIView.animate(withDuration: 0.6, animations: {
             self.dismissButton.alpha = 0.75
         })
@@ -186,12 +183,13 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         destroyVideoPreview()
-        
+
         UIView.animate(withDuration: 0.3, animations: {
             self.dismissButton.alpha = 0.0
         })
@@ -220,7 +218,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                 playerLayer?.player = nil
                 playerLayer = nil
                 
-                
+                statusBarShouldHide = false
+                self.setNeedsStatusBarAppearanceUpdate()
                 showCameraOptions()
                 hideEditOptions()
                 break
@@ -234,9 +233,13 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                 videoCaptureView.isHidden = true
                 showEditOptions()
                 uploadCoordinate        = GPSService.sharedInstance.lastLocation
+                statusBarShouldHide = true
+                self.setNeedsStatusBarAppearanceUpdate()
                 break
             case .Recording:
                 hideCameraOptions()
+                statusBarShouldHide = true
+                self.setNeedsStatusBarAppearanceUpdate()
                 break
             case .VideoTaken:
                 resetProgress()
@@ -429,6 +432,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     func didPressTakePhoto()
     {
+        if cameraState != .Running { return }
         cameraState = .DidPressTakePhoto
         
         flashView.alpha = 0.0
@@ -665,9 +669,11 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             return .lightContent
         }
     }
+    
+    var statusBarShouldHide = false
     override public var prefersStatusBarHidden: Bool {
         get {
-            return true
+            return statusBarShouldHide
         }
     }
     

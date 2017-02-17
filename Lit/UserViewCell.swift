@@ -20,6 +20,7 @@ class UserViewCell: UITableViewCell {
     
     @IBOutlet weak var verifiedBadge: UIImageView!
     
+    @IBOutlet weak var fullnameLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -49,6 +50,13 @@ class UserViewCell: UITableViewCell {
                 self.user = user!
                 self.contentImageView.loadImageAsync(user!.getImageUrl(), completion: nil)
                 self.usernameLabel.text = user!.getDisplayName()
+                
+                let fullname = user!.getName()
+                if fullname != nil && fullname != "" {
+                    self.fullnameLabel.text = fullname!
+                } else {
+                    self.fullnameLabel.text = user!.getDisplayName()
+                }
                 
                 self.verifiedBadge.isHidden = !user!.isVerified()
                 

@@ -79,7 +79,10 @@ class Conversation: NSObject, Comparable {
         conversationRef!.child(mainStore.state.userState.uid).observe(.value, with: { snapshot in
             if snapshot.exists() {
                 let dict = snapshot.value as! [String:AnyObject]
-                let seenTimestamp = dict["seen"] as! Double
+                var seenTimestamp:Double = 0
+                if dict["seen"] != nil {
+                    seenTimestamp = dict["seen"] as! Double
+                }
                 let seenDate = NSDate(timeIntervalSince1970: seenTimestamp/1000)
                 mainStore.dispatch(SeenConversation(seenDate: seenDate, conversationKey: self.key))
             }

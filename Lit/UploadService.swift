@@ -417,12 +417,19 @@ class UploadService {
         postRef.setValue([".sv":"timestamp"])
     }
     
-    static func addLike(postKey:String) {
+    static func addLike(post:StoryItem) {
+
         let ref = FIRDatabase.database().reference()
         let uid = mainStore.state.userState.uid
         
-        let postRef = ref.child("uploads/\(postKey)/likes/\(uid)")
-        postRef.setValue([".sv":"timestamp"])
+        let postRef = ref.child("api/requests/like").childByAutoId()
+        postRef.setValue([
+            "sender": uid,
+            "recipient": post.getAuthorId(),
+            "postKey": post.getKey(),
+            "isVideo": post.getContentType() == .video,
+            "timestamp":[".sv":"timestamp"]
+        ])
     }
     
     static func removeLike(postKey:String) {
@@ -433,15 +440,18 @@ class UploadService {
         postRef.removeValue()
     }
     
-    static func addComment(postKey:String, comment:String) {
+    static func addComment(post:StoryItem, comment:String) {
         if comment == "" { return }
         let ref = FIRDatabase.database().reference()
         let uid = mainStore.state.userState.uid
         
-        let postRef = ref.child("uploads/\(postKey)/comments").childByAutoId()
+        let postRef = ref.child("api/requests/comment").childByAutoId()
         postRef.setValue([
-            "author": uid,
+            "sender": uid,
+            "recipient": post.getAuthorId(),
+            "postKey": post.getKey(),
             "text":comment,
+            "isVideo": post.getContentType() == .video,
             "timestamp":[".sv":"timestamp"]
         ])
     }
