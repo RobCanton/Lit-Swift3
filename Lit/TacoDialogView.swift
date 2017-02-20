@@ -17,8 +17,8 @@ class TacoDialogView: MessageView {
     var longGesture:UILongPressGestureRecognizer!
     var tappedAction:(()->())?
     
-    func setMessage() {
-        bodyLabel?.text = "You are near Muzik Clubs."
+    func setMessage(_ title:String) {
+        bodyLabel?.text = title
         
         longGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressed))
         longGesture.minimumPressDuration = 0.0

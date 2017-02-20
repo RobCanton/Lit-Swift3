@@ -135,7 +135,7 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 60
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

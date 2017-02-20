@@ -84,7 +84,7 @@ class LocationService {
                 let imageURL     = dict["imageURL"] as! String
                 let address      = dict["address"] as! String
                 
-                var radius = 125.0
+                var radius = 100.0
                 if dict["radius"] != nil {
                     radius = dict["radius"] as! Double
                 }

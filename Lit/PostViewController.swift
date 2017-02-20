@@ -295,6 +295,11 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
         self.playerLayer?.player?.pause()
     }
     
+    func resetVideo() {
+        self.playerLayer?.player?.seek(to: CMTimeMake(0, 1))
+        pauseVideo()
+    }
+    
     func prepareForTransition(isPresenting:Bool) {
         content.isHidden = false
         videoContent.isHidden = true
@@ -307,7 +312,9 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     }
     
     func reset() {
-        pauseVideo()
+        content.isHidden = false
+        videoContent.isHidden = true
+        resetVideo()
         commentsRef?.removeAllObservers()
         infoView.backgroundBlur.isHidden = true
         infoView.backgroundBlur.removeAnimation()

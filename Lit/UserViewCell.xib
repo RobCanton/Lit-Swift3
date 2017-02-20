@@ -28,7 +28,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PbV-Jz-H9N">
                         <rect key="frame" x="69" y="33" width="130" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.34999999999999998" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="textColor" white="0.39000000000000001" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLb-U7-gsg">
@@ -41,8 +41,8 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="LVT-xh-M9P" secondAttribute="bottom" constant="2" id="4yn-d8-qgW"/>
-                            <constraint firstAttribute="trailing" secondItem="LVT-xh-M9P" secondAttribute="trailing" constant="4" id="ala-4P-h4H"/>
-                            <constraint firstItem="LVT-xh-M9P" firstAttribute="leading" secondItem="fLb-U7-gsg" secondAttribute="leading" constant="4" id="k1Z-wJ-e6Y"/>
+                            <constraint firstAttribute="trailing" secondItem="LVT-xh-M9P" secondAttribute="trailing" constant="2" id="ala-4P-h4H"/>
+                            <constraint firstItem="LVT-xh-M9P" firstAttribute="leading" secondItem="fLb-U7-gsg" secondAttribute="leading" constant="2" id="k1Z-wJ-e6Y"/>
                             <constraint firstItem="LVT-xh-M9P" firstAttribute="top" secondItem="fLb-U7-gsg" secondAttribute="top" constant="2" id="mhW-9e-yD6"/>
                             <constraint firstAttribute="width" secondItem="fLb-U7-gsg" secondAttribute="height" multiplier="1:1" id="yaR-KH-WNe"/>
                         </constraints>
@@ -52,7 +52,7 @@
                         <color key="backgroundColor" red="0.0" green="0.50196078430000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="B8Z-Hh-dxz"/>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="115" id="jrX-cK-5Ot"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="110" id="jrX-cK-5Ot"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                         <state key="normal" title="Follow">

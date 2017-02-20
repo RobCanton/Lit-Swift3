@@ -93,22 +93,21 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     func activateLocations(activeLocations:[Location]) {
         if isActive { return }
         isActive = true
-        
-        print("New Active Location(s)")
+
         
         cameraActivity?.startAnimating()
         var title:String!
         if activeLocations.count == 1 {
-            title = "You are near \(activeLocations[0].getName())!"
+            title = "You are near \(activeLocations[0].getName())."
         } else {
-            title = "You are near \(activeLocations.count) places!"
+            title = "You are near \(activeLocations.count) places."
         }
         
         // Instantiate a message view from the provided card view layout. SwiftMessages searches for nib
         // files in the main bundle first, so you can easily copy them into your project and make changes.
         let view: TacoDialogView = try! SwiftMessages.viewFromNib()
         view.configureDropShadow()
-        view.setMessage()
+        view.setMessage(title)
         view.tappedAction = {
             SwiftMessages.hide()
             self.presentCamera()
