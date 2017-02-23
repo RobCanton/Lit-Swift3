@@ -24,8 +24,11 @@ class ConversationViewCell: UITableViewCell, GetUserProtocol {
     
     var conversation:Conversation? {
         didSet{
-            conversation!.delegate = self
-            conversation!.retrieveUser()
+            UserService.getUser(conversation!.getPartnerId(), completion: { _user in
+                if let user = _user {
+                    self.userLoaded(user: user)
+                }
+            })
             
             if let lastMessage = conversation!.lastMessage {
                 messageLabel.text = lastMessage.text

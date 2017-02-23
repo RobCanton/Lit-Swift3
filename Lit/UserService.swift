@@ -177,10 +177,11 @@ class UserService {
             "sender": current_uid,
             "recipient": uid
         ])
+    
+        
+        unblockUser(uid: uid, completionHandler: { success in })
         
         
-        socialRef.child("blocked/\(current_uid)/\(uid)").removeValue()
-        socialRef.child("blockedby/\(uid)/\(current_uid)").removeValue()
     }
     
     static func unfollowUser(uid:String) {
@@ -344,10 +345,24 @@ class UserService {
         socialRef.child("following/\(current_uid)/\(uid)").removeValue()
         socialRef.child("followers/\(uid)/\(current_uid)").removeValue()
         socialRef.child("following/\(uid)/\(current_uid)").removeValue()
+        
+        for conversation in mainStore.state.conversations {
+            if conversation.getPartnerId() == uid {
+                muteConversation(conversation: conversation)
+            }
+        }
+        
+        UserService.ref.child("users/conversations/\(uid)/\(current_uid)").setValue(false)
     }
     
     static func unblockUser(uid:String, completionHandler:@escaping (_ success:Bool)->()) {
         let current_uid = mainStore.state.userState.uid
+
+        for conversation in mainStore.state.conversations {
+            if conversation.getPartnerId() == uid {
+                unmuteConversation(conversation: conversation)
+            }
+        }
         
         let socialRef = ref.child("users/social")
         let updateData:[String:Any?] = [
@@ -358,7 +373,34 @@ class UserService {
         socialRef.updateChildValues(updateData, withCompletionBlock: { error, ref in
             completionHandler(error == nil)
         })
+        
+        
     }
+    
+    static func muteConversation(conversation:Conversation) {
+        let partner = conversation.getPartnerId()
+        let uid = mainStore.state.userState.uid
+        
+        let userRef = UserService.ref.child("users/conversations/\(uid)/\(partner)")
+        
+        userRef.setValue(false, withCompletionBlock: { error, ref in
+            mainStore.dispatch(MuteConversation(conversationKey: conversation.getKey()))
+        })
+    }
+    
+    static func unmuteConversation(conversation:Conversation) {
+        let partner = conversation.getPartnerId()
+        let uid = mainStore.state.userState.uid
+        
+        let userRef = UserService.ref.child("users/conversations/\(uid)/\(partner)")
+        
+        userRef.setValue(true, withCompletionBlock: { error, ref in
+            mainStore.dispatch(UnmuteConversation(conversationKey: conversation.getKey()))
+        })
+    }
+    
+    
+    
     
     
 }

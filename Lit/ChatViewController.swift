@@ -179,7 +179,7 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         downloadRef?.removeAllObservers()
-        conversation.listenToConversation()
+        conversation.listen()
     }
     
     

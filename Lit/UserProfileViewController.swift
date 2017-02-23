@@ -292,7 +292,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         guard let partner_uid = uid else { return }
         if current_uid == partner_uid { return }
         if let conversation = checkForExistingConversation(partner_uid: current_uid) {
-            prepareConverstaionForPresentation(conversation: conversation)
+            prepareConversationForPresentation(conversation: conversation)
         } else {
             
             let pairKey = createUserIdPairKey(uid1: current_uid, uid2: partner_uid)
@@ -304,9 +304,9 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
                 
                 let currentUserRef = UserService.ref.child("users/conversations/\(current_uid)")
                 currentUserRef.child(partner_uid).setValue(true, withCompletionBlock: { error, ref in
-                    let conversation = Conversation(key: pairKey, partner_uid: partner_uid)
+                    let conversation = Conversation(key: pairKey, partner_uid: partner_uid, listening: true)
                     self.presentingEmptyConversation = true
-                    self.prepareConverstaionForPresentation(conversation: conversation)
+                    self.prepareConversationForPresentation(conversation: conversation)
                 })
             })
         }
@@ -326,7 +326,8 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     var presentConversation:Conversation?
     var partnerImage:UIImage?
     
-    func prepareConverstaionForPresentation(conversation:Conversation) {
+    func prepareConversationForPresentation(conversation:Conversation) {
+        conversation.listen()
         UserService.getUser(uid, completion: { user in
             if user != nil {
                 self.presentConversation(conversation: conversation, user: user!)

@@ -115,14 +115,7 @@ class MessagesViewController: UITableViewController, StoreSubscriber {
             
             let saveActionButton: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive)
             { action -> Void in
-                let partner = self.conversations[indexPath.row].getPartnerId()
-                let uid = mainStore.state.userState.uid
-                
-                let userRef = UserService.ref.child("users/conversations/\(uid)/\(partner)")
-                
-                userRef.removeValue(completionBlock: { error, ref in
-                    mainStore.dispatch(RemoveConversation(index: indexPath.row))
-                })
+                UserService.muteConversation(conversation: self.conversations[indexPath.row])
             }
             actionSheet.addAction(saveActionButton)
             

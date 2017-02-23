@@ -40,7 +40,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         
         var borderColor = accentColor.cgColor
         if story.hasViewedAll() {
-            borderColor = UIColor.darkGray.cgColor
+            borderColor = selectedColor.cgColor
         }
         if items.count == 0 { return }
         if animated {
@@ -120,7 +120,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
     func setToEmptyMyStory() {
         self.usernameLabel.text = "Your Story"
         self.timeLabel.text = "+ Tap to add"
-        imageContainer.layer.borderColor = UIColor.darkGray.cgColor
+        imageContainer.layer.borderColor = selectedColor.cgColor
         if let user = mainStore.state.userState.user {
             loadImageUsingCacheWithURL(user.getImageUrl(), completion: { image, fromCache in
                 self.contentImageView.image = image

@@ -12,7 +12,8 @@ import JSQMessagesViewController
 func getNonEmptyConversations() -> [Conversation] {
     var activeConvos = [Conversation]()
     for conversation in mainStore.state.conversations {
-        if conversation.lastMessage != nil {
+        let isBlocked = mainStore.state.socialState.blockedBy.contains(conversation.getPartnerId())
+        if conversation.lastMessage != nil && conversation.isListening() && !isBlocked {
             activeConvos.append(conversation)
         }
     }
@@ -80,9 +81,18 @@ func ConversationsReducer(action: Action, state:[Conversation]?) -> [Conversatio
             conversation.seen = userHasSeenMessage(seen: conversation.seenDate, message: conversation.lastMessage)
         }
         break
-    case _ as RemoveConversation:
-        let a = action as! RemoveConversation
-        state.remove(at: a.index)
+    case _ as MuteConversation:
+        let a = action as! MuteConversation
+        if let conversation = findConversation(key: a.conversationKey) {
+            conversation.mute()
+        }
+        break
+    case _ as UnmuteConversation:
+        let a = action as! UnmuteConversation
+        if let conversation = findConversation(key: a.conversationKey) {
+            conversation.listen()
+        }
+        break
     case _ as ClearConversations:
         state = [Conversation]()
         break
@@ -114,8 +124,12 @@ struct SeenConversation: Action {
     let conversationKey:String
 }
 
-struct RemoveConversation: Action {
-    let index:Int
+struct MuteConversation:Action {
+    let conversationKey:String
+}
+
+struct UnmuteConversation:Action {
+    let conversationKey:String
 }
 
 /* Destructive Actions */

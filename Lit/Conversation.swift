@@ -19,6 +19,15 @@ class Conversation: NSObject, Comparable {
     private var key:String
     private var partner_uid:String
     private var partner:User?
+    private var listening:Bool {
+        didSet {
+            if listening {
+                startListening()
+            } else {
+                stopListening()
+            }
+        }
+    }
     
     private var conversationRef:FIRDatabaseReference?
     
@@ -29,15 +38,18 @@ class Conversation: NSObject, Comparable {
     
     var delegate:GetUserProtocol?
     
-    init(key:String, partner_uid:String)
+    init(key:String, partner_uid:String, listening:Bool)
     {
         self.key         = key
         self.partner_uid = partner_uid
+        self.listening   = listening
         
         super.init()
         
         retrieveUser()
-        listenToConversation()
+        if self.listening {
+            startListening()
+        }
     }
     
     func getKey() -> String {
@@ -52,6 +64,18 @@ class Conversation: NSObject, Comparable {
         return partner
     }
     
+    func mute() {
+        listening = false
+    }
+    
+    func listen() {
+        listening = true
+    }
+    
+    func isListening() -> Bool {
+        return listening
+    }
+    
 
     func retrieveUser() {
         UserService.getUser(partner_uid, completion: { _user in
@@ -62,9 +86,12 @@ class Conversation: NSObject, Comparable {
         })
     }
     
-    func listenToConversation() {
+    private func startListening() {
+        stopListening()
+        print("Start Listening to Conversation")
         conversationRef = UserService.ref.child("conversations/\(key)")
         conversationRef!.child("messages").queryLimited(toLast: 1).observe(.childAdded, with: { snapshot in
+            print("HEYA!")
             if snapshot.exists() {
                 let dict = snapshot.value as! [String:AnyObject]
                 let senderId  = dict["senderId"] as! String
@@ -89,7 +116,8 @@ class Conversation: NSObject, Comparable {
         })
     }
     
-    func stopListening() {
+    private func stopListening() {
+        print("Stop Listening to Conversation")
         conversationRef?.removeAllObservers()
     }
 }

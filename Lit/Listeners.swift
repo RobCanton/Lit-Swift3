@@ -110,13 +110,8 @@ class Listeners {
                     let partner = snapshot.key
                     let pairKey = createUserIdPairKey(uid1: uid, uid2: partner)
                     let listening = snapshot.value! as! Bool
-                    if listening {
-                        print("Listening to: \(pairKey)")
-                        let conversation = Conversation(key: pairKey, partner_uid: partner)
-                        mainStore.dispatch(ConversationAdded(conversation: conversation))
-                    } else {
-                        print("Not listening to: \(pairKey)")
-                    }
+                    let conversation = Conversation(key: pairKey, partner_uid: partner, listening: listening)
+                    mainStore.dispatch(ConversationAdded(conversation: conversation))
                 }
             })
         }

@@ -194,7 +194,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     
     func messageNotifications() {
         var count = 0
-        for conversation in mainStore.state.conversations {
+        for conversation in getNonEmptyConversations() {
             if !conversation.seen {
                 count += 1
             }
