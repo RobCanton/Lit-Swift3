@@ -206,7 +206,7 @@
                                             </variation>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="pu2-UU-Aoq" firstAttribute="top" secondItem="kfn-oN-Zse" secondAttribute="top" constant="12" id="08l-el-D7T"/>
                                         <constraint firstItem="pu2-UU-Aoq" firstAttribute="leading" secondItem="kfn-oN-Zse" secondAttribute="leading" constant="17" id="3um-53-Xwb"/>

@@ -89,6 +89,7 @@ class SettingsViewController: UITableViewController {
                 }
                 controller.tempIds = blocked
                 controller.showFollowButton = false
+                controller.title = "Blocked Users"
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case privacyPolicy:

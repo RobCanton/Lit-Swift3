@@ -69,13 +69,19 @@ class ProfileHeaderView: UICollectionReusableView {
         locationLabel.text = "@\(user.getDisplayName())"
         
         self.user = user
+        
+        messageTap = UILongPressGestureRecognizer(target: self, action: #selector(handleMessageLongTap))
+        messageTap!.minimumPressDuration = 0.0
+        messageTap!.numberOfTouchesRequired = 1
+        messageTap!.allowableMovement = 30.0
 
-        setMessageBlockState()
         
         if mainStore.state.socialState.blockedBy.contains(user.getUserId()) {
             postsLabel.isHidden = true
             followersLabel.isHidden = true
             followingLabel.isHidden = true
+            followButton.isHidden = true
+            messageButton.isHidden = true
             
             privateOverlay.isHidden = false
             
@@ -132,20 +138,17 @@ class ProfileHeaderView: UICollectionReusableView {
             followButton.layer.cornerRadius = 2.0
             followButton.clipsToBounds = true
             followButton.layer.borderWidth = 1.0
+            followButton.isHidden = false
             
             messageButton.layer.cornerRadius = 2.0
             messageButton.clipsToBounds = true
+            messageButton.isHidden = false
 
             setUserStatus(status: checkFollowingStatus(uid: user.getUserId()))
             
             followersTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTap))
             followingTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTap))
-            
-            messageTap = UILongPressGestureRecognizer(target: self, action: #selector(handleMessageLongTap))
-            messageTap!.minimumPressDuration = 0.0
-            messageTap!.numberOfTouchesRequired = 1
-            messageTap!.allowableMovement = 30.0
-            
+
             let followersView = followersLabel.superview!
             followersView.isUserInteractionEnabled = true
             followersView.addGestureRecognizer(followersTap)
@@ -154,6 +157,8 @@ class ProfileHeaderView: UICollectionReusableView {
             followingView.isUserInteractionEnabled = true
             followingView.addGestureRecognizer(followingTap)
         }
+        
+        setMessageBlockState()
     
     }
     
@@ -234,7 +239,7 @@ class ProfileHeaderView: UICollectionReusableView {
         controlBarContainer.isUserInteractionEnabled = true
         let messageView = messageButton.superview!
         if user.uid == mainStore.state.userState.uid || mainStore.state.socialState.blocked.contains(user.uid) || mainStore.state.socialState.blockedBy.contains(user.uid) {
-            messageView.alpha = 0.35
+            messageView.alpha = 0.3
             messageView.removeGestureRecognizer(tap)
         } else {
             messageView.alpha = 1.0
