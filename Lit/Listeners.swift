@@ -20,6 +20,8 @@ class Listeners {
     fileprivate static var listeningToConversations = false
     fileprivate static var listeningToFollowers = false
     fileprivate static var listeningToFollowing = false
+    fileprivate static var listeningToBlocked = false
+    fileprivate static var listeningToBlockedBy = false
     
     static func stopListeningToAll() {
         stopListeningToLocations()
@@ -27,6 +29,8 @@ class Listeners {
         stopListeningToFollowers()
         stopListeningToFollowing()
         stopListeningToResponses()
+        stopListeningToBlocked()
+        stopListeningToBlockedBy()
     }
     
     static func startListeningToLocations() {
@@ -41,8 +45,13 @@ class Listeners {
                 locationRef.child("visitors/\(location.getKey())").observe(.value, with: { snapshot in
                     var visitors = [String]()
                     if snapshot.exists() {
+                        
                         for visitor in snapshot.children {
-                            visitors.append((visitor as AnyObject).key)
+                            let visitorSnap = visitor as! FIRDataSnapshot
+                            
+                            if !mainStore.state.socialState.blockedBy.contains(visitorSnap.key) {
+                                visitors.append((visitor as AnyObject).key)
+                            }
                         }
                     }
                     mainStore.dispatch(SetVisitorsForLocation(locationIndex: i, visitors: visitors))
@@ -126,22 +135,17 @@ class Listeners {
             let current_uid = mainStore.state.userState.uid
             let followersRef = ref.child("users/social/followers/\(current_uid)")
             
-            /**
-             Listen for a Follower Added
-             */
+            /** Listen for a Follower Added */
             followersRef.observe(.childAdded, with: { snapshot in
                 if snapshot.exists() {
                     if snapshot.value! is Bool {
                         mainStore.dispatch(AddFollower(uid: snapshot.key))
                     }
-                    
                 }
             })
             
             
-            /**
-             Listen for a Follower Removed
-             */
+            /** Listen for a Follower Removed */
             followersRef.observe(.childRemoved, with: { snapshot in
                 if snapshot.exists() {
                     if snapshot.value! is Bool {
@@ -149,8 +153,6 @@ class Listeners {
                     }
                 }
             })
-            
-            
         }
     }
     
@@ -200,6 +202,70 @@ class Listeners {
     }
     
     
+    static func startListeningToBlocked() {
+        if !listeningToBlocked {
+            listeningToBlocked = true
+            let current_uid = mainStore.state.userState.uid
+            let blockedRef = ref.child("users/social/blocked/\(current_uid)")
+            
+            /** Listen for a Blocked Added */
+            blockedRef.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    if snapshot.value! is Bool {
+                        mainStore.dispatch(AddBlocked(uid: snapshot.key))
+                    }
+                }
+            })
+            
+            
+            /** Listen for a Blocked Removed */
+            blockedRef.observe(.childRemoved, with: { snapshot in
+                if snapshot.exists() {
+                    if snapshot.value! is Bool {
+                        mainStore.dispatch(RemoveBlocked(uid: snapshot.key))
+                    }
+                }
+            })
+        }
+    }
     
+    static func startListeningToBlockedBy() {
+        if !listeningToBlockedBy {
+            listeningToBlockedBy = true
+            let current_uid = mainStore.state.userState.uid
+            let blockedByRef = ref.child("users/social/blockedby/\(current_uid)")
+            
+            /** Listen for a Blocked By Added */
+            blockedByRef.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    if snapshot.value! is Bool {
+                        mainStore.dispatch(AddBlockedBy(uid: snapshot.key))
+                    }
+                }
+            })
+            
+            
+            /** Listen for a Blocked By Removed */
+            blockedByRef.observe(.childRemoved, with: { snapshot in
+                if snapshot.exists() {
+                    if snapshot.value! is Bool {
+                        mainStore.dispatch(RemoveBlockedBy(uid: snapshot.key))
+                    }
+                }
+            })
+        }
+    }
+    
+    static func stopListeningToBlocked() {
+        let current_uid = mainStore.state.userState.uid
+        ref.child("users/social/blocked/\(current_uid)").removeAllObservers()
+        listeningToBlocked = false
+    }
+    
+    static func stopListeningToBlockedBy() {
+        let current_uid = mainStore.state.userState.uid
+        ref.child("users/social/blockedby/\(current_uid)").removeAllObservers()
+        listeningToBlockedBy = false
+    }
     
 }

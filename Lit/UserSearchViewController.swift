@@ -12,16 +12,13 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     var searchBarActive:Bool = false
-    
     var activityIndicator:UIActivityIndicatorView!
-
     var userIds = [String]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         listenToSearchResults()
         searchBar.becomeFirstResponder()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -42,9 +39,10 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
                 } else {
                     let dict = snapshot.value as! [String:Any]
                     for (key, _) in dict {
-                        uids.append(key)
+                        if !mainStore.state.socialState.blockedBy.contains(key) {
+                           uids.append(key)
+                        }
                     }
-
                 }
             
                 self.userIds = uids
@@ -63,7 +61,6 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
         let nib2 = UINib(nibName: "UserViewCell", bundle: nil)
@@ -71,7 +68,6 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
         
         tableView.tableFooterView = UIView(frame: CGRect(x: 0,y: 0,width: tableView!.frame.width,height: 160))
         tableView.separatorColor = UIColor(white: 0.08, alpha: 1.0)
-        
         
         searchBar.delegate = self
         searchBar.showsCancelButton    = false
@@ -147,9 +143,9 @@ class UserSearchViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserViewCell
-        cell.followButton.isEnabled = false
-        cell.followButton.alpha = 0.0
         cell.setupUser(uid: userIds[indexPath.item])
+        cell.followButton.isEnabled = false
+        cell.followButton.isHidden = true
         return cell
     }
 

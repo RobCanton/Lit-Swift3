@@ -62,8 +62,8 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     var location:Location?
     var uid:String?
     var postKey:String?
-    
     var tableView:UITableView!
+    var showFollowButton = true
     
     let cellIdentifier = "userCell"
     var user:User?
@@ -77,6 +77,12 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     var userIds = [String]()
     {
         didSet{
+//            for i in 0..<userIds.count {
+//                let id = userIds[i]
+//                if mainStore.state.socialState.blockedBy.contains(id) {
+//                    userIds.remove(at: i)
+//                }
+//            }
             UserService.getUsers(userIds: userIds, completionHandler: { users in
                 self.users = users
             })
@@ -179,7 +185,8 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! UserViewCell
-        cell.setupUser(uid: users[indexPath.item].getUserId())
+        let userId = users[indexPath.item].getUserId()
+        cell.setupUser(uid: userId)
         cell.unfollowHandler = unfollowHandler
         let labelX = cell.usernameLabel.frame.origin.x
         cell.separatorInset = UIEdgeInsetsMake(0, labelX, 0, 0)
@@ -188,10 +195,10 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+        let userId = users[indexPath.row].getUserId()
         let controller = UserProfileViewController()
         controller.uid = users[indexPath.row].getUserId()
         self.navigationController?.pushViewController(controller, animated: true)
-        
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
     

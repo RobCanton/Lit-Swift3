@@ -20,6 +20,7 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var report: UITableViewCell!
     
+    @IBOutlet weak var blockedUsers: UITableViewCell!
     @IBOutlet weak var logout: UITableViewCell!
     
     let maxRadius = 200
@@ -78,6 +79,16 @@ class SettingsViewController: UITableViewController {
             switch cell {
             case addFacebookFriends:
                 let controller = FacebookFriendsListViewController()
+                self.navigationController?.pushViewController(controller, animated: true)
+                break
+            case blockedUsers:
+                let controller = UsersListViewController()
+                var blocked = [String]()
+                for uid in mainStore.state.socialState.blocked {
+                    blocked.append(uid)
+                }
+                controller.tempIds = blocked
+                controller.showFollowButton = false
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case privacyPolicy:

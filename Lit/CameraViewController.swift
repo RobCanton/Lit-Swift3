@@ -183,12 +183,12 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        playerLayer?.player?.play()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        destroyVideoPreview()
+        
 
         UIView.animate(withDuration: 0.3, animations: {
             self.dismissButton.alpha = 0.0
@@ -197,7 +197,22 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        destroyCameraSession()
+        if shouldDeleteCameraSession {
+            destroyVideoPreview()
+            destroyCameraSession()
+        } else {
+            playerLayer?.player?.pause()
+        }
+    }
+    
+    var shouldDeleteCameraSession = false
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "cameraUnwind" {
+            shouldDeleteCameraSession = true
+        } else {
+            shouldDeleteCameraSession = false
+        }
     }
     
     var cameraState:CameraState = .Off
@@ -722,9 +737,11 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         if keyboardUp {
             textView.resignFirstResponder()
         } else {
-            if tap.location(ofTouch: 0, in: view).y < view.frame.height * 0.75 {
-              textView.becomeFirstResponder()
-            }
+//            if cameraState == .VideoTaken || cameraState == .PhotoTaken {
+//                if tap.location(ofTouch: 0, in: view).y < view.frame.height * 0.75 {
+//                    textView.becomeFirstResponder()
+//                }
+//            }
         }
     }
     

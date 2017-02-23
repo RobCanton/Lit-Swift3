@@ -40,8 +40,9 @@ class ProfileHeaderView: UICollectionReusableView {
     
     var followersTap: UITapGestureRecognizer!
     var followingTap: UITapGestureRecognizer!
-    var messageTap: UILongPressGestureRecognizer!
+    var messageTap: UILongPressGestureRecognizer?
 
+    @IBOutlet weak var privateOverlay: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -52,14 +53,33 @@ class ProfileHeaderView: UICollectionReusableView {
     
     var fetched = false
     
+    
     func populateHeader(user:User){
         if fetched { return }
         fetched = true
-
-        self.user = user
         
-        if let url = user.largeImageURL {
-            loadImageUsingCacheWithURL(url, completion: { image, fromCache in
+        if let name = user.getName() {
+            nameLabel.text = name
+        } else {
+            nameLabel.text = user.getDisplayName()
+        }
+        
+        verifiedImage.isHidden = !user.isVerified()
+        
+        locationLabel.text = "@\(user.getDisplayName())"
+        
+        self.user = user
+
+        setMessageBlockState()
+        
+        if mainStore.state.socialState.blockedBy.contains(user.getUserId()) {
+            postsLabel.isHidden = true
+            followersLabel.isHidden = true
+            followingLabel.isHidden = true
+            
+            privateOverlay.isHidden = false
+            
+            loadImageUsingCacheWithURL(user.imageURL, completion: { image, fromCache in
                 if image != nil {
                     self.errorLabel.isHidden = true
                     if !fromCache {
@@ -72,72 +92,69 @@ class ProfileHeaderView: UICollectionReusableView {
                 } else {
                     self.errorLabel.isHidden = false
                 }
-
+                
             })
-        }
-        
-        if let bio = user.bio {
-            bioLabel.text = bio
-        }
-        
-        postsLabel.styleProfileBlockText(count: 0, text: "posts", color: subColor, color2: UIColor.black)
-        
-        followersLabel.styleProfileBlockText(count: 0, text: "followers", color: subColor, color2: UIColor.black)
-        followingLabel.styleProfileBlockText(count: 0, text: "following", color: subColor, color2: UIColor.black)
-        messageLabel.styleProfileBlockText(count: 0, text: "Message", color: UIColor.white, color2: UIColor.clear)
-
-        
-        followButton.layer.cornerRadius = 2.0
-        followButton.clipsToBounds = true
-        followButton.layer.borderWidth = 1.0
-        followButton.isHidden = false
-
-        messageButton.layer.cornerRadius = 2.0
-        messageButton.clipsToBounds = true
-        messageButton.isHidden
-            = false
-        
-        if let name = user.getName() {
-            nameLabel.text = name
         } else {
-            nameLabel.text = user.getDisplayName()
+            privateOverlay.isHidden = true
+            
+            if let url = user.largeImageURL {
+                loadImageUsingCacheWithURL(url, completion: { image, fromCache in
+                    if image != nil {
+                        self.errorLabel.isHidden = true
+                        if !fromCache {
+                            self.profileImageView.alpha = 0.0
+                            UIView.animate(withDuration: 0.25, animations: {
+                                self.profileImageView.alpha = 1.0
+                            })
+                        }
+                        self.profileImageView.image = image
+                    } else {
+                        self.errorLabel.isHidden = false
+                    }
+                    
+                })
+            }
+            
+            if let bio = user.bio {
+                bioLabel.text = bio
+            }
+            
+            postsLabel.isHidden = false
+            followersLabel.isHidden = false
+            followingLabel.isHidden = false
+            
+            postsLabel.styleProfileBlockText(count: 0, text: "posts", color: subColor, color2: UIColor.black)
+            
+            followersLabel.styleProfileBlockText(count: 0, text: "followers", color: subColor, color2: UIColor.black)
+            followingLabel.styleProfileBlockText(count: 0, text: "following", color: subColor, color2: UIColor.black)
+            messageLabel.styleProfileBlockText(count: 0, text: "Message", color: UIColor.white, color2: UIColor.clear)
+
+            followButton.layer.cornerRadius = 2.0
+            followButton.clipsToBounds = true
+            followButton.layer.borderWidth = 1.0
+            
+            messageButton.layer.cornerRadius = 2.0
+            messageButton.clipsToBounds = true
+
+            setUserStatus(status: checkFollowingStatus(uid: user.getUserId()))
+            
+            followersTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTap))
+            followingTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTap))
+            
+            messageTap = UILongPressGestureRecognizer(target: self, action: #selector(handleMessageLongTap))
+            messageTap!.minimumPressDuration = 0.0
+            messageTap!.numberOfTouchesRequired = 1
+            messageTap!.allowableMovement = 30.0
+            
+            let followersView = followersLabel.superview!
+            followersView.isUserInteractionEnabled = true
+            followersView.addGestureRecognizer(followersTap)
+            
+            let followingView = followingLabel.superview!
+            followingView.isUserInteractionEnabled = true
+            followingView.addGestureRecognizer(followingTap)
         }
-        
-        verifiedImage.isHidden = !user.isVerified()
-        
-        locationLabel.text = "@\(user.getDisplayName())"
-        
-        
-        setUserStatus(status: checkFollowingStatus(uid: user.getUserId()))
-        
-        followersTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTap))
-        followingTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTap))
-        
-        messageTap = UILongPressGestureRecognizer(target: self, action: #selector(handleMessageLongTap))
-        messageTap.minimumPressDuration = 0.0
-        messageTap.numberOfTouchesRequired = 1
-        messageTap.allowableMovement = 30.0
     
-        
-        
-        let followersView = followersLabel.superview!
-        followersView.isUserInteractionEnabled = true
-        followersView.addGestureRecognizer(followersTap)
-        
-        let followingView = followingLabel.superview!
-        followingView.isUserInteractionEnabled = true
-        followingView.addGestureRecognizer(followingTap)
-
-        
-        controlBarContainer.isUserInteractionEnabled = true
-        let messageView = messageButton.superview!
-        if user.uid == mainStore.state.userState.uid {
-            messageView.alpha = 0.35
-        } else {
-            messageView.alpha = 1.0
-            messageView.isUserInteractionEnabled = true
-            messageView.addGestureRecognizer(messageTap)
-        }
     }
     
     func setFullProfile(largeImageURL:String?, bio:String?) {
@@ -166,6 +183,7 @@ class ProfileHeaderView: UICollectionReusableView {
     
     var unfollowHandler:((_ user:User)->())?
     func setUserStatus(status:FollowingStatus) {
+        
         if self.status == status { return }
         self.status = status
         switch status {
@@ -207,6 +225,21 @@ class ProfileHeaderView: UICollectionReusableView {
             break
         case .Requested:
             break
+        }
+    }
+    
+    func setMessageBlockState() {
+        guard let user = self.user else { return }
+        guard let tap = self.messageTap else { return }
+        controlBarContainer.isUserInteractionEnabled = true
+        let messageView = messageButton.superview!
+        if user.uid == mainStore.state.userState.uid || mainStore.state.socialState.blocked.contains(user.uid) || mainStore.state.socialState.blockedBy.contains(user.uid) {
+            messageView.alpha = 0.35
+            messageView.removeGestureRecognizer(tap)
+        } else {
+            messageView.alpha = 1.0
+            messageView.isUserInteractionEnabled = true
+            messageView.addGestureRecognizer(tap)
         }
     }
     

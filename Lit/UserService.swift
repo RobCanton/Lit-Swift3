@@ -25,7 +25,8 @@ class UserService {
         Listeners.startListeningToConversations()
         Listeners.startListeningToFollowers()
         Listeners.startListeningToFollowing()
-        
+        Listeners.startListeningToBlocked()
+        Listeners.startListeningToBlockedBy()
     }
     
     static func logout() {
@@ -37,7 +38,9 @@ class UserService {
     static func logoutOfFirebase() {
         mainStore.dispatch(ClearLocations())
         mainStore.dispatch(ClearConversations())
+    
         Listeners.stopListeningToAll()
+        mainStore.dispatch(ClearSocialState())
         mainStore.dispatch(UserIsUnauthenticated())
         try! FIRAuth.auth()!.signOut()
     }
@@ -158,11 +161,12 @@ class UserService {
     static func followUser(uid:String) {
         let current_uid = mainStore.state.userState.uid
         
-        let userRef = ref.child("users/social/followers/\(uid)/\(current_uid)")
+        let socialRef = ref.child("users/social")
+        let userRef = socialRef.child("followers/\(uid)/\(current_uid)")
         userRef.setValue(false)
         
         
-        let currentUserRef = ref.child("users/social/following/\(current_uid)/\(uid)")
+        let currentUserRef = socialRef.child("following/\(current_uid)/\(uid)")
         currentUserRef.setValue(false, withCompletionBlock: {
             error, ref in
         })
@@ -173,6 +177,10 @@ class UserService {
             "sender": current_uid,
             "recipient": uid
         ])
+        
+        
+        socialRef.child("blocked/\(current_uid)/\(uid)").removeValue()
+        socialRef.child("blockedby/\(uid)/\(current_uid)").removeValue()
     }
     
     static func unfollowUser(uid:String) {
@@ -191,6 +199,8 @@ class UserService {
             "recipient": uid
         ])
     }
+    
+
     
     static func listenToFollowers(uid:String, completion:@escaping (_ followers:[String])->()) {
         let followersRef = ref.child("users/social/followers/\(uid)")
@@ -235,6 +245,9 @@ class UserService {
             ref.child("users/social/following/\(uid)").removeAllObservers()
         }
     }
+    
+    
+    
     
     
     
@@ -311,6 +324,39 @@ class UserService {
                         
                         completionHandler()
                 })
+        })
+    }
+    
+    
+    static func blockUser(uid:String, completionHandler:@escaping (_ success:Bool)->()) {
+        let current_uid = mainStore.state.userState.uid
+        
+        let socialRef = ref.child("users/social")
+        let updateData = [
+            "blocked/\(current_uid)/\(uid)":true,
+            "blockedby/\(uid)/\(current_uid)":true
+        ]
+        socialRef.updateChildValues(updateData, withCompletionBlock: { error, ref in
+            completionHandler(error == nil)
+        })
+        
+        socialRef.child("followers/\(current_uid)/\(uid)").removeValue()
+        socialRef.child("following/\(current_uid)/\(uid)").removeValue()
+        socialRef.child("followers/\(uid)/\(current_uid)").removeValue()
+        socialRef.child("following/\(uid)/\(current_uid)").removeValue()
+    }
+    
+    static func unblockUser(uid:String, completionHandler:@escaping (_ success:Bool)->()) {
+        let current_uid = mainStore.state.userState.uid
+        
+        let socialRef = ref.child("users/social")
+        let updateData:[String:Any?] = [
+            "blocked/\(current_uid)/\(uid)":nil,
+            "blockedby/\(uid)/\(current_uid)":nil
+        ]
+        
+        socialRef.updateChildValues(updateData, withCompletionBlock: { error, ref in
+            completionHandler(error == nil)
         })
     }
     

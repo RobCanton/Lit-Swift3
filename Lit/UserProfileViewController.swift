@@ -73,6 +73,12 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
+        if uid != mainStore.state.userState.uid {
+            let optionsButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(showUserOptions))
+            optionsButton.tintColor = UIColor.white
+            navigationItem.rightBarButtonItem = optionsButton
+        }
+        
         screenSize = self.view.frame
         screenWidth = screenSize.width
         screenHeight = screenSize.height
@@ -100,17 +106,23 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = UIColor.black
         self.view.addSubview(collectionView)
-        
+    
         getFullUser()
     
     }
     
     func getFullUser() {
+        
         self.getHeaderView()?.fetched = false
         UserService.getUser(uid, completion: { _user in
             if _user != nil {
                 
                 self.navigationItem.title = _user!.getDisplayName()
+                if mainStore.state.socialState.blockedBy.contains(self.uid) {
+                    self.user = _user!
+                    self.collectionView?.reloadData()
+                    return
+                }
                 UserService.getUserFullProfile(user: _user!, completion: { fullUser in
                     
                     //self.getKeys()
@@ -130,6 +142,66 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
                 })
             }
         })
+    }
+    
+    
+    func showUserOptions() {
+        guard let user = self.user else { return }
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
+        }
+        actionSheet.addAction(cancelActionButton)
+        
+        if mainStore.state.socialState.blocked.contains(user.getUserId()) {
+            let unblockActionButton: UIAlertAction = UIAlertAction(title: "Unblock", style: .default) { action -> Void in
+                let alert = UIAlertController(title: "Unblock \(user.getDisplayName())?", message: "They will be able to send you messages and view your profile and posts. Lit won't let them know you unblocked them.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Unblock", style: .default, handler: { (action) -> Void in
+                    UserService.unblockUser(uid: user.uid, completionHandler: { success in
+                        print("Unblocked: \(success)")
+                    })
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            actionSheet.addAction(unblockActionButton)
+        } else {
+            let blockActionButton: UIAlertAction = UIAlertAction(title: "Block", style: .destructive) { action -> Void in
+                let alert = UIAlertController(title: "Block \(user.getDisplayName())?", message: "They won't be able to send you messages or view your profile and posts. Lit won't let them know you blocked them.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Block", style: .default, handler: { (action) -> Void in
+                    UserService.blockUser(uid: user.uid, completionHandler: { success in
+                        
+                        if success {
+                            let alert = UIAlertController(title: "\(user.getDisplayName()) Blocked", message: "You can unblock them anytime from their profile or by editing your settings.", preferredStyle: .alert)
+                            
+                            alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: { (action) -> Void in
+                                UserService.blockUser(uid: user.uid, completionHandler: { success in
+                                })
+                            }))
+                            
+                            self.present(alert, animated: true, completion: nil)
+                        } else {
+                            print("ERROR!")
+                        }
+                    })
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            actionSheet.addAction(blockActionButton)
+        }
+        
+        let reportActionButton: UIAlertAction = UIAlertAction(title: "Report", style: .destructive) { action -> Void in
+            
+        }
+        actionSheet.addAction(reportActionButton)
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     
@@ -195,6 +267,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     func newState(state: AppState) {
         let status = checkFollowingStatus(uid: uid)
         getHeaderView()?.setUserStatus(status: status)
+        getHeaderView()?.setMessageBlockState()
     }
     
     func followersBlockTapped() {
@@ -325,8 +398,9 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     var postsRef:FIRDatabaseReference?
     
     func listenToPosts() {
-
+        
         guard let userId = uid else { return }
+        if mainStore.state.socialState.blockedBy.contains(userId) { return }
         postsRef = UserService.ref.child("users/uploads/\(userId)")
         postsRef?.observeSingleEvent(of: .value, with: { snapshot in
             var postKeys = [String]()

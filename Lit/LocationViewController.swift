@@ -165,17 +165,19 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             
             for user in snapshot.children {
                 let userSnap = user as! FIRDataSnapshot
-                var postKeys = [String]()
-                var timestamp:Double!
-
-                for post in userSnap.children {
-                    let postSnap = post as! FIRDataSnapshot
-                    postKeys.append(postSnap.key)
-                    timestamp = postSnap.value! as! Double
+                if !mainStore.state.socialState.blockedBy.contains(userSnap.key) {
+                    var postKeys = [String]()
+                    var timestamp:Double!
+                    
+                    for post in userSnap.children {
+                        let postSnap = post as! FIRDataSnapshot
+                        postKeys.append(postSnap.key)
+                        timestamp = postSnap.value! as! Double
+                    }
+                    
+                    tempDictionary[userSnap.key] = postKeys
+                    timestamps[userSnap.key] = timestamp
                 }
-
-                tempDictionary[userSnap.key] = postKeys
-                timestamps[userSnap.key] = timestamp
             }
             
             self.crossCheckStories(tempDictionary, timestamps: timestamps)

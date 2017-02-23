@@ -378,6 +378,8 @@ extension Tree {
         }
     }
     
+    
+    
     /**
      Removes the largest element from `self` and returns it if it exists, or returns `nil`
      if `self` is empty.
