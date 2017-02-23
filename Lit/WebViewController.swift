@@ -13,6 +13,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     
     var webView:WKWebView!
     
+    var urlString:String!
     
     override func viewDidLoad() {
          super.viewDidLoad()
@@ -22,18 +23,14 @@ class WebViewController: UIViewController, WKNavigationDelegate {
              NSForegroundColorAttributeName: UIColor.white]
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
-        title = "Privacy Policy"
         webView = WKWebView()
         webView.navigationDelegate = self
         webView.backgroundColor = UIColor.black
-        let url = URL(string: "https://www.iubenda.com/privacy-policy/7948881")!
-        webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
-        
+        let url = URL(string: urlString)!
+        webView.load(URLRequest(url: url))
         webView.frame = view.frame
         view.addSubview(webView)
     }
-    
-    
     
 }

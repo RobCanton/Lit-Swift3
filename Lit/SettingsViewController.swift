@@ -14,6 +14,7 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var addFacebookFriends: UITableViewCell!
     @IBOutlet weak var notificationsSwitch: UISwitch!
     @IBOutlet weak var privacyPolicy: UITableViewCell!
+    @IBOutlet weak var terms: UITableViewCell!
     @IBOutlet weak var suggestLocation: UITableViewCell!
     
     @IBOutlet weak var distanceLabel: UILabel!
@@ -93,6 +94,16 @@ class SettingsViewController: UITableViewController {
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case privacyPolicy:
+                let controller = WebViewController()
+                controller.urlString = "https://getlit.site/privacypolicy.html"
+                controller.title = "Privacy Policy"
+                self.navigationController?.pushViewController(controller, animated: true)
+                break
+            case terms:
+                let controller = WebViewController()
+                controller.urlString = "https://getlit.site/terms.html"
+                controller.title = "Terms of Use"
+                self.navigationController?.pushViewController(controller, animated: true)
                 break
             case suggestLocation:
                 makeSuggestion()
