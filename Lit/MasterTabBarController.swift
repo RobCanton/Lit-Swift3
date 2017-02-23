@@ -14,6 +14,7 @@ import Firebase
 import NVActivityIndicatorView
 import SwiftMessages
 import UserNotifications
+import Whisper
 
 class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarControllerDelegate, GPSServiceDelegate {
     typealias StoreSubscriberStateType = AppState
@@ -89,25 +90,27 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     }
     
     var isActive = false
+    var activeTitle:String?
     
     func activateLocations(activeLocations:[Location]) {
         if isActive { return }
         isActive = true
 
+        if !visible { return }
         
         cameraActivity?.startAnimating()
-        var title:String!
+
         if activeLocations.count == 1 {
-            title = "You are near \(activeLocations[0].getName())."
+            activeTitle = "You are near \(activeLocations[0].getName())."
         } else {
-            title = "You are near \(activeLocations.count) places."
+            activeTitle = "You are near \(activeLocations.count) places."
         }
         
         // Instantiate a message view from the provided card view layout. SwiftMessages searches for nib
         // files in the main bundle first, so you can easily copy them into your project and make changes.
         let view: TacoDialogView = try! SwiftMessages.viewFromNib()
         view.configureDropShadow()
-        view.setMessage(title)
+        view.setMessage(activeTitle!)
         view.tappedAction = {
             SwiftMessages.hide()
             self.presentCamera()
@@ -135,10 +138,36 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         // Specify a status bar style to if the message is displayed directly under the status bar.
         config.preferredStatusBarStyle = .lightContent
         
+        config.eventListeners.append() { event in
+            if case .didHide = event {
+                self.showActiveMurmur()
+            }
+        }
+        
+        
         config.ignoreDuplicates = true
         if self.visible {
             SwiftMessages.show(config: config, view: view)
         }
+        
+        
+        
+        
+    }
+    
+    func showActiveMurmur() {
+        if !isActive { return }
+        guard let title = activeTitle else { return }
+
+        var m = Murmur(title: title,
+                       backgroundColor: UIColor.white,
+                       titleColor: UIColor.black,
+                       font: UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold),
+                       action: nil)
+        m.action = {
+            self.presentCamera()
+        }
+        Whisper.show(whistle: m, action: .present)
     }
     
     func deactivateLocation() {
@@ -146,6 +175,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         isActive = false
         cameraButton.layer.borderColor = UIColor.white.cgColor
         cameraActivity?.stopAnimating()
+        Whisper.hide()
     }
     
     
@@ -220,6 +250,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     }
     func presentCamera() {
         //deactivateLocation()
+        Whisper.hide()
         self.performSegue(withIdentifier: "showCamera", sender: self)
     }
     
@@ -238,7 +269,6 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     
     override func segueForUnwinding(to toViewController: UIViewController, from fromViewController: UIViewController, identifier: String?) -> UIStoryboardSegue {
         let segue = CameraUnwindTransition(identifier: identifier, source: fromViewController, destination: toViewController)
-        
         return segue
     }
 
@@ -262,7 +292,6 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         DispatchQueue.main.async {
             
             if self.visible {
-                
                 self.tabBar.center = self._center
                 self.tabBar.isUserInteractionEnabled = true
                 self.tabBar.frame = self.visibleFrame
@@ -273,6 +302,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
                 }, completion: { result in
                 })
             } else {
+                Whisper.hide()
                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [], animations: {
                     self.tabBar.alpha = 0.0
                     

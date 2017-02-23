@@ -17,10 +17,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dp3-Ae-zep" userLabel="Background view">
-                    <rect key="frame" x="18" y="18" width="573" height="126"/>
+                    <rect key="frame" x="12" y="12" width="585" height="138"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z1H-0L-0NQ">
-                            <rect key="frame" x="8" y="10" width="24" height="24"/>
+                            <rect key="frame" x="12" y="10" width="24" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="Z1H-0L-0NQ" secondAttribute="height" multiplier="1:1" id="9x5-4L-msC"/>
                                 <constraint firstAttribute="width" constant="24" id="mgY-vX-veS"/>
@@ -31,16 +31,16 @@
                             </state>
                         </button>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="RJH-Fp-YDa" userLabel="Content view">
-                            <rect key="frame" x="40" y="12" width="525" height="106"/>
+                            <rect key="frame" x="48" y="12" width="525" height="114"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="748" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMT-Vh-S3z">
-                                    <rect key="frame" x="0.0" y="0.0" width="525" height="86"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="525" height="94"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to open the camera." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U9w-CI-YK7">
-                                    <rect key="frame" x="0.0" y="90" width="525" height="16"/>
+                                    <rect key="frame" x="0.0" y="98" width="525" height="16"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -49,11 +49,11 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="RJH-Fp-YDa" secondAttribute="bottom" constant="8" id="3t4-62-KuN"/>
+                        <constraint firstAttribute="bottom" secondItem="RJH-Fp-YDa" secondAttribute="bottom" constant="12" id="3t4-62-KuN"/>
                         <constraint firstItem="RJH-Fp-YDa" firstAttribute="top" secondItem="dp3-Ae-zep" secondAttribute="top" constant="12" id="6rK-Yv-gKZ"/>
-                        <constraint firstItem="Z1H-0L-0NQ" firstAttribute="leading" secondItem="dp3-Ae-zep" secondAttribute="leading" constant="8" id="GNY-BR-zF7"/>
-                        <constraint firstItem="RJH-Fp-YDa" firstAttribute="leading" secondItem="Z1H-0L-0NQ" secondAttribute="trailing" constant="8" id="Z6i-4v-WVG"/>
-                        <constraint firstAttribute="trailing" secondItem="RJH-Fp-YDa" secondAttribute="trailing" constant="8" id="dJi-po-g6O"/>
+                        <constraint firstItem="Z1H-0L-0NQ" firstAttribute="leading" secondItem="dp3-Ae-zep" secondAttribute="leading" constant="12" id="GNY-BR-zF7"/>
+                        <constraint firstItem="RJH-Fp-YDa" firstAttribute="leading" secondItem="Z1H-0L-0NQ" secondAttribute="trailing" constant="12" id="Z6i-4v-WVG"/>
+                        <constraint firstAttribute="trailing" secondItem="RJH-Fp-YDa" secondAttribute="trailing" constant="12" id="dJi-po-g6O"/>
                         <constraint firstItem="Z1H-0L-0NQ" firstAttribute="top" secondItem="dp3-Ae-zep" secondAttribute="top" constant="10" id="kOD-xX-lDs"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
@@ -65,10 +65,10 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="dp3-Ae-zep" secondAttribute="trailing" constant="10" id="gGP-zK-6VU"/>
-                <constraint firstItem="dp3-Ae-zep" firstAttribute="leading" secondItem="JI3-gM-XBO" secondAttribute="leadingMargin" constant="10" id="gyP-aD-uO3"/>
-                <constraint firstAttribute="bottom" secondItem="dp3-Ae-zep" secondAttribute="bottom" constant="10" id="le8-gK-lcY"/>
-                <constraint firstItem="dp3-Ae-zep" firstAttribute="top" secondItem="JI3-gM-XBO" secondAttribute="topMargin" constant="10" id="s15-z9-aHc"/>
+                <constraint firstAttribute="trailing" secondItem="dp3-Ae-zep" secondAttribute="trailing" constant="4" id="gGP-zK-6VU"/>
+                <constraint firstItem="dp3-Ae-zep" firstAttribute="leading" secondItem="JI3-gM-XBO" secondAttribute="leadingMargin" constant="4" id="gyP-aD-uO3"/>
+                <constraint firstAttribute="bottom" secondItem="dp3-Ae-zep" secondAttribute="bottom" constant="4" id="le8-gK-lcY"/>
+                <constraint firstItem="dp3-Ae-zep" firstAttribute="top" secondItem="JI3-gM-XBO" secondAttribute="topMargin" constant="4" id="s15-z9-aHc"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <userDefinedRuntimeAttributes>

@@ -143,6 +143,7 @@ class UploadService {
             var uploadingMurmer = Murmur(title: "Uploading...")
             uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
             uploadingMurmer.titleColor = UIColor.lightGray
+            uploadingMurmer.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
             show(whistle: uploadingMurmer, action: .show(60.0))
             
             // Upload file and metadata to the object
@@ -155,6 +156,7 @@ class UploadService {
                     var murmur = Murmur(title: "Unable to upload.")
                     murmur.backgroundColor = errorColor
                     murmur.titleColor = UIColor.white
+                    murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                     show(whistle: murmur, action: .show(5.0))
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
@@ -177,11 +179,13 @@ class UploadService {
                             var murmur = Murmur(title: "Image uploaded!")
                             murmur.backgroundColor = accentColor
                             murmur.titleColor = UIColor.white
+                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                             show(whistle: murmur, action: .show(3.0))
                         } else {
                             var murmur = Murmur(title: "Unable to upload.")
                             murmur.backgroundColor = errorColor
                             murmur.titleColor = UIColor.white
+                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                             show(whistle: murmur, action: .show(5.0))
                         }
                     })
@@ -210,6 +214,7 @@ class UploadService {
         var uploadingMurmer = Murmur(title: "Uploading...")
         uploadingMurmer.backgroundColor = UIColor(white: 0.04, alpha: 1.0)
         uploadingMurmer.titleColor = UIColor.lightGray
+        uploadingMurmer.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
         show(whistle: uploadingMurmer, action: .show(60.0))
         completion(true)
         
@@ -231,6 +236,7 @@ class UploadService {
                     var murmur = Murmur(title: "Unable to upload.")
                     murmur.backgroundColor = errorColor
                     murmur.titleColor = UIColor.white
+                    murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                     show(whistle: murmur, action: .show(5.0))
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
@@ -254,11 +260,13 @@ class UploadService {
                             var murmur = Murmur(title: "Video uploaded!")
                             murmur.backgroundColor = accentColor
                             murmur.titleColor = UIColor.white
+                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                             show(whistle: murmur, action: .show(3.0))
                         } else {
                             var murmur = Murmur(title: "Unable to upload.")
                             murmur.backgroundColor = errorColor
                             murmur.titleColor = UIColor.white
+                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
                             show(whistle: murmur, action: .show(5.0))
                         }
                     })

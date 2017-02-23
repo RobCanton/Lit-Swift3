@@ -19,6 +19,8 @@
 		B01EE5481E435D450049BCBF /* TextFieldsEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53D1E435D450049BCBF /* TextFieldsEffects.swift */; };
 		B01EE5491E435D450049BCBF /* YokoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53E1E435D450049BCBF /* YokoTextField.swift */; };
 		B01EE54A1E435D450049BCBF /* YoshikoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE53F1E435D450049BCBF /* YoshikoTextField.swift */; };
+		B02761861E5E8B9500668C87 /* MKGradientGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02761841E5E8B9500668C87 /* MKGradientGenerator.swift */; };
+		B02761871E5E8B9500668C87 /* MKGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02761851E5E8B9500668C87 /* MKGradientView.swift */; };
 		B0383C211E4322E2002FD893 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0383C201E4322E2002FD893 /* SettingsViewController.swift */; };
 		B0383C231E43256B002FD893 /* FacebookGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0383C221E43256B002FD893 /* FacebookGraph.swift */; };
 		B0383C261E43515C002FD893 /* UserSearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0383C241E43515C002FD893 /* UserSearchViewController.storyboard */; };
@@ -138,6 +140,8 @@
 		B01EE53D1E435D450049BCBF /* TextFieldsEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldsEffects.swift; sourceTree = "<group>"; };
 		B01EE53E1E435D450049BCBF /* YokoTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YokoTextField.swift; sourceTree = "<group>"; };
 		B01EE53F1E435D450049BCBF /* YoshikoTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoshikoTextField.swift; sourceTree = "<group>"; };
+		B02761841E5E8B9500668C87 /* MKGradientGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKGradientGenerator.swift; sourceTree = "<group>"; };
+		B02761851E5E8B9500668C87 /* MKGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKGradientView.swift; sourceTree = "<group>"; };
 		B0383C201E4322E2002FD893 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B0383C221E43256B002FD893 /* FacebookGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookGraph.swift; sourceTree = "<group>"; };
 		B0383C241E43515C002FD893 /* UserSearchViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserSearchViewController.storyboard; sourceTree = "<group>"; };
@@ -350,6 +354,8 @@
 		B0B043141E40B53000D50DA7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B02761841E5E8B9500668C87 /* MKGradientGenerator.swift */,
+				B02761851E5E8B9500668C87 /* MKGradientView.swift */,
 				B09405D81E4834EB00CE0068 /* WDImagePicker */,
 				B0E59E071E409B65007B4762 /* Extensions.swift */,
 				B01EE5331E435D450049BCBF /* TextFieldEffects */,
@@ -717,6 +723,7 @@
 				B0E59DFC1E40765D007B4762 /* LocationTableCell.swift in Sources */,
 				B01EE5441E435D450049BCBF /* JiroTextField.swift in Sources */,
 				B087C77A1E41E6AE00234715 /* SendLocationHeaderView.swift in Sources */,
+				B02761861E5E8B9500668C87 /* MKGradientGenerator.swift in Sources */,
 				B0BD94931E5496DE00C45BE3 /* NotificationService.swift in Sources */,
 				B0B043341E41599100D50DA7 /* CameraViewController.swift in Sources */,
 				B0E59DFF1E4078BA007B4762 /* Utilities.swift in Sources */,
@@ -739,6 +746,7 @@
 				B0B043111E40AED300D50DA7 /* LocationFooterView.swift in Sources */,
 				B087C7641E41C61700234715 /* LocationsReducer.swift in Sources */,
 				B0E59DEE1E406575007B4762 /* HomeViewController.swift in Sources */,
+				B02761871E5E8B9500668C87 /* MKGradientView.swift in Sources */,
 				B09405E11E4834FB00CE0068 /* WDImageCropView.swift in Sources */,
 				B01EE5301E435CA00049BCBF /* CreateProfileViewController.swift in Sources */,
 				B087C7511E4163AA00234715 /* CameraButton.swift in Sources */,
