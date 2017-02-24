@@ -17,7 +17,7 @@ pod 'View2ViewTransition'
 pod 'NVActivityIndicatorView'
 pod 'Whisper'
 pod 'SwiftMessages', '3.1.4'
-pod 'Popover'
+pod 'ActiveLabel'
 
 end
 

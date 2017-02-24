@@ -39,9 +39,6 @@ class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
@@ -97,12 +94,14 @@ class SettingsViewController: UITableViewController {
                 let controller = WebViewController()
                 controller.urlString = "https://getlit.site/privacypolicy.html"
                 controller.title = "Privacy Policy"
+                controller.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case terms:
                 let controller = WebViewController()
                 controller.urlString = "https://getlit.site/terms.html"
                 controller.title = "Terms of Use"
+                controller.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(controller, animated: true)
                 break
             case suggestLocation:

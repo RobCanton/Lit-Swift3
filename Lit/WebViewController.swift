@@ -18,10 +18,6 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
          super.viewDidLoad()
         
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16.0)!,
-             NSForegroundColorAttributeName: UIColor.white]
-        self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         webView = WKWebView()
         webView.navigationDelegate = self
@@ -29,8 +25,27 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         webView.allowsBackForwardNavigationGestures = true
         let url = URL(string: urlString)!
         webView.load(URLRequest(url: url))
-        webView.frame = view.frame
+        webView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - navigationController!.navigationBar.frame.height - 20.0)
         view.addSubview(webView)
+        print("Bounds: \(view.bounds) | Nav: \(navigationController!.navigationBar.frame.height)")
+
+    }
+    
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
+    }
+    
+    
+    func addDoneButton() {
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        navigationItem.rightBarButtonItem = doneButton
+    }
+    
+    func done() {
+        self.dismiss(animated: true, completion: nil)
     }
     
 }

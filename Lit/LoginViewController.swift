@@ -11,6 +11,7 @@ import ReSwift
 import FBSDKCoreKit
 import FBSDKLoginKit
 import Firebase
+import ActiveLabel
 
 class LoginViewController: UIViewController, StoreSubscriber {
     typealias StoreSubscriberStateType = AppState
@@ -18,8 +19,11 @@ class LoginViewController: UIViewController, StoreSubscriber {
 
     @IBOutlet weak var loginButton: UIButton!
     
+    @IBOutlet weak var legal: ActiveLabel!
     
-    var dict : [String : AnyObject]!
+    var dict:[String : AnyObject]!
+    
+    var activityIndicator:UIActivityIndicatorView!
     
     func newState(state:AppState) {
 
@@ -42,8 +46,37 @@ class LoginViewController: UIViewController, StoreSubscriber {
         loginButton.layer.borderWidth = 2.0
         loginButton.layer.borderColor = UIColor.white.cgColor
         
-        // Do any additional setup after loading the view, typically from a nib.
+        let customType = ActiveType.custom(pattern: "\\sTerms of Use.") //Regex that looks for "with"
+        legal.enabledTypes = [customType]
+        legal.text = "By logging in you agree to the Terms of Use."
+        
+        legal.customColor[customType] = UIColor.white
+        legal.customSelectedColor[customType] = UIColor.lightGray
+        
+        legal.handleCustomTap(for: customType) { element in
+            print("Custom type tapped: \(element)")
+            self.performSegue(withIdentifier: "showTerms", sender: self)
+        }
+        
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        activityIndicator.center = CGPoint(x: view.center.x, y: loginButton.center.y)
+        self.view.addSubview(activityIndicator)
+
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showTerms" {
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.viewControllers[0] as! WebViewController
+            controller.urlString = "https://getlit.site/terms.html"
+            controller.title = "Terms of Use"
+            controller.addDoneButton()
+            
+        }
+    }
+    
+
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -65,6 +98,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mainStore.unsubscribe(self)
+        activityIndicator.stopAnimating()
     }
     
     func setupLoginScreen() {
@@ -98,11 +132,15 @@ class LoginViewController: UIViewController, StoreSubscriber {
     func activateLoginButton() {
         loginButton.isEnabled = true
         loginButton.isHidden = false
+        legal.isEnabled = true
+        legal.isHidden = false
     }
     
     func deactivateLoginButton() {
         loginButton.isEnabled = false
         loginButton.isHidden = true
+        legal.isEnabled = false
+        legal.isHidden = true
     }
 
     @IBAction func handleLoginButton(_ sender: Any) {
@@ -161,6 +199,8 @@ class LoginViewController: UIViewController, StoreSubscriber {
 
         deactivateLoginButton()
         
+        activityIndicator.startAnimating()
+        
         FIRAuth.auth()?.signIn(with: credential, completion: { (firUser, error) in
             
             if error == nil && firUser != nil {
@@ -197,7 +237,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
     }
     
     func checkVersionSupport(_ completion: @escaping ((_ supported:Bool)->())) {
-        
+        activityIndicator.startAnimating()
         let infoDictionary = Bundle.main.infoDictionary!
         let appId = infoDictionary["CFBundleShortVersionString"] as! String
         
@@ -209,7 +249,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             let versionString = snapshot.value as! String
             let minimum_supported_version = Int(versionString.replacingOccurrences(of: ".", with: ""))!
             print("current_version: \(currentVersion) | minimum_supported_version: \(minimum_supported_version)")
-            
+            self.activityIndicator.stopAnimating()
             completion(currentVersion >= minimum_supported_version)
         })
     }
@@ -222,6 +262,14 @@ class LoginViewController: UIViewController, StoreSubscriber {
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    override var prefersStatusBarHidden: Bool
+        {
+        get{
+            return true
+        }
+    }
+    
 
 }
 
