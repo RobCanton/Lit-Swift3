@@ -26,7 +26,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
-        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+
         tableView.backgroundColor = UIColor.black
         
         tableView.delegate = self
@@ -107,7 +109,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 190
+        return 300
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -144,7 +146,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath:
         IndexPath) {
         let parallaxCell = cell as! LocationTableCell
-        parallaxCell.setImageViewOffSet(tableView, indexPath: indexPath as IndexPath)
+        //parallaxCell.setImageViewOffSet(tableView, indexPath: indexPath as IndexPath)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -157,7 +159,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             var count = 0
             for indexPath in self.tableView.indexPathsForVisibleRows! {
                 if let cell = self.tableView.cellForRow(at: indexPath) as?  LocationTableCell {
-                cell.setImageViewOffSet(tableView, indexPath: indexPath)
+                //cell.setImageViewOffSet(tableView, indexPath: indexPath)
                 
                 if count == tableView.indexPathsForVisibleRows!.count - 1 {
                     let rectOfCellInTableView = tableView.rectForRow(at: indexPath)

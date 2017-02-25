@@ -41,7 +41,7 @@ class LocationTableCell: UITableViewCell {
     
     
     @IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!
+
 
     @IBOutlet weak var guestIconsView: UIView!
     @IBOutlet weak var distanceLabel: UILabel!
@@ -51,8 +51,8 @@ class LocationTableCell: UITableViewCell {
     @IBOutlet weak var gradientView: UIView!
     
 
-    var imageViewInitialTopConstraint: CGFloat!
-    var imageViewInitialBottomConstraint: CGFloat!
+    //var imageViewInitialTopConstraint: CGFloat!
+    //var imageViewInitialBottomConstraint: CGFloat!
     let parallaxIndex: CGFloat = 18
     var location:Location?
     var fadeView:UIView!
@@ -64,14 +64,17 @@ class LocationTableCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.bottomImageViewConstraint.constant -= 2 * parallaxIndex
+        //self.bottomImageViewConstraint.constant -= 2 * parallaxIndex
         
-        self.imageViewInitialTopConstraint = self.bottomImageViewConstraint.constant
-        self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
+        //self.imageViewInitialTopConstraint = self.bottomImageViewConstraint.constant
+        //self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
         self.clipsToBounds = true
         
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
+        
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 1.0
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -147,7 +150,7 @@ class LocationTableCell: UITableViewCell {
         }
         gradient?.removeFromSuperlayer()
         
-        x = guestsCountBubble.frame.origin.x + guestsCountBubble.frame.width - (guestsCountBubble.frame.height * 0.2)
+        x = guestsCountBubble.frame.origin.x + guestsCountBubble.frame.width + (guestsCountBubble.frame.height * 0.2)
         guestIcons = [UIImageView]()
         
         
@@ -210,7 +213,7 @@ class LocationTableCell: UITableViewCell {
             guestIconsView.addSubview(guestIcon)
         }
         
-        x = guestIcon.frame.origin.x + guestIcon.frame.width * 0.8
+        x = guestIcon.frame.origin.x + guestIcon.frame.width * 1.25
     }
     
     func setImageViewOffSet(_ tableView: UITableView, indexPath: IndexPath) {
@@ -227,8 +230,8 @@ class LocationTableCell: UITableViewCell {
     func setOffSet(_ offset:CGFloat) {
         let boundOffset = max(0, min(1, offset))
         let pixelOffset = (1-boundOffset)*2*parallaxIndex
-        self.topImageViewConstraint.constant = self.imageViewInitialTopConstraint - pixelOffset
-        self.bottomImageViewConstraint.constant = self.imageViewInitialBottomConstraint + pixelOffset
+        //self.topImageViewConstraint.constant = self.imageViewInitialTopConstraint - pixelOffset
+        //self.bottomImageViewConstraint.constant = self.imageViewInitialBottomConstraint + pixelOffset
     }
     
     var task:URLSessionDataTask?

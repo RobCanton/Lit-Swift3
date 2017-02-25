@@ -42,6 +42,10 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         GPSService.sharedInstance.startUpdatingLocation()
         
         self.setupMiddleButton()
+        
+        
+        
+        self.tabBar.shadowImage = UIImage()
     }
     
     var authListener: FIRAuthStateDidChangeListenerHandle?
