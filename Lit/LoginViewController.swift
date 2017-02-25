@@ -63,6 +63,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         activityIndicator.center = CGPoint(x: view.center.x, y: loginButton.center.y)
         self.view.addSubview(activityIndicator)
 
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -35,7 +35,7 @@ class PhotoCell: UICollectionViewCell {
         UploadService.retrieveImage(byKey: item.getKey(), withUrl: item.getDownloadUrl(), completion: { image, fromFile in
             if !fromFile {
                 self.imageView.alpha = 0.0
-                UIView.animate(withDuration: 0.15, animations: {
+                UIView.animate(withDuration: 0.35, animations: {
                     self.imageView.alpha = 1.0
                 })
             } else {

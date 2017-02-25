@@ -30,6 +30,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     var statusBarShouldHide = false
     
+    var storiesRetrieved = false
+    
     override var prefersStatusBarHidden: Bool
     {
         get{
@@ -157,6 +159,8 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func listenToUserStories() {
+        storiesRetrieved = false
+
         let locRef = UserService.ref.child("locations/uploads/\(location.getKey())")
         locRef.removeAllObservers()
         locRef.queryOrderedByKey().observe(.value, with: { snapshot in
@@ -216,6 +220,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         for story in self.userStories {
             story.determineState()
         }
+        storiesRetrieved = true
         
         tableView.reloadData()
     }
@@ -225,7 +230,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 && userStories.count == 0 {
+        if section == 0 && userStories.count == 0 && storiesRetrieved {
             return 0
         }
         return 34

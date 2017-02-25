@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListHeaderView: UIView {
+class ListHeaderView: UITableViewHeaderFooterView {
 
     @IBOutlet weak var label: UILabel!
     /*
@@ -18,5 +18,23 @@ class ListHeaderView: UIView {
         // Drawing code
     }
     */
+    
+    var activityIndicator:UIActivityIndicatorView?
+    func addActivityIndicator()  {
+        activityIndicator?.removeFromSuperview()
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator!.frame = CGRect(x: 0, y: 0, width: 20.0, height: 20.0)
+        activityIndicator!.center = label.center
+        self.addSubview(activityIndicator!)
+        activityIndicator!.startAnimating()
+        label.isHidden = true
+        
+    }
+    
+    func stopIndicator() {
+        activityIndicator?.stopAnimating()
+        activityIndicator?.removeFromSuperview()
+        label.isHidden = false
+    }
 
 }

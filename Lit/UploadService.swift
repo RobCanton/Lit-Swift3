@@ -474,29 +474,15 @@ class UploadService {
     static func reportItem(item:StoryItem, type:ReportType, showNotification:Bool, completion:@escaping ((_ success:Bool)->())) {
         let ref = FIRDatabase.database().reference()
         let uid = mainStore.state.userState.uid
-        let reportRef = ref.child("reports/\(uid)/\(item.getKey())")
+        let reportRef = ref.child("reports/\(uid):\(item.getKey())")
         let value: [String: Any] = [
+            "sender": uid,
+            "itemKey": item.getKey(),
             "type": type.rawValue,
-            "timeStamp": [".sv": "timestamp"]
+            "timestamp": [".sv": "timestamp"]
         ]
         reportRef.setValue(value, withCompletionBlock: { error, ref in
-            if error == nil {
-                if showNotification {
-//                    var murmur = Murmur(title: "Report Sent!")
-//                    murmur.backgroundColor = accentColor
-//                    murmur.titleColor = UIColor.whiteColor()
-//                    show(whistle: murmur, action: .Show(3.0))
-                    
-                }
-            } else {
-                if showNotification {
-//                    var murmur = Murmur(title: "Report failed to send.")
-//                    murmur.backgroundColor = errorColor
-//                    murmur.titleColor = UIColor.whiteColor()
-//                    show(whistle: murmur, action: .Show(3.0))
-                }
-                completion(false)
-            }
+            completion(error == nil )
         })
     }
     
@@ -574,6 +560,6 @@ class UploadService {
 }
 
 enum ReportType:String {
-    case Inappropriate = "Inappropriate"
-    case Spam          = "Spam"
+    case Inappropriate = "InappropriateContent"
+    case Spam          = "SpamContent"
 }

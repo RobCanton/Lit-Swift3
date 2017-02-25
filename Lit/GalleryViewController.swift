@@ -279,42 +279,63 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         } else {
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
-            let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
-
-            }
+            let cancelActionButton: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
             actionSheet.addAction(cancelActionButton)
             
             let OKAction = UIAlertAction(title: "Report", style: .destructive) { (action) in
                 let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-
-                }
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
                 alertController.addAction(cancelAction)
                 
                 let OKAction = UIAlertAction(title: "It's Inappropriate", style: .destructive) { (action) in
                     UploadService.reportItem(item: item, type: ReportType.Inappropriate, showNotification: true, completion: { success in
-
+                        if success {
+                            let reportAlert = UIAlertController(title: "Report Sent.",
+                                                                message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                            reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                            
+                            self.present(reportAlert, animated: true, completion: nil)
+                        } else {
+                            let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                                message: "Please try again.", preferredStyle: .alert)
+                            reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                            
+                            self.present(reportAlert, animated: true, completion: nil)
+                        }
+                        
+                        
                     })
                 }
                 alertController.addAction(OKAction)
                 
                 let OKAction2 = UIAlertAction(title: "It's Spam", style: .destructive) { (action) in
                     UploadService.reportItem(item: item, type: ReportType.Spam, showNotification: true, completion: { success in
-
+                        if success {
+                            let reportAlert = UIAlertController(title: "Report Sent",
+                                                                message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                            reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                            
+                            self.present(reportAlert, animated: true, completion: nil)
+                        } else {
+                            let reportAlert = UIAlertController(title: "Report Failed to Send",
+                                                                message: "Please try again.", preferredStyle: .alert)
+                            reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                            
+                            self.present(reportAlert, animated: true, completion: nil)
+                        }
+                        
+                        
                     })
                 }
                 alertController.addAction(OKAction2)
                 
-                self.present(alertController, animated: true) {
-
-                }
+                self.present(alertController, animated: true, completion: nil)
             }
             actionSheet.addAction(OKAction)
             
             self.present(actionSheet, animated: true, completion: nil)
         }
-        
     }
     
     func getCurrentCell() -> PostViewController? {

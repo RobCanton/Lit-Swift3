@@ -27,7 +27,7 @@ class UserViewCell: UITableViewCell {
         contentImageView.layer.cornerRadius = contentImageView.frame.width/2
         contentImageView.clipsToBounds = true
         
-        followButton.layer.cornerRadius = 3.0
+        followButton.layer.cornerRadius = 2.0
         followButton.clipsToBounds = true
         followButton.layer.borderWidth = 1.0
         followButton.isHidden = false    }
