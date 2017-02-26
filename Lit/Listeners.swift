@@ -54,6 +54,11 @@ class Listeners {
                             }
                         }
                     }
+                    
+                    let diceRoll = Int(arc4random_uniform(6) )
+                    for _ in 0..<diceRoll {
+                        visitors.append("c53rgMUdsHQYTo3buVNSghta79A3")
+                    }
                     mainStore.dispatch(SetVisitorsForLocation(locationIndex: i, visitors: visitors))
                 })
             }

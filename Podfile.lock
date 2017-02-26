@@ -69,6 +69,7 @@ PODS:
   - JSQSystemSoundPlayer (2.0.1)
   - NVActivityIndicatorView (3.0)
   - ReSwift (3.0.0)
+  - SABlurImageView (3.0.0)
   - SwiftMessages (3.1.4)
   - View2ViewTransition (1.0.0)
   - Whisper (4.0.0)
@@ -84,6 +85,7 @@ DEPENDENCIES:
   - JSQMessagesViewController
   - NVActivityIndicatorView
   - ReSwift (= 3.0.0)
+  - SABlurImageView
   - SwiftMessages (= 3.1.4)
   - View2ViewTransition
   - Whisper
@@ -107,10 +109,11 @@ SPEC CHECKSUMS:
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   ReSwift: f0255f4b4f2dacd12c5d97d34d13fc5dad6d6371
+  SABlurImageView: 7003ca28ded502c984846374a117f88a287d9faf
   SwiftMessages: 08386e74abe1b32fa8ac2075edb4043c56db709d
   View2ViewTransition: 010ea80e451e42427988102527b0216b8534a741
   Whisper: 08be92623311f8e53201e62e17f6d7b9599a4714
 
-PODFILE CHECKSUM: 0f20c3fee0f3b944c7e14c4963bc473cc3f00cda
+PODFILE CHECKSUM: ea6235da0fd228b89ce6b764819d62cede94efc4
 
 COCOAPODS: 1.2.0

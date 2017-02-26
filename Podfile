@@ -18,6 +18,7 @@ pod 'NVActivityIndicatorView'
 pod 'Whisper'
 pod 'SwiftMessages', '3.1.4'
 pod 'ActiveLabel'
+pod "SABlurImageView"
 
 end
 

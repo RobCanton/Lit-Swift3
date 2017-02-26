@@ -17,6 +17,9 @@ class MasterNavigationController: UINavigationController, UINavigationController
         self.delegate = self
         self.interactivePopGestureRecognizer?.delegate = self
         self.interactivePopGestureRecognizer?.isEnabled = true
+        
+        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationBar.shadowImage = UIImage()
     }
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
