@@ -8,6 +8,7 @@
 
 import Foundation
 import ReSwift
+import ZoomTransitioning
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, StoreSubscriber {
     typealias StoreSubscriberStateType = AppState
@@ -60,6 +61,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        if let tabBar = self.tabBarController as? MasterTabBarController {
+            tabBar.setTabBarVisible(_visible: true, animated: true)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -107,7 +112,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 190
+        return 236
+        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -135,10 +141,28 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     var selectedLocationPath:IndexPath?
+    var selectedImageView:UIImageView!
+    
+    var topHalf:UIImageView?
+    var botHalf:UIImageView?
+    var midSection:UIImageView?
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedLocationPath = indexPath
-        self.performSegue(withIdentifier: "showLocation", sender: self)
+        let cell = tableView.cellForRow(at: selectedLocationPath!) as! LocationTableCell
+        selectedImageView = cell.backgroundImage
+        let controller = LocationViewController()
+        guard let indexPath = selectedLocationPath else {return}
+        var location:Location
+        if (searchBarActive) {
+            location = filteredLocations[indexPath.item]
+            cancelSearching()
+        } else {
+            location = locations[indexPath.item]
+        }
+        controller.location = location
+        self.navigationController?.pushViewController(controller, animated: true)
+        //self.performSegue(withIdentifier: "showLocation", sender: self)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath:
@@ -195,6 +219,101 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         get {
             return false
         }
+    }
+}
+
+extension HomeViewController: ZoomTransitionSourceDelegate {
+    
+    func transitionSourceImageView() -> UIImageView {
+        return selectedImageView
+    }
+    
+    func transitionSourceImageViewFrame(forward forward: Bool) -> CGRect {
+        let navHeight = navigationController!.navigationBar.frame.height + 20.0
+        var bounds = selectedImageView.convert(selectedImageView.bounds, to: view)
+        var rect = CGRect(x: bounds.origin.x, y: bounds.origin.y + navHeight, width: bounds.width, height: bounds.height)
+        return rect
+    }
+    
+    func transitionSourceWillBegin() {
+        selectedImageView.isHidden = true
+    }
+    
+    func transitionSourceDidEnd() {
+        selectedImageView.isHidden = false
+    }
+    
+    func transitionSourceDidCancel() {
+        selectedImageView.isHidden = false
+    }
+    
+    func transitionSourceTopLayoutHeight() -> CGFloat{
+        return navigationController!.navigationBar.frame.height + 20.0
+    }
+    
+    func transitionSourceBottomLayoutHeight() -> CGFloat{
+        return tabBarController!.tabBar.frame.height
+    }
+    
+    func transitionSourceCellFrame() -> CGRect {
+        let cell = tableView.cellForRow(at: selectedLocationPath!)!
+        return cell.convert(cell.bounds, to: view)
+    }
+    
+    func createTopHalf() -> UIImageView? {
+
+        let cell = tableView.cellForRow(at: selectedLocationPath!)!
+        let bounds = cell.convert(cell.bounds, to: view)
+        let topLayout = transitionSourceTopLayoutHeight()
+        let snapshot = view.snapshot(of: CGRect(x: 0,
+                                                y: 0,
+                                                width: view.frame.width,
+                                                height: bounds.origin.y))
+        self.topHalf = snapshot
+        return snapshot
+    }
+    
+    func getTopHalf() -> UIImageView? {
+        return topHalf
+    }
+    
+    func createBottomHalf() -> UIImageView? {
+        
+        let cell = tableView.cellForRow(at: selectedLocationPath!)!
+        let bounds = cell.convert(cell.bounds, to: view)
+        let bottomStart = bounds.origin.y  + bounds.height
+        let snapshot = view.snapshot(of: CGRect(x: 0,
+                                                y: bottomStart,
+                                                width: view.frame.width,
+                                                height: view.frame.height - bottomStart))
+        self.botHalf = snapshot
+        return snapshot
+    }
+    
+    func getBottomHalf() -> UIImageView? {
+        return botHalf
+    }
+    
+    func createMidSection() -> UIImageView? {
+        let cell = tableView.cellForRow(at: selectedLocationPath!)!
+        let bounds = cell.convert(cell.bounds, to: view)
+        var imageBounds = selectedImageView.convert(selectedImageView.bounds, to: view)
+        
+        
+        let snapshot = view.snapshot(of: CGRect(x: 0, y: imageBounds.origin.y + imageBounds.height, width: view.frame.width, height: bounds.height - imageBounds.height))
+        
+        self.midSection = snapshot
+        return snapshot
+    }
+    
+    func getMidSection() -> UIImageView? {
+        return midSection
+    }
+    
+
+    func cleanUp() {
+        topHalf = nil
+        botHalf = nil
     }
 }
 
@@ -255,4 +374,38 @@ extension HomeViewController: UISearchBarDelegate {
         self.searchBar.resignFirstResponder()
         self.searchBar.text = ""
     }
+}
+
+extension UIView {
+    
+    /// Create snapshot
+    ///
+    /// - parameter rect: The `CGRect` of the portion of the view to return. If `nil` (or omitted),
+    ///                   return snapshot of the whole view.
+    ///
+    /// - returns: Returns `UIImage` of the specified portion of the view.
+    
+    func snapshot(of rect: CGRect? = nil) -> UIImageView? {
+        // snapshot entire view
+        
+        UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, 0)
+        drawHierarchy(in: bounds, afterScreenUpdates: true)
+        let wholeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // if no `rect` provided, return image of whole view
+        
+        guard let image = wholeImage, let rect = rect else { return nil }
+        
+        // otherwise, grab specified `rect` of image
+        
+        let scale = image.scale
+        let scaledRect = CGRect(x: rect.origin.x * scale, y: rect.origin.y * scale, width: rect.size.width * scale, height: rect.size.height * scale)
+        guard let cgImage = image.cgImage?.cropping(to: scaledRect) else { return nil }
+        let screenshot = UIImage(cgImage: cgImage, scale: scale, orientation: .up)
+        let view = UIImageView(frame: rect)
+        view.image = screenshot
+        return view
+    }
+    
 }

@@ -8,13 +8,17 @@
 
 import Foundation
 import UIKit
+import ZoomTransitioning
 
 class MasterNavigationController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
     
+    private let zoomNavigationControllerDelegate = ZoomNavigationControllerDelegate()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate = self
+       // self.delegate = self
+         delegate = zoomNavigationControllerDelegate
         self.interactivePopGestureRecognizer?.delegate = self
         self.interactivePopGestureRecognizer?.isEnabled = true
         
@@ -22,13 +26,13 @@ class MasterNavigationController: UINavigationController, UINavigationController
         self.navigationBar.shadowImage = UIImage()
     }
     
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
-        return nil
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
+//    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        
+//        return nil
+//    }
+//    
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
     
 }

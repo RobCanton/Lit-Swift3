@@ -159,6 +159,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
     }
     
     func showActiveMurmur() {
+        return
         if !isActive { return }
         guard let title = activeTitle else { return }
 

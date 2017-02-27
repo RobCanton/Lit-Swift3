@@ -41,10 +41,9 @@ class LocationTableCell: UITableViewCell {
     @IBOutlet weak var addressLabel: UILabel!
     
     
-    @IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!
 
-    @IBOutlet weak var guestIconsView: UIView!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var guestsCountBubble: UIView!
     @IBOutlet weak var guestsCountLabel: UILabel!
@@ -76,14 +75,17 @@ class LocationTableCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.bottomImageViewConstraint.constant -= 2 * parallaxIndex
+        //self.bottomImageViewConstraint.constant -= 2 * parallaxIndex
         
-        self.imageViewInitialTopConstraint = self.bottomImageViewConstraint.constant
-        self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
+        //self.imageViewInitialTopConstraint = self.bottomImageViewConstraint.constant
+        //self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
         self.clipsToBounds = true
         
         guestsCountBubble.clipsToBounds = true
         guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
+        
+        guestsCountBubble.layer.borderColor = UIColor.white.cgColor
+        guestsCountBubble.layer.borderWidth = 1.5
         
         guestIcon1.clipsToBounds = true
         guestIcon1.layer.cornerRadius = guestIcon1.frame.height / 2
@@ -101,7 +103,7 @@ class LocationTableCell: UITableViewCell {
         guestIcon5.layer.cornerRadius = guestIcon5.frame.height / 2
         
         self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 1.0
+        self.layer.borderWidth = 0.5
         
         distanceBlurBox.layer.cornerRadius = 2.0
         distanceBlurBox.clipsToBounds = true
@@ -129,7 +131,7 @@ class LocationTableCell: UITableViewCell {
         
         self.location = location
         titleLabel.text = location.getName()
-        addressLabel.text = location.getShortAddress()
+        //addressLabel.text = location.getShortAddress()
         backgroundImage.image = nil
         loadLocationImage(location.getImageURL(), completion: { image, fromCache in
             if !fromCache {
@@ -147,14 +149,14 @@ class LocationTableCell: UITableViewCell {
         if location.isActive() {
             distanceBlurBox.effect = UIBlurEffect(style: .light)
             //distanceLabel.superview!.backgroundColor = UIColor.white
-            distanceLabel.text = "Nearby"
+            addressLabel.text = "Nearby"
             distanceLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)//UIFont(name: "Avenir-Heavy", size: 12.0)
         } else {
             distanceBlurBox.effect = UIBlurEffect(style: .dark)
            // distanceLabel.superview!.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
             distanceLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightLight)//UIFont(name: "Avenir-Medium", size: 11.0)
             if let distance = location.getDistance() {
-                distanceLabel.text = getDistanceString(distance: distance)
+                addressLabel.text = getDistanceString(distance: distance)
                 
             } else {
                 distanceBox.isHidden = true
@@ -204,11 +206,6 @@ class LocationTableCell: UITableViewCell {
         }
         
         guestsCountLabel.text = "\(visitors.count)"
-        
-        
-
-        x = guestsCountBubble.frame.origin.x - guestsCountBubble.frame.height * 0.85
-        guestIcons = [UIImageView]()
         
         
         if visitors.count > 0 {
@@ -333,20 +330,20 @@ class LocationTableCell: UITableViewCell {
     
     func setImageViewOffSet(_ tableView: UITableView, indexPath: IndexPath) {
         
-        let cellFrame = tableView.rectForRow(at: indexPath)
-        let cellFrameInTable = tableView.convert(cellFrame, to:tableView.superview)
-        let cellOffset = cellFrameInTable.origin.y + cellFrameInTable.size.height
-        let tableHeight = tableView.bounds.size.height + cellFrameInTable.size.height
-        let cellOffsetFactor = cellOffset / tableHeight
-        self.setOffSet(cellOffsetFactor)
+//        let cellFrame = tableView.rectForRow(at: indexPath)
+//        let cellFrameInTable = tableView.convert(cellFrame, to:tableView.superview)
+//        let cellOffset = cellFrameInTable.origin.y + cellFrameInTable.size.height
+//        let tableHeight = tableView.bounds.size.height + cellFrameInTable.size.height
+//        let cellOffsetFactor = cellOffset / tableHeight
+//        self.setOffSet(cellOffsetFactor)
         
     }
     
     func setOffSet(_ offset:CGFloat) {
-        let boundOffset = max(0, min(1, offset))
-        let pixelOffset = (1-boundOffset)*2*parallaxIndex
-        self.topImageViewConstraint.constant = self.imageViewInitialTopConstraint - pixelOffset
-        self.bottomImageViewConstraint.constant = self.imageViewInitialBottomConstraint + pixelOffset
+//        let boundOffset = max(0, min(1, offset))
+//        let pixelOffset = (1-boundOffset)*2*parallaxIndex
+//        self.topImageViewConstraint.constant = self.imageViewInitialTopConstraint - pixelOffset
+//        self.bottomImageViewConstraint.constant = self.imageViewInitialBottomConstraint + pixelOffset
     }
     
     var task:URLSessionDataTask?

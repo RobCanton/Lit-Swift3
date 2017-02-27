@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 import View2ViewTransition
+import ZoomTransitioning
 
 class LocationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -24,7 +25,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     var tableView:UITableView!
     
-    var headerView:UIImageView!
+    var headerView:LocationHeaderView!
     
     var returningCell:UserStoryTableViewCell?
     
@@ -35,17 +36,19 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     override var prefersStatusBarHidden: Bool
     {
         get{
-            return statusBarShouldHide
+            return true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = location.getName()
+        //self.navigationItem.title = location.getName()
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
-
+        
+        //navigationController?.setNavigationBarHidden(true, animated: true)
+        
         let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
         let slack:CGFloat = 1.0
         let eventsHeight:CGFloat = 0
@@ -80,17 +83,14 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.separatorColor = UIColor(white: 0.08, alpha: 1.0)
         tableView.backgroundColor = UIColor.black
         
-        headerView = UIImageView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 190))
+        headerView = UINib(nibName: "LocationHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! LocationHeaderView
         headerView.contentMode = .scaleAspectFill
         headerView.clipsToBounds = true
+        headerView.backHandler = dismiss
         
-        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("location-\(self.location!.getKey()).jpg"))
+        headerView.setLocationInfo(location: location)
+
         
-        if let imageFile = UIImage(contentsOfFile: fileURL.path) {
-            self.headerView.image = imageFile
-        } else {
-            headerView.loadImageAsync(location.getImageURL(), completion: nil)
-        }
         
         tableView.tableHeaderView = headerView
         
@@ -107,20 +107,36 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         LocationService.getLocationDetails(location, completion: { location in
             self.location = location
             if let footer = self.tableView?.tableFooterView as? LocationFooterView {
-                footer.descriptionLabel.text = self.location.desc
-                footer.descriptionLabel.sizeToFit()
+                //footer.descriptionLabel.text = self.location.desc
+                //footer.descriptionLabel.sizeToFit()
             }
             self.tableView?.reloadData()
         })
+        
+//        if let distance = location.getDistance() {
+//            let distanceButton = UIBarButtonItem(title: getDistanceString(distance: distance), style: .plain, target: self, action: #selector(showMap))
+//            distanceButton.setTitleTextAttributes([ NSFontAttributeName: UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)], for: UIControlState.normal)
+//            self.navigationItem.rightBarButtonItem = distanceButton
+//            
+//        }
+    }
+    
+    func dismiss() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         listenToUserStories()
         tableView.isUserInteractionEnabled = false
-        
+        //self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         NotificationCenter.default.addObserver(self, selector:#selector(handleEnterForeground), name:
             NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        if let tabBar = self.tabBarController as? MasterTabBarController {
+            // tabBar.setTabBarVisible(_visible: false, animated: true)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -130,13 +146,13 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         statusBarShouldHide = false
         self.setNeedsStatusBarAppearanceUpdate()
         
-        if let tabBar = self.tabBarController as? MasterTabBarController {
-            tabBar.setTabBarVisible(_visible: true, animated: true)
-        }
+//        if let tabBar = self.tabBarController as? MasterTabBarController {
+//            tabBar.setTabBarVisible(_visible: true, animated: true)
+//        }
         
         if let nav = navigationController as? MasterNavigationController {
-            nav.setNavigationBarHidden(false, animated: true)
-            nav.delegate = nav
+            //nav.setNavigationBarHidden(false, animated: true)
+            //nav.delegate = nav
         }
         
         if returningCell != nil {
@@ -147,8 +163,10 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         UserService.ref.child("locations/uploads/\(location.getKey())").removeAllObservers()
          NotificationCenter.default.removeObserver(self)
+
     }
     
     func handleEnterForeground() {
@@ -287,15 +305,19 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             if indexPath.row == 0 {
                 cell.type = .fullAddress
                 cell.label.text = location.getAddress()
+                cell.icon.image = UIImage(named: "marker")
             } else if indexPath.row == 1 {
                 cell.type = .phone
                 cell.label.text = location.phone
+                cell.icon.image = UIImage(named: "phone")
             } else if indexPath.row == 2 {
                 cell.type = .email
                 cell.label.text = location.email
+                cell.icon.image = UIImage(named: "email")
             }  else if indexPath.row == 3 {
                 cell.type = .website
                 cell.label.text = location.website
+                cell.icon.image = UIImage(named: "link")
             }
             return cell
         }
@@ -314,7 +336,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.cellForRow(at: indexPath) as! InfoTableViewCell
             switch cell.type {
             case .fullAddress:
-                self.performSegue(withIdentifier: "showMap", sender: self)
+                showMap()
                 break
             case .phone:
                 promptPhoneCall()
@@ -329,6 +351,10 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
                 break
             }
         }
+    }
+    
+    func showMap() {
+        self.performSegue(withIdentifier: "showMap", sender: self)
     }
     
     let transitionController: TransitionController = TransitionController()
@@ -507,5 +533,40 @@ extension LocationViewController: View2ViewTransitionPresenting {
             }
         }
     }
+}
+
+extension LocationViewController: ZoomTransitionDestinationDelegate {
+    
+    func transitionDestinationImageViewFrame(forward forward: Bool) -> CGRect {
+        let largeImageView = headerView.imageView!
+        var boundz = largeImageView.convert(largeImageView.bounds, to: view)
+        if forward {
+            let x: CGFloat = 0.0
+            let y: CGFloat = 0.0
+            let width = view.frame.width
+            let height = boundz.height
+            return CGRect(x: x, y: y, width: width, height: height)
+        } else {
+            return largeImageView.convert(largeImageView.bounds, to: view)
+        }
+    }
+    
+    func transitionDestinationWillBegin() {
+        let largeImageView = headerView.imageView!
+        largeImageView.isHidden = true
+    }
+    
+    func transitionDestinationDidEnd(transitioningImageView imageView: UIImageView) {
+        let largeImageView = headerView.imageView!
+        largeImageView.isHidden = false
+        largeImageView.image = imageView.image
+    }
+    
+    func transitionDestinationDidCancel() {
+        let largeImageView = headerView.imageView!
+        largeImageView.isHidden = false
+    }
+    
+    
 
 }
