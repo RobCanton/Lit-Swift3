@@ -9,7 +9,6 @@
 import UIKit
 
 class LocationFooterView: UITableViewHeaderFooterView {
-    @IBOutlet weak var descriptionLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

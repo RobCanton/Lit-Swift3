@@ -151,6 +151,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         selectedLocationPath = indexPath
         let cell = tableView.cellForRow(at: selectedLocationPath!) as! LocationTableCell
         selectedImageView = cell.backgroundImage
+        
         let controller = LocationViewController()
         guard let indexPath = selectedLocationPath else {return}
         var location:Location
@@ -191,7 +192,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let bottomPoint = self.tableView.frame.height - rectOfCellInSuperview.height
                     
                     let alpha = 1 - (cellY - bottomPoint) / rectOfCellInSuperview.height
-                    cell.alpha = max(0,alpha)
+                    //cell.alpha = max(0,alpha)
                 }
                 }
                 count += 1
@@ -295,12 +296,13 @@ extension HomeViewController: ZoomTransitionSourceDelegate {
     }
     
     func createMidSection() -> UIImageView? {
-        let cell = tableView.cellForRow(at: selectedLocationPath!)!
+        let cell = tableView.cellForRow(at: selectedLocationPath!)! as! LocationTableCell
         let bounds = cell.convert(cell.bounds, to: view)
         var imageBounds = selectedImageView.convert(selectedImageView.bounds, to: view)
+        let infoView = cell.infoView!
+        let bounds2 = infoView.convert(infoView.bounds, to: view)
         
-        
-        let snapshot = view.snapshot(of: CGRect(x: 0, y: imageBounds.origin.y + imageBounds.height, width: view.frame.width, height: bounds.height - imageBounds.height))
+        let snapshot = view.snapshot(of: bounds2)
         
         self.midSection = snapshot
         return snapshot

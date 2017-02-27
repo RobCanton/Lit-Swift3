@@ -26,7 +26,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xDt-pD-Muz">
-                        <rect key="frame" x="16" y="8" width="57" height="57"/>
+                        <rect key="frame" x="20" y="8" width="57" height="57"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ntz-tH-JMV">
                                 <rect key="frame" x="3" y="3" width="51" height="51"/>
@@ -44,7 +44,7 @@
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PkL-gL-0SR">
                         <rect key="frame" x="81" y="44" width="52" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.60000002384185791" green="0.60000002384185791" blue="0.60000002384185791" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -59,22 +59,22 @@
                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                 <constraints>
                     <constraint firstAttribute="topMargin" secondItem="xDt-pD-Muz" secondAttribute="top" id="AIU-Nz-cT5"/>
-                    <constraint firstItem="6qs-Y9-Iax" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="10" id="G7d-gO-dP6"/>
+                    <constraint firstItem="6qs-Y9-Iax" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="12" id="G7d-gO-dP6"/>
                     <constraint firstItem="6qs-Y9-Iax" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="16" id="GCQ-zq-iZj"/>
                     <constraint firstItem="Zz9-Te-daz" firstAttribute="centerY" secondItem="6qs-Y9-Iax" secondAttribute="centerY" id="IJu-nK-7Qe"/>
                     <constraint firstItem="PkL-gL-0SR" firstAttribute="leading" secondItem="6qs-Y9-Iax" secondAttribute="trailing" constant="8" id="NF2-H8-VxC"/>
-                    <constraint firstItem="xDt-pD-Muz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="OnG-bQ-cfu"/>
+                    <constraint firstItem="xDt-pD-Muz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="OnG-bQ-cfu"/>
                     <constraint firstItem="Zz9-Te-daz" firstAttribute="width" secondItem="Zz9-Te-daz" secondAttribute="height" multiplier="1:1" id="RiH-qd-WTH"/>
                     <constraint firstItem="PkL-gL-0SR" firstAttribute="top" secondItem="6qs-Y9-Iax" secondAttribute="bottom" constant="2" id="W4w-1d-FBk"/>
                     <constraint firstItem="6qs-Y9-Iax" firstAttribute="top" secondItem="xDt-pD-Muz" secondAttribute="top" id="chQ-Wd-vCK"/>
                     <constraint firstItem="6qs-Y9-Iax" firstAttribute="top" secondItem="xDt-pD-Muz" secondAttribute="top" id="cw3-7m-26L"/>
                     <constraint firstItem="PkL-gL-0SR" firstAttribute="baseline" secondItem="6qs-Y9-Iax" secondAttribute="baseline" id="eXH-QX-aOM"/>
-                    <constraint firstItem="PkL-gL-0SR" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="10" id="ekW-sA-Z9D"/>
+                    <constraint firstItem="PkL-gL-0SR" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="12" id="ekW-sA-Z9D"/>
                     <constraint firstItem="6qs-Y9-Iax" firstAttribute="centerY" secondItem="xDt-pD-Muz" secondAttribute="centerY" id="gM9-XL-3eO"/>
                     <constraint firstItem="PkL-gL-0SR" firstAttribute="leading" secondItem="xDt-pD-Muz" secondAttribute="trailing" constant="16" id="nE0-nj-rza"/>
                     <constraint firstAttribute="leadingMargin" secondItem="xDt-pD-Muz" secondAttribute="leading" id="nsM-1B-Zhg"/>
                     <constraint firstItem="Zz9-Te-daz" firstAttribute="leading" secondItem="6qs-Y9-Iax" secondAttribute="trailing" constant="6" id="s04-ut-6is"/>
-                    <constraint firstItem="6qs-Y9-Iax" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="tTe-2u-Yme"/>
+                    <constraint firstItem="6qs-Y9-Iax" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="tTe-2u-Yme"/>
                     <constraint firstAttribute="bottomMargin" secondItem="xDt-pD-Muz" secondAttribute="bottom" constant="2" id="wuZ-3O-DHt"/>
                     <constraint firstItem="PkL-gL-0SR" firstAttribute="top" secondItem="6qs-Y9-Iax" secondAttribute="bottom" constant="4" id="yca-3F-lWA"/>
                 </constraints>

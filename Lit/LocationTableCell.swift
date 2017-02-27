@@ -40,6 +40,7 @@ class LocationTableCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     
+    @IBOutlet weak var infoView: UIView!
     
     //@IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
     //@IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!

@@ -516,6 +516,8 @@
 				B0E59E011E4091D1007B4762 /* LocationViewController.swift */,
 				B059015D1E6284F7005BD519 /* LocationHeaderView.swift */,
 				B059015B1E628496005BD519 /* LocationHeaderView.xib */,
+				B0B043101E40AED300D50DA7 /* LocationFooterView.swift */,
+				B0B043121E40AEDE00D50DA7 /* LocationFooterView.xib */,
 				B0B043211E40BB0100D50DA7 /* StoriesViewController.swift */,
 				B087C7711E41E5EA00234715 /* StoryViewController.swift */,
 				B087C7881E41F82200234715 /* StoryProgressIndicator.swift */,
@@ -537,8 +539,6 @@
 				B0E59E041E409444007B4762 /* InfoTableViewCell.xib */,
 				B09405EF1E4C57AC00CE0068 /* CommentBar.swift */,
 				B09405ED1E4C570C00CE0068 /* CommentBar.xib */,
-				B0B043101E40AED300D50DA7 /* LocationFooterView.swift */,
-				B0B043121E40AEDE00D50DA7 /* LocationFooterView.xib */,
 				B09405CA1E44B18400CE0068 /* MapViewController.swift */,
 			);
 			name = Location;

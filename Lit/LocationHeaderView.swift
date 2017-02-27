@@ -17,8 +17,20 @@ class LocationHeaderView: UIView {
     @IBOutlet weak var addressLabel: UILabel!
     var backHandler:(()->())?
 
+    @IBOutlet weak var distanceLabel: UILabel!
     @IBAction func handleBackButton(_ sender: Any) {
         backHandler?()
+    }
+    @IBOutlet weak var contactButton: UIButton!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        contactButton.layer.cornerRadius = 2.0
+        contactButton.clipsToBounds = true
+        contactButton.layer.borderWidth = 1.0
+        contactButton.layer.borderColor = UIColor.lightGray.cgColor
+        contactButton.isHidden = false
+        
     }
 
     
@@ -27,6 +39,17 @@ class LocationHeaderView: UIView {
         
         titleLabel.text = location.getName()
         addressLabel.text = location.getAddress()
+        
+        if location.isActive() {
+            distanceLabel.text = "Nearby"
+        } else {
+            if let distance = location.getDistance() {
+                distanceLabel.text = getDistanceString(distance: distance)
+                
+            } else {
+                distanceLabel.text = ""
+            }
+        }
         
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("location-\(location.getKey()).jpg"))
         

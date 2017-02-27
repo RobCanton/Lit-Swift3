@@ -19,8 +19,8 @@ class MasterNavigationController: UINavigationController, UINavigationController
         super.viewDidLoad()
        // self.delegate = self
          delegate = zoomNavigationControllerDelegate
-        self.interactivePopGestureRecognizer?.delegate = self
-        self.interactivePopGestureRecognizer?.isEnabled = true
+        self.interactivePopGestureRecognizer?.delegate = nil
+        self.interactivePopGestureRecognizer?.isEnabled = false
         
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
