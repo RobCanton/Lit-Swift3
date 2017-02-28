@@ -153,10 +153,10 @@ func getDistanceString(distance:Double) -> String {
     if distance < 0.5 {
         // meters
         let meters = Double(round(distance * 1000)/1)
-        return "\(meters) m away"
+        return "\(meters) m"
     } else {
         let rounded = roundToOneDecimal(distance)//Double(round(10*distance)/10)
-        return "\(rounded) km away"
+        return "\(rounded) km"
     }
 }
 

@@ -168,7 +168,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             descHeight + 16 // padding
         }
         
-        return titleSize.height + 210 + 50 + 12 + descHeight
+        return titleSize.height + 210 + 50 + 10 + descHeight
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -215,7 +215,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        //self.navigationController?.setNavigationBarHidden(false, animated: true)
         UserService.ref.child("locations/uploads/\(location.getKey())").removeAllObservers()
          NotificationCenter.default.removeObserver(self)
 

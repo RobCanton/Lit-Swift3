@@ -54,7 +54,7 @@ class Listeners {
                             }
                         }
                     }
-
+                    
                     mainStore.dispatch(SetVisitorsForLocation(locationIndex: i, visitors: visitors))
                 })
             }

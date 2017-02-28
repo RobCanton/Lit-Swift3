@@ -89,6 +89,7 @@ class LocationMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseIn, animations: {
             self.mapView.alpha = 1.0

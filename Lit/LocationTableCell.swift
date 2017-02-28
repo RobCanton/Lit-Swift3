@@ -33,8 +33,10 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
+let guestCountMax = 7
+
+
 class LocationTableCell: UITableViewCell {
-    
     
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -42,37 +44,36 @@ class LocationTableCell: UITableViewCell {
     
     @IBOutlet weak var extraGuestCountLabel: UILabel!
     @IBOutlet weak var infoView: UIView!
-    
-    //@IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
-    //@IBOutlet weak var bottomImageViewConstraint: NSLayoutConstraint!
 
-    @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var guestsCountBubble: UIView!
-    @IBOutlet weak var guestsCountLabel: UILabel!
+    @IBOutlet weak var infoHeight: NSLayoutConstraint!
 
-
-    var imageViewInitialTopConstraint: CGFloat!
-    var imageViewInitialBottomConstraint: CGFloat!
-    let parallaxIndex: CGFloat = 18
-    var location:Location?
-    var fadeView:UIView!
     
-    var gradient:CAGradientLayer?
-    
-    var check = 0
-    @IBOutlet weak var gv: UIView!
     @IBOutlet weak var guestIcon1: UIImageView!
     @IBOutlet weak var guestIcon2: UIImageView!
     @IBOutlet weak var guestIcon3: UIImageView!
     @IBOutlet weak var guestIcon4: UIImageView!
     @IBOutlet weak var guestIcon5: UIImageView!
     
+    @IBOutlet weak var guestIcon6: UIImageView!
+    @IBOutlet weak var guestIcon7: UIImageView!
     
-    @IBOutlet weak var leading1: NSLayoutConstraint!
     @IBOutlet weak var leading2: NSLayoutConstraint!
     @IBOutlet weak var leading3: NSLayoutConstraint!
     @IBOutlet weak var leading4: NSLayoutConstraint!
     @IBOutlet weak var leading5: NSLayoutConstraint!
+    @IBOutlet weak var leading6: NSLayoutConstraint!
+    @IBOutlet weak var leading7: NSLayoutConstraint!
+    
+    var imageViewInitialTopConstraint: CGFloat!
+    var imageViewInitialBottomConstraint: CGFloat!
+    let parallaxIndex: CGFloat = 18
+    var location:Location?
+    var fadeView:UIView!
+    var gradient:CAGradientLayer?
+    var check = 0
+    
+    let iconBorderWidth:CGFloat = 1.0
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -83,53 +84,49 @@ class LocationTableCell: UITableViewCell {
         //self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
         self.clipsToBounds = true
         
-        guestsCountBubble.clipsToBounds = true
-        guestsCountBubble.layer.cornerRadius = guestsCountBubble.frame.height / 2
         
-        guestsCountBubble.layer.borderColor = UIColor.white.cgColor
-        guestsCountBubble.layer.borderWidth = 1.5
         
         guestIcon1.clipsToBounds = true
         guestIcon1.layer.cornerRadius = guestIcon1.frame.height / 2
         guestIcon1.layer.borderColor = UIColor.black.cgColor
-        guestIcon1.layer.borderWidth = 1.0
+        guestIcon1.layer.borderWidth = iconBorderWidth
         
         guestIcon2.clipsToBounds = true
         guestIcon2.layer.cornerRadius = guestIcon2.frame.height / 2
         guestIcon2.layer.borderColor = UIColor.black.cgColor
-        guestIcon2.layer.borderWidth = 1.0
+        guestIcon2.layer.borderWidth = iconBorderWidth
         
         guestIcon3.clipsToBounds = true
         guestIcon3.layer.cornerRadius = guestIcon3.frame.height / 2
         guestIcon3.layer.borderColor = UIColor.black.cgColor
-        guestIcon3.layer.borderWidth = 1.0
+        guestIcon3.layer.borderWidth = iconBorderWidth
         
         guestIcon4.clipsToBounds = true
         guestIcon4.layer.cornerRadius = guestIcon4.frame.height / 2
         guestIcon4.layer.borderColor = UIColor.black.cgColor
-        guestIcon4.layer.borderWidth = 1.0
+        guestIcon4.layer.borderWidth = iconBorderWidth
         
         guestIcon5.clipsToBounds = true
         guestIcon5.layer.cornerRadius = guestIcon5.frame.height / 2
         guestIcon5.layer.borderColor = UIColor.black.cgColor
-        guestIcon5.layer.borderWidth = 1.0
+        guestIcon5.layer.borderWidth = iconBorderWidth
+        
+        guestIcon6.clipsToBounds = true
+        guestIcon6.layer.cornerRadius = guestIcon5.frame.height / 2
+        guestIcon6.layer.borderColor = UIColor.black.cgColor
+        guestIcon6.layer.borderWidth = iconBorderWidth
+        
+        guestIcon7.clipsToBounds = true
+        guestIcon7.layer.cornerRadius = guestIcon5.frame.height / 2
+        guestIcon7.layer.borderColor = UIColor.black.cgColor
+        guestIcon7.layer.borderWidth = iconBorderWidth
+        
+        
+        self.addressLabel.superview!.layer.cornerRadius = 2.0
+        self.addressLabel.superview!.clipsToBounds = true
         
         self.layer.borderColor = UIColor.black.cgColor
         self.layer.borderWidth = 0.5
-        
-        distanceBlurBox.layer.cornerRadius = 2.0
-        distanceBlurBox.clipsToBounds = true
-
-        let gradient = CAGradientLayer()
-        gradient.frame = gv.bounds
-        gradient.startPoint = CGPoint(x: 0, y: 1)
-        gradient.endPoint = CGPoint(x: 0, y: 0)
-        let dark = UIColor(white: 0.0, alpha: 0.65)
-        gradient.colors = [dark.cgColor, UIColor.clear.cgColor]
-        gv.layer.insertSublayer(gradient, at: 0)
-        
-
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -137,7 +134,10 @@ class LocationTableCell: UITableViewCell {
         
     }
 
-    @IBOutlet weak var distanceBlurBox: UIVisualEffectView!
+    
+    @IBOutlet weak var distanceTopConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var distanceTrailingConstraint: NSLayoutConstraint!
     
     func setCellLocation(location:Location) {
         
@@ -156,28 +156,35 @@ class LocationTableCell: UITableViewCell {
             
         })
         
+        if location.getVisitors().count > 0 {
+            infoHeight.constant = 60 + 36
+        } else {
+            infoHeight.constant = 60
+        }
         
-        if location.getVisitors().count > 5 {
-            extraGuestCountLabel.text = "+\(location.getVisitors().count)"
+        
+        if location.getVisitors().count > guestCountMax {
+            extraGuestCountLabel.text = "+\(location.getVisitors().count - guestCountMax)"
         } else {
             extraGuestCountLabel.text = ""
         }
         
-        let distanceBox = distanceLabel.superview!
         if location.isActive() {
-            distanceBlurBox.effect = UIBlurEffect(style: .light)
-            //distanceLabel.superview!.backgroundColor = UIColor.white
+            distanceTopConstraint.constant = 4.0
+            distanceTrailingConstraint.constant = 6.0
+            addressLabel.superview!.backgroundColor = UIColor.white
             addressLabel.text = "Nearby"
-            distanceLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)//UIFont(name: "Avenir-Heavy", size: 12.0)
+            addressLabel.textColor = UIColor.black
+            addressLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightSemibold)//UIFont(name: "Avenir-Heavy", size: 12.0)
         } else {
-            distanceBlurBox.effect = UIBlurEffect(style: .dark)
-           // distanceLabel.superview!.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-            distanceLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightLight)//UIFont(name: "Avenir-Medium", size: 11.0)
+            distanceTopConstraint.constant = 0
+            distanceTrailingConstraint.constant = 0
+            addressLabel.textColor = UIColor.white
+            addressLabel.superview!.backgroundColor = UIColor.black
+            addressLabel.font = UIFont.systemFont(ofSize: 11, weight: UIFontWeightLight)//UIFont(name: "Avenir-Medium", size: 11.0)
             if let distance = location.getDistance() {
                 addressLabel.text = getDistanceString(distance: distance)
                 
-            } else {
-                distanceBox.isHidden = true
             }
         }
         setMultipleGuests()
@@ -208,33 +215,21 @@ class LocationTableCell: UITableViewCell {
         
         currentVisitors = visitors
         
-        if guestIcons != nil {
-            for icon in guestIcons! {
-                icon.removeFromSuperview()
-            }
-        }
-        gradient?.removeFromSuperlayer()
         
-        var max = 5
+        var max = guestCountMax
         if visitors.count <= max {
             max = visitors.count
 
         }
-        
-        guestsCountLabel.text = "\(visitors.count)"
-        
-        
-        /*if visitors.count > 0 {
-            guestsCountBubble.isHidden = false
-        } else {
-            //guestsCountBubble.isHidden = true
-        }*/
+
         
         guestIcon1.isHidden = true
         guestIcon2.isHidden = true
         guestIcon3.isHidden = true
         guestIcon4.isHidden = true
         guestIcon5.isHidden = true
+        guestIcon6.isHidden = true
+        guestIcon7.isHidden = true
         
         for i in 0..<max {
             let visitor = visitors[i]
@@ -311,36 +306,73 @@ class LocationTableCell: UITableViewCell {
                     }
                 })
             }
-        
+            
+            if i == 5 {
+                
+                UserService.getUser(visitor, check: check, completion: { user, check in
+                    if user != nil && self.check == check {
+                        
+                        loadImageCheckingCache(withUrl: user!.getImageUrl(), check: check, completion: { image, fromCache, check in
+                            if image != nil && self.check == check {
+                                self.guestIcon6.isHidden = false
+                                self.guestIcon6.image = image
+                            }
+                        })
+                    }
+                })
+            }
+            
+            if i == 6 {
+                
+                UserService.getUser(visitor, check: check, completion: { user, check in
+                    if user != nil && self.check == check {
+                        
+                        loadImageCheckingCache(withUrl: user!.getImageUrl(), check: check, completion: { image, fromCache, check in
+                            if image != nil && self.check == check {
+                                self.guestIcon7.isHidden = false
+                                self.guestIcon7.image = image
+                            }
+                        })
+                    }
+                })
+            }
+ 
         }
         
         switch visitors.count {
         case 1:
-            setLeadingConstraints(constant: 8)
+            setLeadingConstraints(constant: 3)
             break
         case 2:
-            setLeadingConstraints(constant: 2)
+            setLeadingConstraints(constant: 3)
             break
         case 3:
-            setLeadingConstraints(constant: -4)
+            setLeadingConstraints(constant: 3)
             break
         case 4:
-            setLeadingConstraints(constant: -8)
+            setLeadingConstraints(constant: -3)
+            break
+        case 5:
+            setLeadingConstraints(constant: -6)
+            break
+        case 6:
+            setLeadingConstraints(constant: -9)
             break
         default:
             setLeadingConstraints(constant: -12)
             break
-        }
-
+         }
+        
     }
     
     
     func setLeadingConstraints(constant:CGFloat) {
-        //leading1.constant = constant
         leading2.constant = constant
         leading3.constant = constant
         leading4.constant = constant
         leading5.constant = constant
+        leading6.constant = constant
+        leading7.constant = constant
     }
 
     
