@@ -40,6 +40,7 @@ class LocationTableCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     
+    @IBOutlet weak var extraGuestCountLabel: UILabel!
     @IBOutlet weak var infoView: UIView!
     
     //@IBOutlet weak var topImageViewConstraint: NSLayoutConstraint!
@@ -90,18 +91,28 @@ class LocationTableCell: UITableViewCell {
         
         guestIcon1.clipsToBounds = true
         guestIcon1.layer.cornerRadius = guestIcon1.frame.height / 2
+        guestIcon1.layer.borderColor = UIColor.black.cgColor
+        guestIcon1.layer.borderWidth = 1.0
         
         guestIcon2.clipsToBounds = true
         guestIcon2.layer.cornerRadius = guestIcon2.frame.height / 2
+        guestIcon2.layer.borderColor = UIColor.black.cgColor
+        guestIcon2.layer.borderWidth = 1.0
         
         guestIcon3.clipsToBounds = true
         guestIcon3.layer.cornerRadius = guestIcon3.frame.height / 2
+        guestIcon3.layer.borderColor = UIColor.black.cgColor
+        guestIcon3.layer.borderWidth = 1.0
         
         guestIcon4.clipsToBounds = true
         guestIcon4.layer.cornerRadius = guestIcon4.frame.height / 2
+        guestIcon4.layer.borderColor = UIColor.black.cgColor
+        guestIcon4.layer.borderWidth = 1.0
         
         guestIcon5.clipsToBounds = true
         guestIcon5.layer.cornerRadius = guestIcon5.frame.height / 2
+        guestIcon5.layer.borderColor = UIColor.black.cgColor
+        guestIcon5.layer.borderWidth = 1.0
         
         self.layer.borderColor = UIColor.black.cgColor
         self.layer.borderWidth = 0.5
@@ -146,6 +157,12 @@ class LocationTableCell: UITableViewCell {
         })
         
         
+        if location.getVisitors().count > 5 {
+            extraGuestCountLabel.text = "+\(location.getVisitors().count)"
+        } else {
+            extraGuestCountLabel.text = ""
+        }
+        
         let distanceBox = distanceLabel.superview!
         if location.isActive() {
             distanceBlurBox.effect = UIBlurEffect(style: .light)
@@ -173,8 +190,6 @@ class LocationTableCell: UITableViewCell {
     var currentVisitors:[String]?
     
     func setMultipleGuests() {
-        
-        
         
         let visitors = location!.getVisitors()
         
@@ -209,11 +224,11 @@ class LocationTableCell: UITableViewCell {
         guestsCountLabel.text = "\(visitors.count)"
         
         
-        if visitors.count > 0 {
+        /*if visitors.count > 0 {
             guestsCountBubble.isHidden = false
         } else {
-            guestsCountBubble.isHidden = true
-        }
+            //guestsCountBubble.isHidden = true
+        }*/
         
         guestIcon1.isHidden = true
         guestIcon2.isHidden = true
@@ -313,7 +328,7 @@ class LocationTableCell: UITableViewCell {
             setLeadingConstraints(constant: -8)
             break
         default:
-            setLeadingConstraints(constant: -14)
+            setLeadingConstraints(constant: -12)
             break
         }
 
@@ -321,7 +336,7 @@ class LocationTableCell: UITableViewCell {
     
     
     func setLeadingConstraints(constant:CGFloat) {
-        leading1.constant = constant
+        //leading1.constant = constant
         leading2.constant = constant
         leading3.constant = constant
         leading4.constant = constant

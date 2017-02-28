@@ -49,7 +49,7 @@ class LocationHeaderView: UIView {
         titleLabel.text = location.getName()
         var distanceStr = ""
         if let distance = location.getDistance() {
-            distanceStr = "  · \(getDistanceString(distance: distance))"
+            distanceStr = " · \(getDistanceString(distance: distance))"
         }
         subtitle.text = location.getType()
         descriptionLabel.text = location.desc
@@ -61,8 +61,6 @@ class LocationHeaderView: UIView {
         } else {
             imageView.loadImageAsync(location.getImageURL(), completion: nil)
         }
-        
-       
     }
 
 }
