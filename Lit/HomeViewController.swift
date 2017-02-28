@@ -28,6 +28,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.automaticallyAdjustsScrollViewInsets = false
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
+        if let nav = navigationController as? MasterNavigationController {
+            nav.setToZoomDelegate()
+        }
         tableView.backgroundColor = UIColor.black
         
         tableView.delegate = self

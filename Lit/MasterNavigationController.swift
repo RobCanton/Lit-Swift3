@@ -18,21 +18,32 @@ class MasterNavigationController: UINavigationController, UINavigationController
     override func viewDidLoad() {
         super.viewDidLoad()
        // self.delegate = self
-         delegate = zoomNavigationControllerDelegate
-        self.interactivePopGestureRecognizer?.delegate = nil
-        self.interactivePopGestureRecognizer?.isEnabled = false
+        setToStandardDelegate()
+        
         
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
     }
     
-//    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        
-//        return nil
-//    }
+    func setToZoomDelegate() {
+        delegate = zoomNavigationControllerDelegate
+        self.interactivePopGestureRecognizer?.delegate = nil
+        self.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
+    func setToStandardDelegate() {
+        delegate = self
+        self.interactivePopGestureRecognizer?.delegate = self
+        self.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        return nil
+    }
 //    
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
 }

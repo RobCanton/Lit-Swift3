@@ -28,6 +28,7 @@
 		B059015C1E628497005BD519 /* LocationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B059015B1E628496005BD519 /* LocationHeaderView.xib */; };
 		B059015E1E6284F7005BD519 /* LocationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B059015D1E6284F7005BD519 /* LocationHeaderView.swift */; };
 		B0828FF31E64AA6E00F3EE2C /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = B0828FF21E64AA6E00F3EE2C /* mapStyle.json */; };
+		B0828FF51E65396C00F3EE2C /* LocationMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0828FF41E65396C00F3EE2C /* LocationMapViewController.swift */; };
 		B087C7511E4163AA00234715 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7501E4163AA00234715 /* CameraButton.swift */; };
 		B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7521E41646E00234715 /* KDCircularProgress.swift */; };
 		B087C7561E41C10A00234715 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7551E41C10A00234715 /* UserProfileViewController.swift */; };
@@ -152,6 +153,7 @@
 		B059015B1E628496005BD519 /* LocationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationHeaderView.xib; sourceTree = "<group>"; };
 		B059015D1E6284F7005BD519 /* LocationHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHeaderView.swift; sourceTree = "<group>"; };
 		B0828FF21E64AA6E00F3EE2C /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
+		B0828FF41E65396C00F3EE2C /* LocationMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationMapViewController.swift; sourceTree = "<group>"; };
 		B087C7501E4163AA00234715 /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		B087C7521E41646E00234715 /* KDCircularProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDCircularProgress.swift; sourceTree = "<group>"; };
 		B087C7551E41C10A00234715 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 			isa = PBXGroup;
 			children = (
 				B0E59E011E4091D1007B4762 /* LocationViewController.swift */,
+				B0828FF41E65396C00F3EE2C /* LocationMapViewController.swift */,
 				B059015D1E6284F7005BD519 /* LocationHeaderView.swift */,
 				B059015B1E628496005BD519 /* LocationHeaderView.xib */,
 				B0B043101E40AED300D50DA7 /* LocationFooterView.swift */,
@@ -746,6 +749,7 @@
 				B087C76D1E41E4CD00234715 /* CommentCell.swift in Sources */,
 				B087C7621E41C5D900234715 /* UserReducer.swift in Sources */,
 				B0E59DE21E4050B5007B4762 /* Location.swift in Sources */,
+				B0828FF51E65396C00F3EE2C /* LocationMapViewController.swift in Sources */,
 				B0B0432B1E40CFC000D50DA7 /* Conversation.swift in Sources */,
 				B01EE54A1E435D450049BCBF /* YoshikoTextField.swift in Sources */,
 				B09405D11E44D04400CE0068 /* PostViewController.swift in Sources */,

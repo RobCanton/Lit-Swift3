@@ -36,6 +36,9 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     var descriptionTap:UITapGestureRecognizer!
     var descriptionCollapsed = true
     
+    var mapTap:UITapGestureRecognizer!
+    
+    
     override var prefersStatusBarHidden: Bool
     {
         get{
@@ -115,6 +118,10 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.tableFooterView = footerView
         footerView.setLocationInfo(location: location)
         
+        mapTap = UITapGestureRecognizer(target: self, action: #selector(showMap))
+        footerView.mapContainer.isUserInteractionEnabled = true
+        footerView.mapContainer.addGestureRecognizer(mapTap)
+        
         tableView.reloadData()
         
         view.addSubview(tableView)
@@ -191,6 +198,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         if let nav = navigationController as? MasterNavigationController {
             //nav.setNavigationBarHidden(false, animated: true)
             //nav.delegate = nav
+            nav.setToZoomDelegate()
         }
         
         if returningCell != nil {
@@ -286,7 +294,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 && userStories.count == 0 && storiesRetrieved {
+        if section == 0 && userStories.count == 0 {
             return 0
         }
         return 33
@@ -392,7 +400,12 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func showMap() {
-        self.performSegue(withIdentifier: "showMap", sender: self)
+        if let nav = navigationController as? MasterNavigationController {
+            nav.setToStandardDelegate()
+        }
+        let controller = LocationMapViewController()
+        controller.location = location
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     let transitionController: TransitionController = TransitionController()

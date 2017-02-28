@@ -1,31 +1,26 @@
 //
-//  LocationFooterView.swift
+//  LocationMapViewController.swift
 //  Lit
 //
-//  Created by Robert Canton on 2017-01-31.
+//  Created by Robert Canton on 2017-02-27.
 //  Copyright © 2017 Robert Canton. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import GoogleMaps
 
-class LocationFooterView: UITableViewHeaderFooterView {
-
-
-    @IBOutlet weak var mapContainer: UIView!
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        
-        
-    }
+class LocationMapViewController: UIViewController {
     
-    func setLocationInfo(location:Location) {
-
+    var location:Location!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor.black
         let camera = GMSCameraPosition.camera(withTarget: location.getCoordinates().coordinate, zoom: 16.0)
         
-        let mapView = GMSMapView.map(withFrame: mapContainer.bounds, camera: camera)
-        mapContainer.addSubview(mapView)
+        let mapView = GMSMapView.map(withFrame: view.bounds, camera: camera)
+        view.addSubview(mapView)
         mapView.backgroundColor = UIColor.black
         
         // Creates a marker in the center of the map.
@@ -42,12 +37,11 @@ class LocationFooterView: UITableViewHeaderFooterView {
         
         marker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         marker.icon = UIImage(named: "circle_dot")
-        mapView.settings.scrollGestures = false
-        mapView.settings.rotateGestures = false
+        mapView.settings.scrollGestures = true
+        mapView.settings.rotateGestures = true
         mapView.isBuildingsEnabled = true
         mapView.isMyLocationEnabled = true
-        mapView.isUserInteractionEnabled = false
-        //mapView.selectedMarker = marker
+        mapView.selectedMarker = marker
         
         
         var strokeColor = UIColor.white
@@ -67,7 +61,7 @@ class LocationFooterView: UITableViewHeaderFooterView {
         circ.strokeColor = strokeColor
         circ.strokeWidth = 1
         circ.map = mapView
-
+        
         
         do {
             // Set the map style by passing the URL of the local file.
@@ -79,6 +73,9 @@ class LocationFooterView: UITableViewHeaderFooterView {
         } catch {
             NSLog("One or more of the map styles failed to load. \(error)")
         }
+        
+        
     }
-
+    
+    
 }
