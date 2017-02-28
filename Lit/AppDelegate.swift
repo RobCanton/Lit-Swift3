@@ -13,6 +13,8 @@ import ReSwift
 import Firebase
 import UserNotifications
 import AVFoundation
+import GoogleMaps
+import GooglePlaces
 
 let mainStore = Store<AppState>(
     reducer: AppReducer(),
@@ -41,6 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 
         FIRApp.configure()
+        
+        GMSServices.provideAPIKey("AIzaSyCQJh5Rz0hDTh0CM9SEmTPlX8TymeQ4po0")
+        GMSPlacesClient.provideAPIKey("AIzaSyCQJh5Rz0hDTh0CM9SEmTPlX8TymeQ4po0")
         
         let colorView = UIView()
         colorView.backgroundColor = selectedColor

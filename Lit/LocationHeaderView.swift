@@ -10,14 +10,16 @@ import Foundation
 import UIKit
 
 class LocationHeaderView: UIView {
+    
+    @IBOutlet weak var subtitle: UILabel!
+    
     @IBOutlet weak var imageView: UIImageView!
 
     @IBOutlet weak var titleLabel: UILabel!
-    
-    @IBOutlet weak var addressLabel: UILabel!
+
+    @IBOutlet weak var descriptionLabel: UILabel!
     var backHandler:(()->())?
 
-    @IBOutlet weak var distanceLabel: UILabel!
     @IBAction func handleBackButton(_ sender: Any) {
         backHandler?()
     }
@@ -28,28 +30,23 @@ class LocationHeaderView: UIView {
         contactButton.layer.cornerRadius = 2.0
         contactButton.clipsToBounds = true
         contactButton.layer.borderWidth = 1.0
-        contactButton.layer.borderColor = UIColor.lightGray.cgColor
+        contactButton.layer.borderColor = UIColor.white.cgColor
         contactButton.isHidden = false
         
     }
 
     
     @IBOutlet weak var backButton: UIButton!
+    
     func setLocationInfo(location:Location) {
         
         titleLabel.text = location.getName()
-        addressLabel.text = location.getAddress()
-        
-        if location.isActive() {
-            distanceLabel.text = "Nearby"
-        } else {
-            if let distance = location.getDistance() {
-                distanceLabel.text = getDistanceString(distance: distance)
-                
-            } else {
-                distanceLabel.text = ""
-            }
+        var distanceStr = ""
+        if let distance = location.getDistance() {
+            distanceStr = "  · \(getDistanceString(distance: distance))"
         }
+        subtitle.text = location.getType()
+        descriptionLabel.text = location.desc
         
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("location-\(location.getKey()).jpg"))
         

@@ -50,6 +50,13 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.1)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
+  - GoogleMaps (2.1.1):
+    - GoogleMaps/Maps (= 2.1.1)
+  - GoogleMaps/Base (2.1.1)
+  - GoogleMaps/Maps (2.1.1):
+    - GoogleMaps/Base
+  - GooglePlaces (2.1.1):
+    - GoogleMaps/Base (= 2.1.1)
   - GoogleSymbolUtilities (1.1.2)
   - GoogleToolboxForMac/DebugUtils (2.1.0):
     - GoogleToolboxForMac/Defines (= 2.1.0)
@@ -69,7 +76,6 @@ PODS:
   - JSQSystemSoundPlayer (2.0.1)
   - NVActivityIndicatorView (3.0)
   - ReSwift (3.0.0)
-  - SABlurImageView (3.0.0)
   - SwiftMessages (3.1.4)
   - View2ViewTransition (1.0.0)
   - Whisper (4.0.0)
@@ -83,10 +89,11 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Messaging
   - Firebase/Storage
+  - GoogleMaps
+  - GooglePlaces
   - JSQMessagesViewController
   - NVActivityIndicatorView
   - ReSwift (= 3.0.0)
-  - SABlurImageView
   - SwiftMessages (= 3.1.4)
   - View2ViewTransition
   - Whisper
@@ -104,6 +111,8 @@ SPEC CHECKSUMS:
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
   FirebaseStorage: 5738284835edb57f0e81d4ae5832bb17c1e4b5fa
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
+  GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
+  GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
@@ -111,12 +120,11 @@ SPEC CHECKSUMS:
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   ReSwift: f0255f4b4f2dacd12c5d97d34d13fc5dad6d6371
-  SABlurImageView: 7003ca28ded502c984846374a117f88a287d9faf
   SwiftMessages: 08386e74abe1b32fa8ac2075edb4043c56db709d
   View2ViewTransition: 010ea80e451e42427988102527b0216b8534a741
   Whisper: 08be92623311f8e53201e62e17f6d7b9599a4714
   ZoomTransitioning: 42d9ad29c83d896f3fe28c324a4fe98ac821f0dd
 
-PODFILE CHECKSUM: 804456d0188a944d895ba11312ae638678b356b0
+PODFILE CHECKSUM: 04240572bada02f535f2a96e964c9a46f1763126
 
 COCOAPODS: 1.2.0

@@ -27,6 +27,7 @@
 		B0383C271E43515C002FD893 /* UserSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0383C251E43515C002FD893 /* UserSearchViewController.swift */; };
 		B059015C1E628497005BD519 /* LocationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B059015B1E628496005BD519 /* LocationHeaderView.xib */; };
 		B059015E1E6284F7005BD519 /* LocationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B059015D1E6284F7005BD519 /* LocationHeaderView.swift */; };
+		B0828FF31E64AA6E00F3EE2C /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = B0828FF21E64AA6E00F3EE2C /* mapStyle.json */; };
 		B087C7511E4163AA00234715 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7501E4163AA00234715 /* CameraButton.swift */; };
 		B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7521E41646E00234715 /* KDCircularProgress.swift */; };
 		B087C7561E41C10A00234715 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7551E41C10A00234715 /* UserProfileViewController.swift */; };
@@ -150,6 +151,7 @@
 		B0383C251E43515C002FD893 /* UserSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSearchViewController.swift; sourceTree = "<group>"; };
 		B059015B1E628496005BD519 /* LocationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationHeaderView.xib; sourceTree = "<group>"; };
 		B059015D1E6284F7005BD519 /* LocationHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHeaderView.swift; sourceTree = "<group>"; };
+		B0828FF21E64AA6E00F3EE2C /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
 		B087C7501E4163AA00234715 /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		B087C7521E41646E00234715 /* KDCircularProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDCircularProgress.swift; sourceTree = "<group>"; };
 		B087C7551E41C10A00234715 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				B0D84F7A1E4046DD0043D28C /* Info.plist */,
 				B09405D51E460BF100CE0068 /* GoogleService-Info.plist */,
 				B0D84F6E1E4046DD0043D28C /* AppDelegate.swift */,
+				B0828FF21E64AA6E00F3EE2C /* mapStyle.json */,
 				B0E59DE61E4050B9007B4762 /* Models */,
 				B0E59DD91E404FDC007B4762 /* State */,
 				B0E59DE71E405506007B4762 /* Services */,
@@ -628,6 +631,7 @@
 				B0E59E061E409444007B4762 /* InfoTableViewCell.xib in Resources */,
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
 				B09405F41E4EE14200CE0068 /* TacoDialogView.xib in Resources */,
+				B0828FF31E64AA6E00F3EE2C /* mapStyle.json in Resources */,
 				B09405EA1E4A7C3F00CE0068 /* StoryInfoView.xib in Resources */,
 				B01EE5421E435D450049BCBF /* Info.plist in Resources */,
 				B0D0DC431E43057400381AEE /* EditProfileViewController.storyboard in Resources */,

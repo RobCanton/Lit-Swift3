@@ -33,6 +33,9 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     var storiesRetrieved = false
     
+    var descriptionTap:UITapGestureRecognizer!
+    var descriptionCollapsed = true
+    
     override var prefersStatusBarHidden: Bool
     {
         get{
@@ -84,9 +87,20 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.backgroundColor = UIColor.black
         
         headerView = UINib(nibName: "LocationHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! LocationHeaderView
-        headerView.contentMode = .scaleAspectFill
+        
+        
+        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: calculateHeaderHeight())
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+        headerView.layoutSubviews()
         headerView.clipsToBounds = true
         headerView.backHandler = dismiss
+        
+        descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionTapped))
+        headerView.descriptionLabel.isUserInteractionEnabled = true
+        headerView.descriptionLabel.addGestureRecognizer(descriptionTap)
+        
+        print("LABEL HEIGHT: \(headerView.descriptionLabel.frame.height)")
         
         headerView.setLocationInfo(location: location)
 
@@ -99,19 +113,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         
         let footerView = UINib(nibName: "LocationFooterView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! LocationFooterView
         tableView.tableFooterView = footerView
+        footerView.setLocationInfo(location: location)
         
         tableView.reloadData()
         
         view.addSubview(tableView)
-        
-        LocationService.getLocationDetails(location, completion: { location in
-            self.location = location
-            if let footer = self.tableView?.tableFooterView as? LocationFooterView {
-                //footer.descriptionLabel.text = self.location.desc
-                //footer.descriptionLabel.sizeToFit()
-            }
-            self.tableView?.reloadData()
-        })
         
 //        if let distance = location.getDistance() {
 //            let distanceButton = UIBarButtonItem(title: getDistanceString(distance: distance), style: .plain, target: self, action: #selector(showMap))
@@ -123,6 +129,38 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     func dismiss() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func descriptionTapped(sender:UITapGestureRecognizer) {
+        print("TAPPED")
+        descriptionCollapsed = !descriptionCollapsed
+        let desc = headerView.descriptionLabel!
+        if descriptionCollapsed {
+            desc.numberOfLines = 2
+        } else {
+            desc.numberOfLines = 0
+        }
+        desc.sizeToFit()
+        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: calculateHeaderHeight())
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+        headerView.layoutSubviews()
+        tableView.reloadData()
+    }
+    
+    func calculateHeaderHeight() -> CGFloat {
+        let titleSize =  UILabel.size(withText: location.getName(), forWidth: tableView.frame.size.width - 118, withFont: UIFont.systemFont(ofSize: 24.0, weight: UIFontWeightHeavy))
+        
+        var descHeight:CGFloat = 0.0
+        if let desc = location.desc {
+            descHeight = UILabel.size(withText: desc, forWidth: tableView.frame.size.width - 28, withFont: UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightLight)).height
+            if descHeight > 38.5 && descriptionCollapsed {
+                descHeight = 38.5
+            }
+            descHeight + 16 // padding
+        }
+        
+        return titleSize.height + 210 + 50 + 10 + descHeight
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -251,14 +289,14 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         if section == 0 && userStories.count == 0 && storiesRetrieved {
             return 0
         }
-        return 34
+        return 33
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
             headerView.isHidden = false
-            headerView.label.text = "RECENT"
+            headerView.label.text = "Recent"
             return headerView
         } else if section == 1 {
             let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView

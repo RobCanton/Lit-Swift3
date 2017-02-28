@@ -78,19 +78,25 @@ class LocationService {
             if snapshot.exists() {
                 let dict         = snapshot.value as! [String:AnyObject]
                 let name         = dict["name"] as! String
+                let type         = dict["type"] as! String
                 let coordinates  = dict["coordinates"] as! [String:Double]
                 let lat          = coordinates["latitude"]!
                 let lon          = coordinates["longitude"]!
                 let imageURL     = dict["imageURL"] as! String
                 let address      = dict["address"] as! String
                 
+                let phone   = dict["phone"] as? String
+                let email   = dict["email"] as? String
+                let website = dict["website"] as? String
+                let desc    = dict["description"] as? String
+                
                 var radius = 100.0
                 if dict["radius"] != nil {
                     radius = dict["radius"] as! Double
                 }
                 
-                location = Location(key: locationKey, name: name, latitude: lat, longitude: lon, radius: radius, imageURL: imageURL, address: address,
-                                    phone: nil, email: nil, website: nil, desc: nil)
+                location = Location(key: locationKey, name: name, type: type, latitude: lat, longitude: lon, radius: radius, imageURL: imageURL, address: address,
+                                    phone: phone, email: email, website: website, desc: desc)
                 locationsCache.setObject(location!, forKey: locationKey as NSString)
             }
             

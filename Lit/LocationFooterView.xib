@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11762"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,24 +12,33 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="LocationFooterView" customModule="Lit" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="355" height="196"/>
+            <rect key="frame" x="0.0" y="0.0" width="355" height="203"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="emW-QF-172">
-                    <rect key="frame" x="0.0" y="0.0" width="355" height="196"/>
+                    <rect key="frame" x="0.0" y="0.0" width="355" height="203"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Nms-s2-14z">
-                            <rect key="frame" x="8" y="8" width="339" height="50"/>
+                        <view clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DhM-kk-cxe">
+                            <rect key="frame" x="12" y="31" width="331" height="164"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdA-qR-rSw">
+                            <rect key="frame" x="12" y="8" width="331" height="1"/>
+                            <color key="backgroundColor" red="0.15000000599999999" green="0.15000000599999999" blue="0.15000000599999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="50" id="5By-Be-sQf"/>
+                                <constraint firstAttribute="height" constant="1" id="qFo-a7-7wU"/>
                             </constraints>
-                        </stackView>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     <constraints>
-                        <constraint firstAttribute="trailingMargin" secondItem="Nms-s2-14z" secondAttribute="trailing" id="Tyn-Mn-6g7"/>
-                        <constraint firstAttribute="leadingMargin" secondItem="Nms-s2-14z" secondAttribute="leading" id="WkZ-9b-094"/>
-                        <constraint firstAttribute="topMargin" secondItem="Nms-s2-14z" secondAttribute="top" id="c66-DZ-Tyd"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="AdA-qR-rSw" secondAttribute="trailing" constant="12" id="G7t-Qy-X23"/>
+                        <constraint firstItem="DhM-kk-cxe" firstAttribute="top" secondItem="emW-QF-172" secondAttribute="top" constant="32" id="KQU-DX-1qG"/>
+                        <constraint firstItem="AdA-qR-rSw" firstAttribute="leading" secondItem="emW-QF-172" secondAttribute="leadingMargin" constant="12" id="Rwt-EH-cVf"/>
+                        <constraint firstAttribute="trailing" secondItem="DhM-kk-cxe" secondAttribute="trailing" constant="12" id="ZmM-Ky-6Y1"/>
+                        <constraint firstItem="AdA-qR-rSw" firstAttribute="top" secondItem="emW-QF-172" secondAttribute="top" constant="16" id="jHX-kq-6qg"/>
+                        <constraint firstItem="DhM-kk-cxe" firstAttribute="leading" secondItem="emW-QF-172" secondAttribute="leading" constant="12" id="qFB-DY-WfO"/>
+                        <constraint firstAttribute="bottom" secondItem="DhM-kk-cxe" secondAttribute="bottom" constant="12" id="x5n-sY-Bjr"/>
                     </constraints>
                 </view>
             </subviews>
@@ -41,7 +50,10 @@
                 <constraint firstAttribute="trailing" secondItem="emW-QF-172" secondAttribute="trailing" id="o75-kq-HWO"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="29.5" y="-56"/>
+            <connections>
+                <outlet property="mapContainer" destination="DhM-kk-cxe" id="pdH-v4-K6F"/>
+            </connections>
+            <point key="canvasLocation" x="30.5" y="-125.5"/>
         </view>
     </objects>
 </document>
