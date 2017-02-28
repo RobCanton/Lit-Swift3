@@ -379,7 +379,7 @@
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="BY0-vB-XIc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="BY0-vB-XIc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -419,7 +419,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Activity" id="h8X-VY-ZWg">
-                        <barButtonItem key="rightBarButtonItem" image="find_user" id="eDG-LI-HfH">
+                        <barButtonItem key="rightBarButtonItem" image="find_user_filled" id="eDG-LI-HfH">
                             <connections>
                                 <segue destination="9zo-VJ-oUC" kind="show" id="1jh-UM-EHw"/>
                             </connections>
@@ -457,7 +457,7 @@
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="Wp1-Pi-1AE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="Wp1-Pi-1AE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -931,7 +931,7 @@
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="c2t-xW-Dz5">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="c2t-xW-Dz5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -951,7 +951,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SendNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="aJA-z7-s7u" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="afM-T2-vfW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="afM-T2-vfW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1009,7 +1009,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2SC-Xe-IfT" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="lgT-MD-MTp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="lgT-MD-MTp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1028,7 +1028,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="UHb-U7-0a0" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="pLW-BU-Y8K">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="pLW-BU-Y8K">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1048,7 +1048,7 @@
         <image name="bluedot" width="16" height="16"/>
         <image name="collapse" width="25" height="25"/>
         <image name="facebook" width="25" height="25"/>
-        <image name="find_user" width="25" height="25"/>
+        <image name="find_user_filled" width="25" height="25"/>
         <image name="home" width="25" height="25"/>
         <image name="left_arrow" width="25" height="25"/>
         <image name="message" width="25" height="25"/>

@@ -19,12 +19,13 @@ class LocationHeaderView: UIView {
 
     @IBOutlet weak var descriptionLabel: UILabel!
     var backHandler:(()->())?
-
+    var contactHandler:(()->())?
     @IBAction func handleBackButton(_ sender: Any) {
         backHandler?()
     }
     @IBOutlet weak var contactButton: UIButton!
     
+    @IBOutlet weak var backButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         contactButton.layer.cornerRadius = 2.0
@@ -33,10 +34,15 @@ class LocationHeaderView: UIView {
         contactButton.layer.borderColor = UIColor.white.cgColor
         contactButton.isHidden = false
         
+        contactButton.setTitleColor(UIColor.white, for: .normal)
+        contactButton.setTitleColor(UIColor.gray, for: .selected)
+        
     }
 
+    @IBAction func handleContact(_ sender: Any) {
+        contactHandler?()
+    }
     
-    @IBOutlet weak var backButton: UIButton!
     
     func setLocationInfo(location:Location) {
         

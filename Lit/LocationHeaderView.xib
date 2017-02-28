@@ -40,6 +40,9 @@
                             <state key="normal" title="Contact">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="handleContact:" destination="iN0-l3-epB" eventType="touchUpInside" id="EFL-mH-4ib"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Nightclub" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oMz-VL-3Pj">
                             <rect key="frame" x="20" y="57" width="94" height="21"/>
@@ -68,10 +71,14 @@
                         <constraint firstAttribute="trailing" secondItem="BWB-aQ-WjT" secondAttribute="trailing" constant="12" id="ums-JV-hvq"/>
                     </constraints>
                 </view>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Eh-Wm-7sk">
-                    <rect key="frame" x="12" y="12" width="32" height="32"/>
+                <button opaque="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Eh-Wm-7sk">
+                    <rect key="frame" x="12" y="12" width="42" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="K9D-i7-ehf"/>
+                        <constraint firstAttribute="height" constant="64" id="l1l-q7-jNN"/>
+                    </constraints>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <state key="normal" image="delete">
+                    <state key="normal" image="navback">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -83,17 +90,17 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="hSs-OK-Oxk" secondAttribute="trailing" id="6PD-Vf-46w"/>
                 <constraint firstItem="pMz-q6-flq" firstAttribute="top" secondItem="hSs-OK-Oxk" secondAttribute="bottom" id="QjJ-Da-qI8"/>
-                <constraint firstItem="2Eh-Wm-7sk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="Xm2-2F-3Uu"/>
+                <constraint firstItem="2Eh-Wm-7sk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Xm2-2F-3Uu"/>
                 <constraint firstAttribute="bottom" secondItem="pMz-q6-flq" secondAttribute="bottom" id="Xw0-Cr-Emn"/>
                 <constraint firstItem="pMz-q6-flq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aPz-8I-RMo"/>
                 <constraint firstAttribute="trailing" secondItem="pMz-q6-flq" secondAttribute="trailing" id="eTr-vX-qqp"/>
-                <constraint firstItem="2Eh-Wm-7sk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="vvm-cd-znG"/>
+                <constraint firstItem="2Eh-Wm-7sk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="2" id="vvm-cd-znG"/>
                 <constraint firstItem="hSs-OK-Oxk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="wKM-cR-NjG"/>
                 <constraint firstItem="hSs-OK-Oxk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="xKE-7H-ng0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="backButton" destination="2Eh-Wm-7sk" id="5RE-9t-Y6v"/>
+                <outlet property="backButton" destination="2Eh-Wm-7sk" id="SaY-VI-uUd"/>
                 <outlet property="contactButton" destination="7rM-2D-3N6" id="OYO-yC-OW5"/>
                 <outlet property="descriptionLabel" destination="BWB-aQ-WjT" id="s5v-i8-9rY"/>
                 <outlet property="imageView" destination="hSs-OK-Oxk" id="y9n-6i-kc1"/>
@@ -104,6 +111,6 @@
         </view>
     </objects>
     <resources>
-        <image name="delete" width="25" height="25"/>
+        <image name="navback" width="25" height="25"/>
     </resources>
 </document>

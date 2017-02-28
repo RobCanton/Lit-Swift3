@@ -98,6 +98,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         headerView.layoutSubviews()
         headerView.clipsToBounds = true
         headerView.backHandler = dismiss
+        headerView.contactHandler = handleContact
         
         descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionTapped))
         headerView.descriptionLabel.isUserInteractionEnabled = true
@@ -167,7 +168,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             descHeight + 16 // padding
         }
         
-        return titleSize.height + 210 + 50 + 10 + descHeight
+        return titleSize.height + 210 + 50 + 12 + descHeight
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -205,6 +206,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             returningCell!.activate(true)
             returningCell = nil
         }
+        
+        UIView.animate(withDuration: 0.15, delay: 0.075, options: .curveEaseIn, animations: {
+            self.headerView.backButton.alpha = 1.0
+        }, completion: nil)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -399,9 +405,26 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func handleContact() {
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        sheet.addAction(UIAlertAction(title: "Call", style: .default, handler: { _ in
+            self.promptPhoneCall()
+        }))
+        sheet.addAction(UIAlertAction(title: "Email", style: .default, handler: { _ in
+            self.promptEmail()
+        }))
+        sheet.addAction(UIAlertAction(title: "Visit Website", style: .default, handler: { _ in
+            self.promptWebsite()
+        }))
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(sheet, animated: true, completion: nil)
+    }
+    
     func showMap() {
         if let nav = navigationController as? MasterNavigationController {
-            nav.setToStandardDelegate()
+            nav.setToStandardDelegate(interactive: false)
         }
         let controller = LocationMapViewController()
         controller.location = location
@@ -434,13 +457,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             // Set transitionController as a navigation controller delegate and push.
             navigationController.delegate = transitionController
             transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showMap" {
-            let controller = segue.destination as! MapViewController
-            controller.setMapLocation(_location: location)
         }
     }
     

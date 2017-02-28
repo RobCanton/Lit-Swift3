@@ -342,14 +342,15 @@ extension ActivityViewController: View2ViewTransitionPresenting {
         guard let indexPath: IndexPath = userInfo?["initialIndexPath"] as? IndexPath else {
             return CGRect.zero
         }
+        
+        let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
+        
         if indexPath.section == 0 {
             let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath)! as! UserStoryTableViewCell
             let image_frame = cell.contentImageView.frame
             let image_height = image_frame.height
-            let x = cell.frame.origin.x + 19
-
-            let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-
+            let x = cell.frame.origin.x + 23
+            
             var y = cell.frame.origin.y + 11 + navHeight
             if !isPresenting {
                 y += 20.0
@@ -362,7 +363,7 @@ extension ActivityViewController: View2ViewTransitionPresenting {
             let cell: UserStoryTableViewCell = self.tableView!.cellForRow(at: indexPath)! as! UserStoryTableViewCell
             let image_frame = cell.contentImageView.frame
             let image_height = image_frame.height
-            let x = cell.frame.origin.x + 19
+            let x = cell.frame.origin.x + 23
 
             let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
 

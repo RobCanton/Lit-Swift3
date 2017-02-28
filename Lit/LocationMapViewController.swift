@@ -14,12 +14,20 @@ class LocationMapViewController: UIViewController {
     
     var location:Location!
     
+    var mapView:GMSMapView!
+    
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = location.getName()
+        
+        
         self.view.backgroundColor = UIColor.black
         let camera = GMSCameraPosition.camera(withTarget: location.getCoordinates().coordinate, zoom: 16.0)
-        
-        let mapView = GMSMapView.map(withFrame: view.bounds, camera: camera)
+
+        mapView = GMSMapView.map(withFrame: view.bounds, camera: camera)
         view.addSubview(mapView)
         mapView.backgroundColor = UIColor.black
         
@@ -39,7 +47,7 @@ class LocationMapViewController: UIViewController {
         marker.icon = UIImage(named: "circle_dot")
         mapView.settings.scrollGestures = true
         mapView.settings.rotateGestures = true
-        mapView.isBuildingsEnabled = true
+        
         mapView.isMyLocationEnabled = true
         mapView.selectedMarker = marker
         
@@ -74,7 +82,17 @@ class LocationMapViewController: UIViewController {
             NSLog("One or more of the map styles failed to load. \(error)")
         }
         
+        mapView.alpha = 0.0
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseIn, animations: {
+            self.mapView.alpha = 1.0
+        }, completion: nil)
     }
     
     

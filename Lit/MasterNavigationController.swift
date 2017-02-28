@@ -18,7 +18,7 @@ class MasterNavigationController: UINavigationController, UINavigationController
     override func viewDidLoad() {
         super.viewDidLoad()
        // self.delegate = self
-        setToStandardDelegate()
+        setToStandardDelegate(interactive: true)
         
         
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -31,10 +31,10 @@ class MasterNavigationController: UINavigationController, UINavigationController
         self.interactivePopGestureRecognizer?.isEnabled = false
     }
     
-    func setToStandardDelegate() {
+    func setToStandardDelegate(interactive:Bool) {
         delegate = self
         self.interactivePopGestureRecognizer?.delegate = self
-        self.interactivePopGestureRecognizer?.isEnabled = true
+        self.interactivePopGestureRecognizer?.isEnabled = interactive
     }
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {

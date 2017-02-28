@@ -44,9 +44,9 @@ class LocationFooterView: UITableViewHeaderFooterView {
         marker.icon = UIImage(named: "circle_dot")
         mapView.settings.scrollGestures = false
         mapView.settings.rotateGestures = false
-        mapView.isBuildingsEnabled = true
         mapView.isMyLocationEnabled = true
         mapView.isUserInteractionEnabled = false
+        mapView.alpha = 0.0
         //mapView.selectedMarker = marker
         
         
@@ -79,6 +79,10 @@ class LocationFooterView: UITableViewHeaderFooterView {
         } catch {
             NSLog("One or more of the map styles failed to load. \(error)")
         }
+        
+        UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseIn, animations: {
+            mapView.alpha = 1.0
+        }, completion: nil)
     }
 
 }
