@@ -37,6 +37,7 @@ class ProfileHeaderView: UICollectionReusableView {
     var followersHandler:(()->())?
     var followingHandler:(()->())?
     var editProfileHandler:(()->())?
+    var followHandler:(()->())?
     
     var followersTap: UITapGestureRecognizer!
     var followingTap: UITapGestureRecognizer!
@@ -214,6 +215,7 @@ class ProfileHeaderView: UICollectionReusableView {
             break
         }
     }
+    
     @IBAction func handleFollowTap(sender: AnyObject) {
         guard let user = self.user else { return }
         guard let status = self.status else { return }
@@ -227,6 +229,7 @@ class ProfileHeaderView: UICollectionReusableView {
         case .None:
             setUserStatus(status: .Requested)
             UserService.followUser(uid: user.getUserId())
+            followHandler?()
             break
         case .Requested:
             break

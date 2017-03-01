@@ -347,6 +347,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    
     func messageBlockTapped() {
         
         let current_uid = mainStore.state.userState.uid
@@ -384,6 +385,21 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         self.present(controller, animated: true, completion: nil)
     }
     
+    func followHandler() {
+        if !NotificationService.shared.notificationsEnabled() && !NotificationService.shared.followPromptShown {
+            NotificationService.shared.followPromptShown = true
+            
+            let alert = UIAlertController(title: "Do you want to be notified when you someone follows you?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { _ in }))
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                NotificationService.shared.registerForUserNotifications()
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     var presentConversation:Conversation?
     var partnerImage:UIImage?
     
@@ -406,16 +422,6 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         })
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //        if segue.identifier == "toMessage" {
-        //            guard let conversation = presentConversation else { return }
-        //            let controller = segue.destinationViewController as! ContainerViewController
-        //            controller.isEmpty = presentingEmptyConversation
-        //            controller.hidesBottomBarWhenPushed = true
-        //            controller.conversation = conversation
-        //            controller.partnerImage = partnerImage
-        //        }
-    }
 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -445,7 +451,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
             view.followersHandler = followersBlockTapped
             view.followingHandler = followingBlockTapped
             view.messageHandler = messageBlockTapped
-            
+            view.followHandler = followHandler
             view.editProfileHandler = editProfileTapped
             view.unfollowHandler = unfollowHandler
             view.setPostsCount(count: postKeys.count)

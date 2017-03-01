@@ -224,10 +224,11 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
-        
+        if section == 0 {
+            headerView.isHidden = true
+        }
         if section == 1 && userStories.count > 0 {
             headerView.isHidden = false
-            headerView.label.text = "FOLLOWING"
         }
         
         return headerView
@@ -236,9 +237,9 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 && userStories.count > 0 {
-            return 34
+            return 28
         }
-        return 0
+        return 14
     }
 
     

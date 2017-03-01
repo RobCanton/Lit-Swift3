@@ -10,7 +10,6 @@ import UIKit
 
 class ListHeaderView: UITableViewHeaderFooterView {
 
-    @IBOutlet weak var label: UILabel!
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -18,23 +17,6 @@ class ListHeaderView: UITableViewHeaderFooterView {
         // Drawing code
     }
     */
-    
-    var activityIndicator:UIActivityIndicatorView?
-    func addActivityIndicator()  {
-        activityIndicator?.removeFromSuperview()
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        activityIndicator!.frame = CGRect(x: 0, y: 0, width: 20.0, height: 20.0)
-        activityIndicator!.center = label.center
-        self.addSubview(activityIndicator!)
-        activityIndicator!.startAnimating()
-        label.isHidden = true
-        
-    }
-    
-    func stopIndicator() {
-        activityIndicator?.stopAnimating()
-        activityIndicator?.removeFromSuperview()
-        label.isHidden = false
-    }
+
 
 }

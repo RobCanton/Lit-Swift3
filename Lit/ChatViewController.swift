@@ -95,6 +95,8 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
+    
+    
     func startActivityIndicator() {
         DispatchQueue.main.async {
             if self.settingUp {
@@ -185,6 +187,7 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
     }
     
     func reloadMessagesView() {
@@ -351,6 +354,20 @@ extension ChatViewController {
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         UserService.sendMessage(conversation: conversation, message: text, uploadKey: nil, completion: nil)
         self.finishSendingMessage(animated: true)
+        
+        if !NotificationService.shared.notificationsEnabled() && !NotificationService.shared.messagePromptShown {
+            NotificationService.shared.messagePromptShown = true
+            
+            let alert = UIAlertController(title: "Do you want to be notified when you receive a reply?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { _ in }))
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                NotificationService.shared.registerForUserNotifications()
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+        
     }
 
     

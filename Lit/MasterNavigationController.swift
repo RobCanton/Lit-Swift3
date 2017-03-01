@@ -19,13 +19,14 @@ class MasterNavigationController: UINavigationController, UINavigationController
         super.viewDidLoad()
         setToStandardDelegate(interactive: true)
         
-        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationBar.shadowImage = UIImage()
+       
     }
     
     func setToZoomDelegate() {
         delegate = zoomNavigationControllerDelegate
         disableInteractivePop()
+        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationBar.shadowImage = UIImage()
     }
     
     func setToStandardDelegate(interactive:Bool) {
@@ -51,5 +52,8 @@ class MasterNavigationController: UINavigationController, UINavigationController
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
+    
+
+    
     
 }

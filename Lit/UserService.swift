@@ -246,12 +246,7 @@ class UserService {
             ref.child("users/social/following/\(uid)").removeAllObservers()
         }
     }
-    
-    
-    
-    
-    
-    
+
     
     static func uploadProfilePicture(largeImage:UIImage, smallImage:UIImage , completionHandler:@escaping (_ success:Bool, _ largeImageURL:String?, _ smallImageURL:String?)->()) {
         let storageRef = FIRStorage.storage().reference()
@@ -314,17 +309,15 @@ class UserService {
     
     static func updateProfilePictureURL(largeURL:String, smallURL:String, completionHandler:@escaping ()->()) {
         let uid = mainStore.state.userState.uid
-        let basicRef = FIRDatabase.database().reference().child("users/profile/basic/\(uid)")
-        basicRef.updateChildValues([
-            "profileImageURL": smallURL
-            ], withCompletionBlock: { error, ref in
-                let fullRef = FIRDatabase.database().reference().child("users/profile/full/\(uid)")
-                fullRef.updateChildValues([
-                    "largeProfileImageURL": largeURL
-                    ], withCompletionBlock: { error, ref in
-                        
-                        completionHandler()
-                })
+        let profileRef = FIRDatabase.database().reference().child("users/profile") //FIRDatabase.database().reference().child("users/profile/basic/\(uid)")
+        
+        let updates = [
+            "basic/\(uid)/profileImageURL": smallURL,
+            "full/\(uid)/largeProfileImageURL": largeURL
+        ]
+        
+        profileRef.updateChildValues(updates, withCompletionBlock: { error, ref in
+            completionHandler()
         })
     }
     

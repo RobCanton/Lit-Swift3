@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11762"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,13 +15,10 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMZ-v6-xax">
-                    <rect key="frame" x="20" y="9" width="173" height="22"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wNI-Jz-jJI">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                </view>
                 <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zLF-Ni-pB5">
                     <rect key="frame" x="20" y="21" width="560" height="1"/>
                     <color key="backgroundColor" red="0.15000000596046448" green="0.15000000596046448" blue="0.15000000596046448" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -34,24 +31,21 @@
             <constraints>
                 <constraint firstItem="zLF-Ni-pB5" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="3SO-Yd-Zyj"/>
                 <constraint firstItem="zLF-Ni-pB5" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AdW-Jn-nnA"/>
-                <constraint firstItem="GMZ-v6-xax" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="LfB-Mf-QhO"/>
-                <constraint firstItem="GMZ-v6-xax" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="MFM-YU-cfP"/>
+                <constraint firstAttribute="bottom" secondItem="wNI-Jz-jJI" secondAttribute="bottom" id="DgA-Jt-UCV"/>
                 <constraint firstAttribute="leadingMargin" secondItem="zLF-Ni-pB5" secondAttribute="leading" id="S1f-Ka-n5Y"/>
+                <constraint firstAttribute="trailing" secondItem="wNI-Jz-jJI" secondAttribute="trailing" id="TNG-RX-815"/>
+                <constraint firstItem="wNI-Jz-jJI" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="d5a-gG-Ovy"/>
                 <constraint firstAttribute="trailingMargin" secondItem="zLF-Ni-pB5" secondAttribute="trailing" id="eF7-kK-HWO"/>
+                <constraint firstItem="wNI-Jz-jJI" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jnL-Yu-c9Z"/>
                 <constraint firstAttribute="trailing" secondItem="zLF-Ni-pB5" secondAttribute="trailing" constant="8" id="tfO-uL-ERc"/>
-                <constraint firstItem="GMZ-v6-xax" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="z1c-dx-WSM"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="z1c-dx-WSM"/>
                     <exclude reference="AdW-Jn-nnA"/>
                     <exclude reference="tfO-uL-ERc"/>
                 </mask>
             </variation>
-            <connections>
-                <outlet property="label" destination="GMZ-v6-xax" id="bbP-OV-Yt1"/>
-            </connections>
             <point key="canvasLocation" x="432" y="59"/>
         </view>
     </objects>

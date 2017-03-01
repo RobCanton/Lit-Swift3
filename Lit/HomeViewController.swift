@@ -70,6 +70,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    override func viewDidAppear(_ animated:Bool) {
+        super.viewDidAppear(animated)
+        if !GPSService.sharedInstance.isAuthorized() {
+            let actionSheet = UIAlertController(title: "Location Services Disabled", message: "Lit requires your location to search for nearby activity. Please enable location services.", preferredStyle: .alert)
+            
+            let cancelActionButton: UIAlertAction = UIAlertAction(title: "No", style: .destructive) { action -> Void in
+            }
+            actionSheet.addAction(cancelActionButton)
+            
+            let saveActionButton: UIAlertAction = UIAlertAction(title: "Open Settings", style: .default)
+            { action -> Void in
+                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+            }
+            actionSheet.addAction(saveActionButton)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mainStore.unsubscribe(self)

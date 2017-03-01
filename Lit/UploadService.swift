@@ -153,11 +153,7 @@ class UploadService {
                 if (error != nil) {
                     // HANDLE ERROR
                     hide()
-                    var murmur = Murmur(title: "Unable to upload.")
-                    murmur.backgroundColor = errorColor
-                    murmur.titleColor = UIColor.white
-                    murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                    show(whistle: murmur, action: .show(5.0))
+                    showFailureNotification("Error uploading image.")
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()
@@ -176,17 +172,9 @@ class UploadService {
                     dataRef.child("meta").setValue(obj, withCompletionBlock: { error, _ in
                         hide()
                         if error == nil {
-                            var murmur = Murmur(title: "Image uploaded!")
-                            murmur.backgroundColor = accentColor
-                            murmur.titleColor = UIColor.white
-                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                            show(whistle: murmur, action: .show(3.0))
+                            showSuccessNotification("Image uploaded!")
                         } else {
-                            var murmur = Murmur(title: "Unable to upload.")
-                            murmur.backgroundColor = errorColor
-                            murmur.titleColor = UIColor.white
-                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                            show(whistle: murmur, action: .show(5.0))
+                            showFailureNotification("Error uploading image.")
                         }
                     })
                     
@@ -233,11 +221,7 @@ class UploadService {
                 if (error != nil) {
                     // HANDLE ERROR
                     hide()
-                    var murmur = Murmur(title: "Unable to upload.")
-                    murmur.backgroundColor = errorColor
-                    murmur.titleColor = UIColor.white
-                    murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                    show(whistle: murmur, action: .show(5.0))
+                    showFailureNotification("Error uploading video.")
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()
@@ -257,17 +241,9 @@ class UploadService {
                     dataRef.child("meta").setValue(obj, withCompletionBlock: { error, _ in
                         hide()
                         if error == nil {
-                            var murmur = Murmur(title: "Video uploaded!")
-                            murmur.backgroundColor = accentColor
-                            murmur.titleColor = UIColor.white
-                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                            show(whistle: murmur, action: .show(3.0))
+                            showSuccessNotification("Video uploaded!")
                         } else {
-                            var murmur = Murmur(title: "Unable to upload.")
-                            murmur.backgroundColor = errorColor
-                            murmur.titleColor = UIColor.white
-                            murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
-                            show(whistle: murmur, action: .show(5.0))
+                            showFailureNotification("Error uploading video.")
                         }
                     })
                 }
@@ -487,74 +463,162 @@ class UploadService {
     }
     
     static func removeItemFromLocation(item:StoryItem, completion:@escaping (()->())) {
+        var type = "image"
+        if item.contentType == .video {
+            type = "video"
+        }
+        
         let ref = FIRDatabase.database().reference()
-        let locationRef = ref.child("locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)")
-        locationRef.removeValue(completionBlock: { error, _locationRef in
+        let updates:[String:Any?] = [
+            "locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toLocation": false
+        ]
+        
+        ref.updateChildValues(updates, withCompletionBlock: { error, ref in
             if error == nil {
-                let uploadRef = ref.child("uploads/\(item.key)/meta/toLocation")
-                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
-                    if error == nil {
-                        item.toLocation = false
-                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
-                        completion()
-                    } else {
-                        completion()
-                    }
-                })
+                item.toLocation = false
+                dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                
+                var type = "Image"
+                if item.contentType == .video {
+                    type = "Video"
+                }
+                
+                showSuccessNotification("\(type) removed!")
+                completion()
             } else {
+                var type = "image"
+                if item.contentType == .video {
+                    type = "video"
+                }
+                
+                showFailureNotification("Unable to remove \(type).")
                 completion()
             }
         })
     }
     
     static func removeItemFromStory(item:StoryItem, completion:@escaping (()->())) {
+        var type = "image"
+        if item.contentType == .video {
+            type = "video"
+        }
+        
         let ref = FIRDatabase.database().reference()
-        let storyRef = ref.child("users/activity/\(item.authorId)/\(item.key)")
-        storyRef.removeValue(completionBlock: { error, _locationRef in
+        let updates:[String:Any?] = [
+            "users/activity/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toStory": false
+        ]
+        
+        ref.updateChildValues(updates, withCompletionBlock: { error, ref in
             if error == nil {
-                let uploadRef = ref.child("uploads/\(item.key)/meta/toStory")
-                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
-                    if error == nil {
-                        item.toStory = false
-                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
-                        completion()
-                    } else {
-                        completion()
-                    }
-                })
+                item.toStory = false
+                dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                
+                var type = "Image"
+                if item.contentType == .video {
+                    type = "Video"
+                }
+                
+                showSuccessNotification("\(type) removed!")
+                completion()
             } else {
+                var type = "image"
+                if item.contentType == .video {
+                    type = "video"
+                }
+                
+                showFailureNotification("Unable to remove \(type).")
                 completion()
             }
         })
     }
     
     static func removeItemFromProfile(item:StoryItem, completion:@escaping (()->())) {
+        
         let ref = FIRDatabase.database().reference()
-        let storyRef = ref.child("users/uploads/\(item.authorId)/\(item.key)")
-        storyRef.removeValue(completionBlock: { error, _locationRef in
+        let updates:[String:Any?] = [
+            "users/uploads/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toProfile": false
+        ]
+        
+        ref.updateChildValues(updates, withCompletionBlock: { error, ref in
             if error == nil {
-                let uploadRef = ref.child("uploads/\(item.key)/meta/toProfile")
-                uploadRef.setValue(false, withCompletionBlock: { error, _uploadRef in
-                    if error == nil {
-                        item.toProfile = false
-                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
-                        completion()
-                    } else {
-                        completion()
-                    }
-                })
+                item.toProfile = false
+                dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                
+                var type = "Image"
+                if item.contentType == .video {
+                    type = "Video"
+                }
+                
+                showSuccessNotification("\(type) removed!")
+                completion()
             } else {
+                var type = "image"
+                if item.contentType == .video {
+                    type = "video"
+                }
+                
+                showFailureNotification("Unable to remove \(type).")
                 completion()
             }
         })
     }
     
     static func deleteItem(item:StoryItem, completion:@escaping (()->())){
-        removeItemFromLocation(item: item, completion: {
-            removeItemFromStory(item: item, completion: {
-                removeItemFromProfile(item: item, completion: completion)
-            })
+        
+        let ref = FIRDatabase.database().reference()
+        let updates:[String:Any?] = [
+            "users/uploads/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toProfile": false,
+            "users/activity/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toStory": false,
+            "locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)": nil,
+            "uploads/\(item.key)/meta/toLocation": false
+        ]
+        
+        ref.updateChildValues(updates, withCompletionBlock: { error, ref in
+            if error == nil {
+                item.toProfile = false
+                item.toLocation = false
+                item.toStory = false
+                dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+                
+                var type = "Image"
+                if item.contentType == .video {
+                    type = "Video"
+                }
+                
+                showSuccessNotification("\(type) deleted!")
+                completion()
+            } else {
+                
+                var type = "image"
+                if item.contentType == .video {
+                    type = "video"
+                }
+                
+                showFailureNotification("Unable to delete \(type).")
+                completion()
+            }
         })
+    }
+    
+    private static func showSuccessNotification(_ message:String) {
+        var murmur = Murmur(title: message)
+        murmur.backgroundColor = accentColor
+        murmur.titleColor = UIColor.white
+        murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
+        show(whistle: murmur, action: .show(2.0))
+    }
+    
+    private static func showFailureNotification(_ message:String) {
+        var murmur = Murmur(title: message)
+        murmur.backgroundColor = errorColor
+        murmur.titleColor = UIColor.white
+        murmur.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightSemibold)
+        show(whistle: murmur, action: .show(3.0))
     }
 
 }

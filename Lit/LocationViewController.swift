@@ -315,106 +315,42 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         if section == 0 {
             let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
             headerView.isHidden = false
-            headerView.label.text = "Recent"
-            return headerView
-        } else if section == 1 {
-            let headerView = UINib(nibName: "ListHeaderView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListHeaderView
-            headerView.isHidden = false
-            headerView.label.text = "INFO"
+            headerView.backgroundColor = UIColor.black
             return headerView
         }
         return nil
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 76
-        } else {
-            if indexPath.row == 0 {
-                return 42
-            } else if indexPath.row == 1 && location.phone != nil {
-                return 42
-            } else if indexPath.row == 2 && location.email != nil {
-                return 42
-            } else if indexPath.row == 3 && location.website != nil {
-                return 42
-            }
-            return 0
-        }
+        return 76
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            if storiesRetrieved {
-                return userStories.count
-            } else {
-                return 1
-            }
+        if storiesRetrieved {
+            return userStories.count
         } else {
-            return 4
+            return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 0 {
-            if storiesRetrieved {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "storyCell", for: indexPath) as! UserStoryTableViewCell
-                cell.setUserStory(userStories[indexPath.item], useUsername: false)
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath) as! LoadingTableViewCell
-                return cell
-            }
+        if storiesRetrieved {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "storyCell", for: indexPath) as! UserStoryTableViewCell
+            cell.setUserStory(userStories[indexPath.item], useUsername: false)
+            return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! InfoTableViewCell
-            if indexPath.row == 0 {
-                cell.type = .fullAddress
-                cell.label.text = location.getAddress()
-                cell.icon.image = UIImage(named: "marker")
-            } else if indexPath.row == 1 {
-                cell.type = .phone
-                cell.label.text = location.phone
-                cell.icon.image = UIImage(named: "phone")
-            } else if indexPath.row == 2 {
-                cell.type = .email
-                cell.label.text = location.email
-                cell.icon.image = UIImage(named: "email")
-            }  else if indexPath.row == 3 {
-                cell.type = .website
-                cell.label.text = location.website
-                cell.icon.image = UIImage(named: "link")
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath) as! LoadingTableViewCell
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 && storiesRetrieved {
+        if storiesRetrieved {
             let story = userStories[indexPath.item]
             if story.state == .contentLoaded {
                 presentStory(indexPath)
             } else {
                 story.downloadStory()
-            }
-        } else if indexPath.section == 1 {
-            let cell = tableView.cellForRow(at: indexPath) as! InfoTableViewCell
-            switch cell.type {
-            case .fullAddress:
-                showMap()
-                break
-            case .phone:
-                promptPhoneCall()
-                break
-            case .email:
-                promptEmail()
-                break
-            case .website:
-                promptWebsite()
-                break
-            default:
-                break
             }
         }
     }
@@ -573,13 +509,8 @@ extension LocationViewController: View2ViewTransitionPresenting {
         let image_height = image_frame.height
         let x = cell.frame.origin.x + 23
         
-        let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
-        
-        var y = cell.frame.origin.y + 11 //+ navHeight
-        if !isPresenting {
-            //y += 20.0
-        }
-        
+        let y = cell.frame.origin.y + 11 //+ navHeight
+
         let rect = CGRect(x: x, y: y, width: image_height, height: image_height)// CGRectMake(x,y,image_height, image_height)
         return self.tableView.convert(rect, to: self.tableView.superview)
     }
