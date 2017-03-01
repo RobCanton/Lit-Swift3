@@ -199,7 +199,72 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         
         let reportActionButton: UIAlertAction = UIAlertAction(title: "Report", style: .destructive) { action -> Void in
             
+            let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                
+            }))
+            
+            sheet.addAction(UIAlertAction(title: "Inappropriate Profile", style: .destructive, handler: { _ in
+                UserService.reportUser(user: user, type: .InappropriateProfile, showNotification: true, completion: { success in
+                    
+                    if success {
+                        let reportAlert = UIAlertController(title: "Report Sent.",
+                                                            message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    } else {
+                        let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                            message: "Please try again.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    }
+                })
+            }))
+            
+            sheet.addAction(UIAlertAction(title: "Harassment", style: .destructive, handler: { _ in
+                UserService.reportUser(user: user, type: .Harassment, showNotification: true, completion: { success in
+                    if success {
+                        let reportAlert = UIAlertController(title: "Report Sent.",
+                                                            message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    } else {
+                        let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                            message: "Please try again.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    }
+                })
+            }))
+            
+            sheet.addAction(UIAlertAction(title: "Bot", style: .destructive, handler: { _ in
+                UserService.reportUser(user: user, type: .Bot, showNotification: true, completion: { success in
+                    if success {
+                        let reportAlert = UIAlertController(title: "Report Sent.",
+                                                            message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    } else {
+                        let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                            message: "Please try again.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    }
+                })
+            }))
+            
+            self.present(sheet, animated: true, completion: nil)
+            
         }
+        
+        
         actionSheet.addAction(reportActionButton)
         self.present(actionSheet, animated: true, completion: nil)
     }
@@ -214,9 +279,8 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         
         if let nav = navigationController as? MasterNavigationController {
             if nav.delegate !== nav {
-                print("Nav delegate is transtion")
+                
             } else {
-                print("Nav delegate is nav")
                 listenToPosts()
                 nav.setNavigationBarHidden(false, animated: true)
             }
@@ -239,12 +303,9 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         
         if let nav = navigationController as? MasterNavigationController {
             if nav.delegate !== nav {
-                print("Nav delegate is transtion")
                 nav.setNavigationBarHidden(false, animated: true)
-                nav.delegate = nav
+                nav.setToStandardDelegate(interactive: true)
                 listenToPosts()
-            } else {
-                print("Nav delegate is nav")
             }
         }
         
@@ -492,16 +553,13 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
          self.transitionController.userInfo = ["destinationIndexPath": indexPath as AnyObject, "initialIndexPath": indexPath as AnyObject]
          self.transitionController.rounded = false
          
-         // This example will push view controller if presenting view controller has navigation controller.
-         // Otherwise, present another view controller
-         if let navigationController = self.navigationController {
-         
+        if let nav = navigationController as? MasterNavigationController {
             statusBarShouldHide = true
-            
-            // Set transitionController as a navigation controller delegate and push.
-            navigationController.delegate = transitionController
+            nav.disableInteractivePop()
+            nav.delegate = transitionController
             transitionController.push(viewController: galleryViewController, on: self, attached: galleryViewController)
-         }
+        }
+        
     }
 
     

@@ -562,4 +562,8 @@ class UploadService {
 enum ReportType:String {
     case Inappropriate = "InappropriateContent"
     case Spam          = "SpamContent"
+    case InappropriateProfile = "InappropriateProfile"
+    case Harassment = "Harassment"
+    case Bot = "Bot"
+    case Other = "Other"
 }

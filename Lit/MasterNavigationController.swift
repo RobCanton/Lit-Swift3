@@ -25,8 +25,7 @@ class MasterNavigationController: UINavigationController, UINavigationController
     
     func setToZoomDelegate() {
         delegate = zoomNavigationControllerDelegate
-        self.interactivePopGestureRecognizer?.delegate = nil
-        self.interactivePopGestureRecognizer?.isEnabled = false
+        disableInteractivePop()
     }
     
     func setToStandardDelegate(interactive:Bool) {
@@ -35,10 +34,19 @@ class MasterNavigationController: UINavigationController, UINavigationController
         self.interactivePopGestureRecognizer?.isEnabled = interactive
     }
     
+    func disableInteractivePop() {
+        self.interactivePopGestureRecognizer?.delegate = nil
+        self.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
+    
+    
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         return nil
     }
+    
+    
 //    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true

@@ -78,6 +78,12 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         
         let infoNib = UINib(nibName: "InfoTableViewCell", bundle: nil)
         tableView.register(infoNib, forCellReuseIdentifier: "infoCell")
+        
+        
+        let loadingNib = UINib(nibName: "LoadingTableViewCell", bundle: nil)
+        tableView.register(loadingNib, forCellReuseIdentifier: "loadingCell")
+
+        
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 100, 0)
         
 
@@ -229,7 +235,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func listenToUserStories() {
-        storiesRetrieved = false
 
         let locRef = UserService.ref.child("locations/uploads/\(location.getKey())")
         locRef.removeAllObservers()
@@ -300,7 +305,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 && userStories.count == 0 {
+        if section == 0 && userStories.count == 0 && storiesRetrieved {
             return 0
         }
         return 33
@@ -340,7 +345,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return userStories.count
+            if storiesRetrieved {
+                return userStories.count
+            } else {
+                return 1
+            }
         } else {
             return 4
         }
@@ -349,9 +358,14 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "storyCell", for: indexPath) as! UserStoryTableViewCell
-            cell.setUserStory(userStories[indexPath.item], useUsername: false)
-            return cell
+            if storiesRetrieved {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "storyCell", for: indexPath) as! UserStoryTableViewCell
+                cell.setUserStory(userStories[indexPath.item], useUsername: false)
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath) as! LoadingTableViewCell
+                return cell
+            }
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! InfoTableViewCell
             if indexPath.row == 0 {
@@ -377,7 +391,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 {
+        if indexPath.section == 0 && storiesRetrieved {
             let story = userStories[indexPath.item]
             if story.state == .contentLoaded {
                 presentStory(indexPath)
@@ -455,8 +469,15 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             
             statusBarShouldHide = true
             // Set transitionController as a navigation controller delegate and push.
-            navigationController.delegate = transitionController
-            transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
+            
+            
+            
+            if let nav = navigationController as? MasterNavigationController {
+                nav.disableInteractivePop()
+                nav.delegate = transitionController
+                transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
+            }
+
         }
     }
     

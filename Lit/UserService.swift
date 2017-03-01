@@ -373,8 +373,22 @@ class UserService {
         socialRef.updateChildValues(updateData, withCompletionBlock: { error, ref in
             completionHandler(error == nil)
         })
-        
-        
+
+    }
+    
+    static func reportUser(user:User, type:ReportType, showNotification:Bool, completion:@escaping ((_ success:Bool)->())) {
+        let ref = FIRDatabase.database().reference()
+        let uid = mainStore.state.userState.uid
+        let reportRef = ref.child("reports/\(uid):\(user.getUserId())")
+        let value: [String: Any] = [
+            "sender": uid,
+            "userId": user.getUserId(),
+            "type": type.rawValue,
+            "timestamp": [".sv": "timestamp"]
+        ]
+        reportRef.setValue(value, withCompletionBlock: { error, ref in
+            completion(error == nil )
+        })
     }
     
     static func muteConversation(conversation:Conversation) {

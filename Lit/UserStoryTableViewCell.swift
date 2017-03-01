@@ -129,6 +129,21 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
 
     }
     
+    var activityIndicator:UIActivityIndicatorView?
+    
+    func setToLoadingCell() {
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        activityIndicator!.activityIndicatorViewStyle = .white
+        activityIndicator!.startAnimating()
+        activityIndicator!.center = self.center
+        self.addSubview(activityIndicator!)
+    }
+    
+    func clearLoading() {
+        activityIndicator?.stopAnimating()
+        activityIndicator?.removeFromSuperview()
+    }
+    
     
     func stateChange(_ state:UserStoryState) {
 

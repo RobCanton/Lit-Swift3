@@ -29,6 +29,8 @@
 		B059015E1E6284F7005BD519 /* LocationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B059015D1E6284F7005BD519 /* LocationHeaderView.swift */; };
 		B0828FF31E64AA6E00F3EE2C /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = B0828FF21E64AA6E00F3EE2C /* mapStyle.json */; };
 		B0828FF51E65396C00F3EE2C /* LocationMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0828FF41E65396C00F3EE2C /* LocationMapViewController.swift */; };
+		B0828FF81E664E6E00F3EE2C /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0828FF61E664E6C00F3EE2C /* LoadingTableViewCell.swift */; };
+		B0828FF91E664E6F00F3EE2C /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0828FF71E664E6C00F3EE2C /* LoadingTableViewCell.xib */; };
 		B087C7511E4163AA00234715 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7501E4163AA00234715 /* CameraButton.swift */; };
 		B087C7531E41646E00234715 /* KDCircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7521E41646E00234715 /* KDCircularProgress.swift */; };
 		B087C7561E41C10A00234715 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B087C7551E41C10A00234715 /* UserProfileViewController.swift */; };
@@ -154,6 +156,8 @@
 		B059015D1E6284F7005BD519 /* LocationHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHeaderView.swift; sourceTree = "<group>"; };
 		B0828FF21E64AA6E00F3EE2C /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
 		B0828FF41E65396C00F3EE2C /* LocationMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationMapViewController.swift; sourceTree = "<group>"; };
+		B0828FF61E664E6C00F3EE2C /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
+		B0828FF71E664E6C00F3EE2C /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		B087C7501E4163AA00234715 /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		B087C7521E41646E00234715 /* KDCircularProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDCircularProgress.swift; sourceTree = "<group>"; };
 		B087C7551E41C10A00234715 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -541,6 +545,8 @@
 				B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */,
 				B0B0430C1E40A83500D50DA7 /* UserStoryTableViewCell.swift */,
 				B0B0430D1E40A83500D50DA7 /* UserStoryTableViewCell.xib */,
+				B0828FF61E664E6C00F3EE2C /* LoadingTableViewCell.swift */,
+				B0828FF71E664E6C00F3EE2C /* LoadingTableViewCell.xib */,
 				B0E59E031E409444007B4762 /* InfoTableViewCell.swift */,
 				B0E59E041E409444007B4762 /* InfoTableViewCell.xib */,
 				B09405EF1E4C57AC00CE0068 /* CommentBar.swift */,
@@ -643,6 +649,7 @@
 				B0383C261E43515C002FD893 /* UserSearchViewController.storyboard in Resources */,
 				B0D84F761E4046DD0043D28C /* Assets.xcassets in Resources */,
 				B0D84F741E4046DD0043D28C /* Main.storyboard in Resources */,
+				B0828FF91E664E6F00F3EE2C /* LoadingTableViewCell.xib in Resources */,
 				B087C7861E41EE8600234715 /* ListHeaderView.xib in Resources */,
 				B087C77F1E41E6AE00234715 /* SendProfileViewCell.xib in Resources */,
 				B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */,
@@ -770,6 +777,7 @@
 				B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */,
 				B0E59DF51E4066EC007B4762 /* MasterTabBarController.swift in Sources */,
 				B09405F31E4EE14200CE0068 /* TacoDialogView.swift in Sources */,
+				B0828FF81E664E6E00F3EE2C /* LoadingTableViewCell.swift in Sources */,
 				B01EE5431E435D450049BCBF /* IsaoTextField.swift in Sources */,
 				B0E59DE51E4050B5007B4762 /* User.swift in Sources */,
 				B0D84F711E4046DD0043D28C /* LoginViewController.swift in Sources */,

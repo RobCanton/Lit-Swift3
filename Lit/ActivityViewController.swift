@@ -73,7 +73,7 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
         
         if let nav = navigationController as? MasterNavigationController {
             nav.setNavigationBarHidden(false, animated: true)
-            nav.delegate = nav
+            nav.setToStandardDelegate(interactive: true)
         }
         
         if returningCell != nil {
@@ -324,12 +324,11 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
         let i = IndexPath(item: indexPath.row, section: 0)
         self.transitionController.userInfo = ["destinationIndexPath": i as AnyObject, "initialIndexPath": indexPath as AnyObject]
 
-        if let navigationController = self.navigationController {
+        if let nav = navigationController as? MasterNavigationController {
             statusBarShouldHide = true
-            // Set transitionController as a navigation controller delegate and push.
-            navigationController.delegate = transitionController
+            nav.disableInteractivePop()
+            nav.delegate = transitionController
             transitionController.push(viewController: presentedViewController, on: self, attached: presentedViewController)
-            
         }
     }
 }
