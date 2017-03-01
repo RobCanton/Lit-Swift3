@@ -77,11 +77,6 @@ class LocationTableCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        //self.bottomImageViewConstraint.constant -= 2 * parallaxIndex
-        
-        //self.imageViewInitialTopConstraint = self.bottomImageViewConstraint.constant
-        //self.imageViewInitialBottomConstraint = self.bottomImageViewConstraint.constant
         self.clipsToBounds = true
         
         
@@ -373,25 +368,6 @@ class LocationTableCell: UITableViewCell {
         leading5.constant = constant
         leading6.constant = constant
         leading7.constant = constant
-    }
-
-    
-    func setImageViewOffSet(_ tableView: UITableView, indexPath: IndexPath) {
-        
-//        let cellFrame = tableView.rectForRow(at: indexPath)
-//        let cellFrameInTable = tableView.convert(cellFrame, to:tableView.superview)
-//        let cellOffset = cellFrameInTable.origin.y + cellFrameInTable.size.height
-//        let tableHeight = tableView.bounds.size.height + cellFrameInTable.size.height
-//        let cellOffsetFactor = cellOffset / tableHeight
-//        self.setOffSet(cellOffsetFactor)
-        
-    }
-    
-    func setOffSet(_ offset:CGFloat) {
-//        let boundOffset = max(0, min(1, offset))
-//        let pixelOffset = (1-boundOffset)*2*parallaxIndex
-//        self.topImageViewConstraint.constant = self.imageViewInitialTopConstraint - pixelOffset
-//        self.bottomImageViewConstraint.constant = self.imageViewInitialBottomConstraint + pixelOffset
     }
     
     var task:URLSessionDataTask?

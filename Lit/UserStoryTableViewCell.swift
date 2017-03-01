@@ -26,7 +26,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         imageContainer.layer.cornerRadius = imageContainer.frame.width/2
         imageContainer.clipsToBounds = true
         imageContainer.layer.borderColor = UIColor.clear.cgColor
-        imageContainer.layer.borderWidth = 1.5
+        imageContainer.layer.borderWidth = 1.25
         
         contentImageView.layer.cornerRadius = contentImageView.frame.width/2
         contentImageView.clipsToBounds = true
@@ -40,7 +40,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         
         var borderColor = accentColor.cgColor
         if story.hasViewedAll() {
-            borderColor = selectedColor.cgColor
+            borderColor = UIColor.clear.cgColor
         }
         if items.count == 0 { return }
         if animated {
@@ -120,7 +120,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
     func setToEmptyMyStory() {
         self.usernameLabel.text = "Your Story"
         self.timeLabel.text = "+ Tap to add"
-        imageContainer.layer.borderColor = selectedColor.cgColor
+        imageContainer.layer.borderColor = UIColor.clear.cgColor
         if let user = mainStore.state.userState.user {
             loadImageUsingCacheWithURL(user.getImageUrl(), completion: { image, fromCache in
                 self.contentImageView.image = image

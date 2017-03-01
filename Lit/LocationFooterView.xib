@@ -33,11 +33,11 @@
                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     <constraints>
                         <constraint firstAttribute="trailingMargin" secondItem="AdA-qR-rSw" secondAttribute="trailing" constant="8" id="G7t-Qy-X23"/>
-                        <constraint firstItem="DhM-kk-cxe" firstAttribute="top" secondItem="emW-QF-172" secondAttribute="top" constant="32" id="KQU-DX-1qG"/>
+                        <constraint firstItem="DhM-kk-cxe" firstAttribute="top" secondItem="emW-QF-172" secondAttribute="top" constant="38" id="KQU-DX-1qG"/>
                         <constraint firstItem="AdA-qR-rSw" firstAttribute="leading" secondItem="emW-QF-172" secondAttribute="leadingMargin" constant="8" id="Rwt-EH-cVf"/>
-                        <constraint firstAttribute="trailing" secondItem="DhM-kk-cxe" secondAttribute="trailing" constant="12" id="ZmM-Ky-6Y1"/>
+                        <constraint firstAttribute="trailing" secondItem="DhM-kk-cxe" secondAttribute="trailing" constant="16" id="ZmM-Ky-6Y1"/>
                         <constraint firstItem="AdA-qR-rSw" firstAttribute="top" secondItem="emW-QF-172" secondAttribute="top" constant="16" id="jHX-kq-6qg"/>
-                        <constraint firstItem="DhM-kk-cxe" firstAttribute="leading" secondItem="emW-QF-172" secondAttribute="leading" constant="12" id="qFB-DY-WfO"/>
+                        <constraint firstItem="DhM-kk-cxe" firstAttribute="leading" secondItem="emW-QF-172" secondAttribute="leading" constant="16" id="qFB-DY-WfO"/>
                         <constraint firstAttribute="bottom" secondItem="DhM-kk-cxe" secondAttribute="bottom" constant="12" id="x5n-sY-Bjr"/>
                     </constraints>
                 </view>

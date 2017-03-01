@@ -17,9 +17,7 @@ class MasterNavigationController: UINavigationController, UINavigationController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // self.delegate = self
         setToStandardDelegate(interactive: true)
-        
         
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()

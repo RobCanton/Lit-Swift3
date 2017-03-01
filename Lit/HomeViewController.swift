@@ -43,7 +43,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.separatorInset = UIEdgeInsets.zero
         tableView.tableHeaderView = nil
         tableView.showsVerticalScrollIndicator = false
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 120))
         tableView.reloadData()
         setCellAlphas()
         
@@ -175,8 +175,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath:
         IndexPath) {
-        let parallaxCell = cell as! LocationTableCell
-        parallaxCell.setImageViewOffSet(tableView, indexPath: indexPath as IndexPath)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -189,18 +187,22 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             var count = 0
             for indexPath in self.tableView.indexPathsForVisibleRows! {
                 if let cell = self.tableView.cellForRow(at: indexPath) as?  LocationTableCell {
-                cell.setImageViewOffSet(tableView, indexPath: indexPath)
-                
-                if count == tableView.indexPathsForVisibleRows!.count - 1 {
-                    let rectOfCellInTableView = tableView.rectForRow(at: indexPath)
                     
-                    let rectOfCellInSuperview = tableView.convert(rectOfCellInTableView, to: tableView.superview)
-                    let cellY = rectOfCellInSuperview.origin.y
-                    let bottomPoint = self.tableView.frame.height - rectOfCellInSuperview.height
+                    if count == tableView.indexPathsForVisibleRows!.count - 2 || indexPath.row >= locations.count - 1 {
+                        let rectOfCellInTableView = tableView.rectForRow(at: indexPath)
+                        let rectOfCellInSuperview = tableView.convert(rectOfCellInTableView, to: tableView.superview)
+                        let infoBounds = cell.infoView.convert(cell.infoView.bounds, to: tableView)
+                        let cellY = rectOfCellInSuperview.origin.y - (rectOfCellInTableView.height - infoBounds.height/3)
+                        let bottomPoint = self.tableView.frame.height - rectOfCellInSuperview.height * 2.0
+                        
+                        let alpha = 1 - (cellY - bottomPoint) / (infoBounds.height/3)
+                        cell.infoView.alpha = max(0,alpha)
+                    } else if count == tableView.indexPathsForVisibleRows!.count - 1 {
+                        cell.infoView.alpha = 0.0
+                    } else {
+                        cell.infoView.alpha = 1.0
+                    }
                     
-                    let alpha = 1 - (cellY - bottomPoint) / rectOfCellInSuperview.height
-                    //cell.alpha = max(0,alpha)
-                }
                 }
                 count += 1
             }
