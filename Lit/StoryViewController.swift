@@ -102,6 +102,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
     func stateChange(_ state:UserStoryState) {
         switch state {
         case .notLoaded:
+            story.downloadItems()
             animateIndicator()
             break
         case .loadingItemInfo:

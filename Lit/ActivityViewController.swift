@@ -367,7 +367,7 @@ extension ActivityViewController: View2ViewTransitionPresenting {
 
             let navHeight = screenStatusBarHeight + navigationController!.navigationBar.frame.height
 
-            var y = cell.frame.origin.y + 11 + navHeight
+            var y = cell.frame.origin.y + 11 + navHeight - self.tableView.contentOffset.y
             if !isPresenting {
                 y += 20.0
             }
