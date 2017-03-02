@@ -109,9 +109,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionTapped))
         headerView.descriptionLabel.isUserInteractionEnabled = true
         headerView.descriptionLabel.addGestureRecognizer(descriptionTap)
-        
-        print("LABEL HEIGHT: \(headerView.descriptionLabel.frame.height)")
-        
+
         headerView.setLocationInfo(location: location)
 
         
@@ -132,13 +130,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.reloadData()
         
         view.addSubview(tableView)
-        
-//        if let distance = location.getDistance() {
-//            let distanceButton = UIBarButtonItem(title: getDistanceString(distance: distance), style: .plain, target: self, action: #selector(showMap))
-//            distanceButton.setTitleTextAttributes([ NSFontAttributeName: UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)], for: UIControlState.normal)
-//            self.navigationItem.rightBarButtonItem = distanceButton
-//            
-//        }
+
     }
     
     func dismiss() {
@@ -146,7 +138,6 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func descriptionTapped(sender:UITapGestureRecognizer) {
-        print("TAPPED")
         descriptionCollapsed = !descriptionCollapsed
         let desc = headerView.descriptionLabel!
         if descriptionCollapsed {

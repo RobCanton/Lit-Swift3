@@ -72,6 +72,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(animated)
+        
+        if let nav = navigationController as? MasterNavigationController {
+            nav.setToZoomDelegate()
+        }
+        
         if !GPSService.sharedInstance.isAuthorized() {
             let actionSheet = UIAlertController(title: "Location Services Disabled", message: "Lit requires your location to search for nearby activity. Please enable location services.", preferredStyle: .alert)
             

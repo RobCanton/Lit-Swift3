@@ -86,7 +86,6 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewDidDisappear(animated)
         
         tabBarRef.setTabBarVisible(_visible: true, animated: true)
-        clearDirectory(name: "temp")
         
         for cell in collectionView.visibleCells as! [StoryViewController] {
             cell.cleanUp()

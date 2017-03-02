@@ -37,6 +37,12 @@ class FacebookGraph {
         let ref = FIRDatabase.database().reference()
         requestFacebookFriendIds(completion: { fb_ids in
             var _users = [String]()
+            
+            
+            if fb_ids.count == 0 {
+                completion(_users)
+            }
+            
             var count = 0
             for id in fb_ids {
                 
@@ -53,6 +59,8 @@ class FacebookGraph {
                     }
                 })
             }
+            
+            
         })
     }
     

@@ -119,26 +119,14 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
             self.presentCamera()
         }
         
-        
         var config = SwiftMessages.Config()
         
         // Slide up from the bottom.
         config.presentationStyle = .top
-        
-        // Display in a window at the specified window level: UIWindowLevelStatusBar
-        // displays over the status bar while UIWindowLevelNormal displays under.
         config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
-        
-        // Disable the default auto-hiding behavior.
         config.duration = .forever
-        
-        // Dim the background like a popover view. Hide when the background is tapped.
         config.dimMode = .color(color: UIColor(white: 0.0, alpha: 0.5), interactive: true)//.gray(interactive: false)
-        
-        // Enable the interactive pan-to-hide gesture.
         config.interactiveHide = true
-        
-        // Specify a status bar style to if the message is displayed directly under the status bar.
         config.preferredStatusBarStyle = .lightContent
         
         config.eventListeners.append() { event in
@@ -152,10 +140,7 @@ class MasterTabBarController: UITabBarController, StoreSubscriber, UITabBarContr
         if self.visible {
             SwiftMessages.show(config: config, view: view)
         }
-        
-        
-        
-        
+
     }
     
     func showActiveMurmur() {

@@ -28,6 +28,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
     
     func newState(state:AppState) {
 
+        print("version: \(state.supportedVersion) | auth: \(state.userState.isAuth) | user: \(state.userState.user != nil)")
         if state.supportedVersion && state.userState.isAuth && state.userState.user != nil {
             
             self.performSegue(withIdentifier: "showLit", sender: self)
@@ -63,6 +64,21 @@ class LoginViewController: UIViewController, StoreSubscriber {
         activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         activityIndicator.center = CGPoint(x: view.center.x, y: loginButton.center.y)
         self.view.addSubview(activityIndicator)
+        
+        if let user = FIRAuth.auth()?.currentUser {
+            print("user already authenticated.")
+            
+            checkUserAgainstDatabase({ success in
+                if !success {
+                    UserService.logout()
+                    
+                }
+                self.versionCheck()
+            })
+            
+        } else {
+            self.versionCheck()
+        }
 
 
     }
@@ -129,8 +145,44 @@ class LoginViewController: UIViewController, StoreSubscriber {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
+        
+        print("viewWillAppear")
+//        if !mainStore.state.supportedVersion {
+//            print("Not supported version")
+//            
+//            checkVersionSupport({ supported in
+//                print("Version: \(supported)")
+//                if supported {
+//                    mainStore.dispatch(SupportedVersion())
+//                    self.setupLoginScreen()
+//                } else {
+//                    self.showUpdateAlert()
+//                }
+//            })
+//        } else {
+//            
+//           self.setupLoginScreen()
+//        }
+//        
+        
+        
+        
+//        if playerLayer == nil {
+//            retrieveVideo(completion: { videoURL, fromFile in
+//                if videoURL != nil {
+//                    self.setupVideoBackground(videoURL: videoURL!)
+//                }
+//            })
+//        }
+
+    }
+    
+    func versionCheck() {
         if !mainStore.state.supportedVersion {
+            print("Not supported version")
+
             checkVersionSupport({ supported in
+                print("Version: \(supported)")
                 if supported {
                     mainStore.dispatch(SupportedVersion())
                     self.setupLoginScreen()
@@ -141,14 +193,6 @@ class LoginViewController: UIViewController, StoreSubscriber {
         } else {
            self.setupLoginScreen()
         }
-        if playerLayer == nil {
-            retrieveVideo(completion: { videoURL, fromFile in
-                if videoURL != nil {
-                    self.setupVideoBackground(videoURL: videoURL!)
-                }
-            })
-        }
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -181,19 +225,19 @@ class LoginViewController: UIViewController, StoreSubscriber {
                         if user != nil {
                             UserService.login(user!)
                         } else {
-                            UserService.logoutOfFirebase()
+                            UserService.logout()
                             self.activateLoginButton()
                         }
                     })
                 } else {
-                    UserService.logoutOfFirebase()
+                    UserService.logout()
                     self.activateLoginButton()
                 }
             })
             
         } else {
             print("user not authenticated.")
-            UserService.logoutOfFirebase()
+            UserService.logout()
             self.activateLoginButton()
         }
     }
@@ -232,6 +276,8 @@ class LoginViewController: UIViewController, StoreSubscriber {
                     self.removeFbData()
                     self.activateLoginButton()
                 }
+            } else {
+                print("Facebook error: \(error.debugDescription)")
             }
         }
     }
@@ -283,7 +329,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
                 })
             } else {
                 print("error")
-                UserService.logoutOfFirebase()
+                UserService.logout()
                 self.removeFbData()
                 return
             }
@@ -315,6 +361,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         let versionRef = UserService.ref.child("config/client/minimum_supported_version")
         print("Observing current version")
         versionRef.observeSingleEvent(of: .value, with: { snapshot in
+            print("Wats going on")
             let versionString = snapshot.value as! String
             let minimum_supported_version = Int(versionString.replacingOccurrences(of: ".", with: ""))!
             print("current_version: \(currentVersion) | minimum_supported_version: \(minimum_supported_version)")

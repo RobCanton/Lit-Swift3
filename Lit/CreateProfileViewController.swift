@@ -11,6 +11,7 @@ import Firebase
 import UIKit
 import FBSDKCoreKit
 import AudioToolbox
+import SwiftMessages
 
 class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -255,8 +256,41 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         usernameField.resignFirstResponder()
         fullnameField.resignFirstResponder()
         
+        
+        let view: TacoDialogView = try! SwiftMessages.viewFromNib()
+        view.configureDropShadow()
+        view.setMessage("Terms of Use")
+        
+        var config = SwiftMessages.Config()
+        
+
+        config.presentationStyle = .bottom
+        config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
+        config.duration = .forever
+        config.dimMode = .color(color: UIColor(white: 0.0, alpha: 0.5), interactive: false)//.gray(interactive: false)
+        config.preferredStatusBarStyle = .lightContent
+
+        
+        config.eventListeners.append() { event in
+            if case .didHide = event {
+                
+            }
+        }
+        
+        
+        config.ignoreDuplicates = true
+        SwiftMessages.show(config: config, view: view)
+
+        //processAccountCreation()
+        
+        
+    }
+    
+    func processAccountCreation() {
         let name = fullnameField.text!
         let username = usernameField.text!
+        
+        
         
         if let user = FIRAuth.auth()?.currentUser {
             let largeImage = headerView.image!
@@ -283,12 +317,12 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
                                 ]
                                 
                                 fullProfileRef.setValue(obj, withCompletionBlock: {error, ref in
-                                        if error != nil {
-                                            print(error!.localizedDescription)
-                                        }
-                                        else {
-                                            self.getNewUser()
-                                        }
+                                    if error != nil {
+                                        print(error!.localizedDescription)
+                                    }
+                                    else {
+                                        self.getNewUser()
+                                    }
                                 })
                             }
                     })

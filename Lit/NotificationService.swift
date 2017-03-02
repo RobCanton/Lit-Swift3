@@ -45,12 +45,7 @@ class NotificationService: NSObject, CLLocationManagerDelegate, UNUserNotificati
     func setNotificationBadges() {
         let total = messageBadge + activityBadge + socialBadge
         
-        UIApplication.shared.applicationIconBadgeNumber = total
-        let uid = mainStore.state.userState.uid
-        let ref = FIRDatabase.database().reference().child("users/notifications/\(uid)/badge")
-        ref.setValue(total)
-        
-        
+        UIApplication.shared.applicationIconBadgeNumber = total        
     }
     
     func registerForUserNotifications() {
