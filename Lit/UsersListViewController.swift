@@ -188,6 +188,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         let userId = users[indexPath.item].getUserId()
         cell.setupUser(uid: userId)
         cell.unfollowHandler = unfollowHandler
+        cell.followHandler = followHandler
         let labelX = cell.usernameLabel.frame.origin.x
         cell.separatorInset = UIEdgeInsetsMake(0, labelX, 0, 0)
         return cell
@@ -202,6 +203,21 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
     
+    
+    func followHandler() {
+        if !NotificationService.shared.notificationsEnabled() && !NotificationService.shared.followPromptShown {
+            NotificationService.shared.followPromptShown = true
+            
+            let alert = UIAlertController(title: "Do you want to be notified when you someone follows you?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: { _ in }))
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                NotificationService.shared.registerForUserNotifications()
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 
     
     func addDoneButton() {

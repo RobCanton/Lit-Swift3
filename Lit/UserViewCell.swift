@@ -99,6 +99,9 @@ class UserViewCell: UITableViewCell {
         }
     }
     
+    
+    var followHandler:(()->())?
+    
     var unfollowHandler:((_ user:User)->())?
     
     @IBAction func handleFollowTap(sender: AnyObject) {
@@ -115,6 +118,7 @@ class UserViewCell: UITableViewCell {
             if mainStore.state.socialState.blockedBy.contains(user.getUserId()) { return }
             setUserStatus(status: .Requested)
             UserService.followUser(uid: user.getUserId())
+            followHandler?()
             break
         case .Requested:
             break

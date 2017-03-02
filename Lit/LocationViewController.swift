@@ -539,7 +539,7 @@ extension LocationViewController: View2ViewTransitionPresenting {
                 returningCell!.deactivate()
             }
         }
-        if !isPresenting {
+        if !isPresenting && !self.tableView!.indexPathsForVisibleRows!.contains(indexPath) {
             self.tableView!.reloadData()
             self.tableView!.scrollToRow(at: i, at: .middle, animated: false)
             self.tableView!.layoutIfNeeded()
