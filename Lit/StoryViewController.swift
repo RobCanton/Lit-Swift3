@@ -417,6 +417,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         progressBar?.removeFromSuperview()
         commentsRef?.removeAllObservers()
         delegate = nil
+        animateInitiated = false
         NotificationCenter.default.removeObserver(self)
         
     }

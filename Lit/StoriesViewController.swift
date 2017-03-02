@@ -338,16 +338,20 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                     if let location = self.location {
                         let storyAction: UIAlertAction = UIAlertAction(title: "Remove from \(location.getName())", style: .destructive)
                         { action -> Void in
-                            UploadService.removeItemFromLocation(item: item, completion: {
-                                self.dismissPopup(true)
+                            UploadService.removeItemFromLocation(item: item, notify: true, completion: { success in
+                                if success {
+                                    self.dismissPopup(true)
+                                }
                             })
                         }
                         deleteController.addAction(storyAction)
                     } else{
                         let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my story", style: .destructive)
                         { action -> Void in
-                            UploadService.removeItemFromStory(item: item, completion: {
-                                self.dismissPopup(true)
+                            UploadService.removeItemFromStory(item: item, notify: true, completion: { success in
+                                if success {
+                                   self.dismissPopup(true)
+                                }
                             })
                         }
                         deleteController.addAction(storyAction)
@@ -355,16 +359,20 @@ class StoriesViewController: UIViewController, UICollectionViewDelegate, UIColle
                     
                     
                     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
-                        UploadService.deleteItem(item: item, completion: {
-                            self.dismissPopup(true)
+                        UploadService.deleteItem(item: item, completion: { success in
+                            if success {
+                               self.dismissPopup(true)
+                            }
                         })
                     }
                     deleteController.addAction(deleteAction)
                     
                     self.present(deleteController, animated: true, completion: nil)
                 } else {
-                    UploadService.deleteItem(item: item, completion: {
-                        self.dismissPopup(true)
+                    UploadService.deleteItem(item: item, completion: { success in
+                        if success {
+                            self.dismissPopup(true)
+                        }
                     })
                 }
             }

@@ -18,6 +18,7 @@ import Firebase
 class ChatViewController: JSQMessagesViewController, GetUserProtocol {
     
 
+    var popUpMode = false
     var isEmpty = false
     var refreshControl: UIRefreshControl!
 
@@ -52,10 +53,11 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
     var activityIndicator:UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         messages = [JSQMessage]()
         // Do any additional setup after loading the view, typically from a nib.
         self.collectionView?.backgroundColor = UIColor.black
-        self.navigationController?.navigationBar.backItem?.backBarButtonItem?.title = " "
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
         self.inputToolbar.barTintColor = UIColor.black
         self.inputToolbar.contentView.leftBarButtonItemWidth = 0
@@ -93,6 +95,81 @@ class ChatViewController: JSQMessagesViewController, GetUserProtocol {
         
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name:NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        let optionsButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(showUserOptions))
+        optionsButton.tintColor = UIColor.white
+        navigationItem.rightBarButtonItem = optionsButton
+        
+        if popUpMode {
+            let close = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(handleClose))
+            self.navigationItem.leftBarButtonItem = close
+        }
+    }
+    
+    func handleClose() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func showUserOptions() {
+        guard let user = conversation.getPartner() else { return }
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if !popUpMode {
+            sheet.addAction(UIAlertAction(title: "View User Profile", style: .default, handler: { _ in
+                let controller = UserProfileViewController()
+                controller.uid = self.conversation.getPartnerId()
+                self.navigationController?.pushViewController(controller, animated: true)
+            }))
+        }
+        
+        sheet.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { _ in
+            let reportSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            reportSheet.addAction(UIAlertAction(title: "Inappropriate Message(s)", style: .destructive, handler: { success in
+                UserService.reportUser(user: user, type: .InappropriateMessages, showNotification: true, completion: { success in
+                    if success {
+                        let reportAlert = UIAlertController(title: "Report Sent.",
+                                                            message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    } else {
+                        let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                            message: "Please try again.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    }
+                })
+            }))
+            
+            reportSheet.addAction(UIAlertAction(title: "Spam", style: .destructive, handler: { _ in
+                UserService.reportUser(user: user, type: .SpamMessages, showNotification: true, completion: { success in
+                    if success {
+                        let reportAlert = UIAlertController(title: "Report Sent.",
+                                                            message: "Thanks for lettings us know. We will act upon this report within 24 hours.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    } else {
+                        let reportAlert = UIAlertController(title: "Report Failed to Send.",
+                                                            message: "Please try again.", preferredStyle: .alert)
+                        reportAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                        
+                        self.present(reportAlert, animated: true, completion: nil)
+                    }
+                })
+            }))
+            
+            reportSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            self.present(reportSheet, animated: true, completion: nil)
+        
+            
+        }))
+        
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(sheet, animated: true, completion: nil)
     }
     
     

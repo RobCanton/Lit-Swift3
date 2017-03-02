@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B00BB2CF1E6756A3002AD0F0 /* EmptyLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00BB2CD1E6756A3002AD0F0 /* EmptyLocationTableViewCell.swift */; };
+		B00BB2D01E6756A3002AD0F0 /* EmptyLocationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00BB2CE1E6756A3002AD0F0 /* EmptyLocationTableViewCell.xib */; };
 		B01EE5301E435CA00049BCBF /* CreateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE52E1E435CA00049BCBF /* CreateProfileViewController.swift */; };
 		B01EE5401E435D450049BCBF /* AkiraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5341E435D450049BCBF /* AkiraTextField.swift */; };
 		B01EE5411E435D450049BCBF /* HoshiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01EE5351E435D450049BCBF /* HoshiTextField.swift */; };
@@ -133,6 +135,8 @@
 
 /* Begin PBXFileReference section */
 		82D051C960EAD77D39AD3FF9 /* Pods-Lit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lit.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lit/Pods-Lit.release.xcconfig"; sourceTree = "<group>"; };
+		B00BB2CD1E6756A3002AD0F0 /* EmptyLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyLocationTableViewCell.swift; sourceTree = "<group>"; };
+		B00BB2CE1E6756A3002AD0F0 /* EmptyLocationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyLocationTableViewCell.xib; sourceTree = "<group>"; };
 		B01EE52E1E435CA00049BCBF /* CreateProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProfileViewController.swift; sourceTree = "<group>"; };
 		B01EE5341E435D450049BCBF /* AkiraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AkiraTextField.swift; sourceTree = "<group>"; };
 		B01EE5351E435D450049BCBF /* HoshiTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoshiTextField.swift; sourceTree = "<group>"; };
@@ -515,6 +519,8 @@
 				B0E59DED1E406575007B4762 /* HomeViewController.swift */,
 				B0E59DFA1E40765D007B4762 /* LocationTableCell.swift */,
 				B0E59DFB1E40765D007B4762 /* LocationTableCell.xib */,
+				B00BB2CD1E6756A3002AD0F0 /* EmptyLocationTableViewCell.swift */,
+				B00BB2CE1E6756A3002AD0F0 /* EmptyLocationTableViewCell.xib */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -638,6 +644,7 @@
 				B087C77D1E41E6AE00234715 /* SendLocationViewCell.xib in Resources */,
 				B0B043131E40AEDE00D50DA7 /* LocationFooterView.xib in Resources */,
 				B0E59E061E409444007B4762 /* InfoTableViewCell.xib in Resources */,
+				B00BB2D01E6756A3002AD0F0 /* EmptyLocationTableViewCell.xib in Resources */,
 				B0E59DFD1E40765D007B4762 /* LocationTableCell.xib in Resources */,
 				B09405F41E4EE14200CE0068 /* TacoDialogView.xib in Resources */,
 				B0828FF31E64AA6E00F3EE2C /* mapStyle.json in Resources */,
@@ -791,6 +798,7 @@
 				B0E59DE31E4050B5007B4762 /* Story.swift in Sources */,
 				B059015E1E6284F7005BD519 /* LocationHeaderView.swift in Sources */,
 				B0B0430E1E40A83500D50DA7 /* UserStoryTableViewCell.swift in Sources */,
+				B00BB2CF1E6756A3002AD0F0 /* EmptyLocationTableViewCell.swift in Sources */,
 				B087C75D1E41C27100234715 /* ProfileHeaderView.swift in Sources */,
 				B0E59DF01E406662007B4762 /* Listeners.swift in Sources */,
 				B01EE5471E435D450049BCBF /* MinoruTextField.swift in Sources */,

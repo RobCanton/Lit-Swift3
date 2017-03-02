@@ -136,9 +136,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let location = locations[indexPath.row]
         if location.getVisitors().count > 0 {
-            return 266
+            return 264
         }
-        return 230
+        return 228
         
     }
     

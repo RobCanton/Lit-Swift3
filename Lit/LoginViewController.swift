@@ -12,6 +12,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import Firebase
 import ActiveLabel
+import AVFoundation
 
 class LoginViewController: UIViewController, StoreSubscriber {
     typealias StoreSubscriberStateType = AppState
@@ -33,13 +34,13 @@ class LoginViewController: UIViewController, StoreSubscriber {
         }
     }
     
+    let splashKey = "splashVideo.mp4"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("Login view did load")
-        createDirectory("location_images")
-        createDirectory("temp")
-        createDirectory("user_uploads")
+
         
         self.deactivateLoginButton()
         
@@ -77,6 +78,52 @@ class LoginViewController: UIViewController, StoreSubscriber {
         }
     }
     
+     func downloadSplashVideo(completion: @escaping (_ data:Data?)->()) {
+        let videoRef = FIRStorage.storage().reference().child("brand/splashVideo.mp4")
+        
+        videoRef.data(withMaxSize: 50 * 1024 * 1024) { (data, error) -> Void in
+            if (error != nil) {
+                print("Error - \(error!.localizedDescription)")
+                completion(nil)
+            } else {
+                return completion(data!)
+            }
+        }
+    }
+    
+    func writeVideoToFile(video:Data) -> URL {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending(splashKey))
+        try! video.write(to: fileURL, options: [.atomic])
+        return fileURL
+    }
+    
+    func readVideoFromFile() -> URL? {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending(splashKey))
+        do {
+            let _ = try Data(contentsOf: fileURL)
+            
+            return fileURL
+        } catch let error as Error{
+            print("ERROR: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    func retrieveVideo(completion: @escaping (_ videoUrl:URL?, _ fromFile:Bool)->()) {
+
+        if let data = readVideoFromFile() {
+            completion(data, true)
+        } else {
+            downloadSplashVideo(completion: { data in
+                if data != nil {
+                    let url = self.writeVideoToFile(video: data!)
+                    completion(url, false)
+                }
+                completion(nil, false)
+            })
+        }
+    }
+    
 
 
     override func viewWillAppear(_ animated: Bool) {
@@ -94,12 +141,33 @@ class LoginViewController: UIViewController, StoreSubscriber {
         } else {
            self.setupLoginScreen()
         }
+        if playerLayer == nil {
+            retrieveVideo(completion: { videoURL, fromFile in
+                if videoURL != nil {
+                    self.setupVideoBackground(videoURL: videoURL!)
+                }
+            })
+        }
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mainStore.unsubscribe(self)
         activityIndicator.stopAnimating()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+        playerLayer?.player?.seek(to: CMTimeMake(0, 1))
+        playerLayer?.player?.pause()
+        playerLayer?.player?.replaceCurrentItem(with: nil)
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        videoView?.removeFromSuperview()
+
     }
     
     func setupLoginScreen() {
@@ -268,6 +336,36 @@ class LoginViewController: UIViewController, StoreSubscriber {
         {
         get{
             return true
+        }
+    }
+    
+
+    var videoView:UIView?
+    var playerLayer: AVPlayerLayer?
+    func setupVideoBackground(videoURL:URL) {
+        
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        videoView = UIView(frame: self.view.bounds)
+        self.view.insertSubview(videoView!, at: 0)
+        
+        let videoPlayer = AVPlayer()
+        playerLayer = AVPlayerLayer(player: videoPlayer)
+        playerLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        
+        playerLayer!.frame = self.view.bounds
+        videoView!.layer.addSublayer(playerLayer!)
+        let item = AVPlayerItem(url: videoURL)
+        videoPlayer.replaceCurrentItem(with: item)
+        videoPlayer.play()
+        loopVideo(videoPlayer: videoPlayer)
+        
+    }
+    
+    func loopVideo(videoPlayer: AVPlayer) {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
+            videoPlayer.seek(to: kCMTimeZero)
+            videoPlayer.play()
         }
     }
     

@@ -462,12 +462,7 @@ class UploadService {
         })
     }
     
-    static func removeItemFromLocation(item:StoryItem, completion:@escaping (()->())) {
-        var type = "image"
-        if item.contentType == .video {
-            type = "video"
-        }
-        
+    static func removeItemFromLocation(item:StoryItem, notify:Bool, completion:@escaping ((_ success:Bool)->())) {
         let ref = FIRDatabase.database().reference()
         let updates:[String:Any?] = [
             "locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)": nil,
@@ -479,31 +474,22 @@ class UploadService {
                 item.toLocation = false
                 dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
                 
-                var type = "Image"
-                if item.contentType == .video {
-                    type = "Video"
+                if notify {
+                    showSuccessNotification("Removed!")
                 }
                 
-                showSuccessNotification("\(type) removed!")
-                completion()
+                completion(true)
             } else {
-                var type = "image"
-                if item.contentType == .video {
-                    type = "video"
+                if notify {
+                    showFailureNotification("Unable to remove.")
                 }
                 
-                showFailureNotification("Unable to remove \(type).")
-                completion()
+                completion(false)
             }
         })
     }
     
-    static func removeItemFromStory(item:StoryItem, completion:@escaping (()->())) {
-        var type = "image"
-        if item.contentType == .video {
-            type = "video"
-        }
-        
+    static func removeItemFromStory(item:StoryItem, notify:Bool, completion:@escaping ((_ success:Bool)->())) {
         let ref = FIRDatabase.database().reference()
         let updates:[String:Any?] = [
             "users/activity/\(item.authorId)/\(item.key)": nil,
@@ -515,26 +501,22 @@ class UploadService {
                 item.toStory = false
                 dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
                 
-                var type = "Image"
-                if item.contentType == .video {
-                    type = "Video"
+                if notify {
+                    
+                    showSuccessNotification("Removed!")
                 }
                 
-                showSuccessNotification("\(type) removed!")
-                completion()
+                completion(true)
             } else {
-                var type = "image"
-                if item.contentType == .video {
-                    type = "video"
+                if notify {
+                    showFailureNotification("Unable to remove.")
                 }
-                
-                showFailureNotification("Unable to remove \(type).")
-                completion()
+                completion(false)
             }
         })
     }
     
-    static func removeItemFromProfile(item:StoryItem, completion:@escaping (()->())) {
+    static func removeItemFromProfile(item:StoryItem, notify:Bool, completion:@escaping ((_ success:Bool)->())) {
         
         let ref = FIRDatabase.database().reference()
         let updates:[String:Any?] = [
@@ -546,62 +528,42 @@ class UploadService {
             if error == nil {
                 item.toProfile = false
                 dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
-                
-                var type = "Image"
-                if item.contentType == .video {
-                    type = "Video"
+                if notify {
+                    showSuccessNotification("Removed!")
                 }
                 
-                showSuccessNotification("\(type) removed!")
-                completion()
+                completion(true)
             } else {
-                var type = "image"
-                if item.contentType == .video {
-                    type = "video"
+                if notify {
+                    showFailureNotification("Unable to remove.")
                 }
                 
-                showFailureNotification("Unable to remove \(type).")
-                completion()
+                completion(false)
             }
         })
     }
     
-    static func deleteItem(item:StoryItem, completion:@escaping (()->())){
+    static func deleteItem(item:StoryItem, completion:@escaping ((_ success:Bool)->())){
         
-        let ref = FIRDatabase.database().reference()
-        let updates:[String:Any?] = [
-            "users/uploads/\(item.authorId)/\(item.key)": nil,
-            "uploads/\(item.key)/meta/toProfile": false,
-            "users/activity/\(item.authorId)/\(item.key)": nil,
-            "uploads/\(item.key)/meta/toStory": false,
-            "locations/uploads/\(item.locationKey)/\(item.authorId)/\(item.key)": nil,
-            "uploads/\(item.key)/meta/toLocation": false
-        ]
-        
-        ref.updateChildValues(updates, withCompletionBlock: { error, ref in
-            if error == nil {
-                item.toProfile = false
-                item.toLocation = false
-                item.toStory = false
-                dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
-                
-                var type = "Image"
-                if item.contentType == .video {
-                    type = "Video"
-                }
-                
-                showSuccessNotification("\(type) deleted!")
-                completion()
-            } else {
-                
-                var type = "image"
-                if item.contentType == .video {
-                    type = "video"
-                }
-                
-                showFailureNotification("Unable to delete \(type).")
-                completion()
-            }
+        removeItemFromStory(item: item, notify: false, completion: { story_removed in
+            removeItemFromProfile(item: item, notify: false, completion: { profile_removed in
+                removeItemFromLocation(item: item, notify: false, completion: { location_removed in
+
+                    if !story_removed && !profile_removed && !location_removed {
+                        showFailureNotification("Unabled to delete.")
+                        completion(false)
+                    } else{
+                        item.toProfile = false
+                        item.toLocation = false
+                        item.toStory = false
+                        dataCache.setObject(item, forKey: "upload-\(item.key)" as NSString)
+    
+                        showSuccessNotification("Deleted!")
+                        completion(true)
+                    }
+
+                })
+            })
         })
     }
     
@@ -630,4 +592,6 @@ enum ReportType:String {
     case Harassment = "Harassment"
     case Bot = "Bot"
     case Other = "Other"
+    case InappropriateMessages = "InappropriateMessages"
+    case SpamMessages = "SpamMessages"
 }

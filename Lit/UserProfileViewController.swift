@@ -414,11 +414,18 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
     
     func presentConversation(conversation:Conversation, user:User) {
         loadImageUsingCacheWithURL(user.getImageUrl(), completion: { image, fromCache in
+            
+            
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
             controller.conversation = conversation
             controller.partnerImage = image
-            self.navigationController?.navigationBar.tintColor = UIColor.white
-            self.navigationController?.pushViewController(controller, animated: true)
+            controller.popUpMode = true
+            let nav = UINavigationController(rootViewController: controller)
+            nav.navigationBar.barTintColor = UIColor.black
+            nav.navigationBar.isTranslucent = false
+            nav.navigationBar.tintColor = UIColor.white
+            nav.navigationBar.barStyle = .black
+            self.present(nav, animated: true, completion: nil)
         })
     }
     

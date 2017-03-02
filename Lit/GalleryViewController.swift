@@ -253,23 +253,29 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
                     deleteController.addAction(cancelAction)
                     let storyAction: UIAlertAction = UIAlertAction(title: "Remove from my profile", style: .destructive)
                     { action -> Void in
-                        UploadService.removeItemFromProfile(item: item, completion: {
-                            self.dismissPopup(true)
+                        UploadService.removeItemFromProfile(item: item, notify: true, completion: { success in
+                            if success {
+                                self.dismissPopup(true)
+                            }
                         })
                     }
                     deleteController.addAction(storyAction)
                     
                     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
-                        UploadService.deleteItem(item: item, completion: {
-                            self.dismissPopup(true)
+                        UploadService.deleteItem(item: item, completion: { success in
+                            if success {
+                               self.dismissPopup(true)
+                            }
                         })
                     }
                     deleteController.addAction(deleteAction)
                     
                     self.present(deleteController, animated: true, completion: nil)
                 } else {
-                    UploadService.deleteItem(item: item, completion: {
-                        self.dismissPopup(true)
+                    UploadService.deleteItem(item: item, completion: { success in
+                        if success {
+                            self.dismissPopup(true)
+                        }
                     })
                 }
             }

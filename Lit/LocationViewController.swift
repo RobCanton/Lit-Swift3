@@ -342,6 +342,7 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath) as! LoadingTableViewCell
             return cell
         }
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -351,8 +352,11 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
                 presentStory(indexPath)
             } else {
                 story.downloadStory()
+                
             }
         }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func handleContact() {

@@ -19,6 +19,7 @@ class MasterNavigationController: UINavigationController, UINavigationController
         super.viewDidLoad()
         setToStandardDelegate(interactive: true)
         
+        
        
     }
     
@@ -46,6 +47,8 @@ class MasterNavigationController: UINavigationController, UINavigationController
         
         return nil
     }
+    
+    
     
     
 //    

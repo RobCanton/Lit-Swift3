@@ -27,10 +27,7 @@ class PhotoCell: UICollectionViewCell {
     var itemKey:String?
     
     func setPhoto(item:StoryItem) {
-        if itemKey != nil && itemKey != item.getKey() {
-            imageView.image = nil
-            itemKey = item.getKey()
-        }
+        imageView.image = nil
     
         UploadService.retrieveImage(byKey: item.getKey(), withUrl: item.getDownloadUrl(), completion: { image, fromFile in
             if !fromFile {
