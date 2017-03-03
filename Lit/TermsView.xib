@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="JI3-gM-XBO" userLabel="Card View" customClass="TermsView" customModule="Lit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="601" height="474"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dp3-Ae-zep" userLabel="Background view">
+                    <rect key="frame" x="40" y="108" width="529" height="358"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncy-e6-di3">
+                            <rect key="frame" x="227" y="16" width="75" height="75"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="Ncy-e6-di3" secondAttribute="height" multiplier="1:1" id="sKU-6K-KZE"/>
+                                <constraint firstAttribute="height" constant="75" id="yC4-nt-CRZ"/>
+                            </constraints>
+                            <state key="normal" image="ok_large"/>
+                        </button>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="UxT-BU-s4l">
+                            <rect key="frame" x="12" y="314" width="505" height="32"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4de-yv-DXh">
+                                    <rect key="frame" x="0.0" y="0.0" width="244.5" height="32"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                    <state key="normal" title="Cancel">
+                                        <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="handleCancel:" destination="JI3-gM-XBO" eventType="touchUpInside" id="Dei-Xp-C8l"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PUe-H6-BAt">
+                                    <rect key="frame" x="260.5" y="0.0" width="244.5" height="32"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                    <state key="normal" title="I Agree"/>
+                                    <connections>
+                                        <action selector="handleAgree:" destination="JI3-gM-XBO" eventType="touchUpInside" id="Kth-MC-uBl"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ISp-jo-cRd">
+                            <rect key="frame" x="8" y="305" width="513" height="1"/>
+                            <color key="backgroundColor" white="0.84999999999999998" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="CaO-KE-HUf"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2g-HM-NTi">
+                            <rect key="frame" x="264" y="306" width="1" height="52"/>
+                            <color key="backgroundColor" white="0.84999999999999998" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="Vpg-LJ-v1d"/>
+                            </constraints>
+                        </view>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="RJH-Fp-YDa" userLabel="Content view">
+                            <rect key="frame" x="16" y="103" width="497" height="187"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="748" text="ACCEPT TERMS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMT-Vh-S3z">
+                                    <rect key="frame" x="0.0" y="0.0" width="497" height="21.5"/>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By creating an account, you agree to the following terms." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U9w-CI-YK7">
+                                    <rect key="frame" x="0.0" y="49.5" width="497" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" white="0.14999999999999999" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EIH-o0-dl0">
+                                    <rect key="frame" x="0.0" y="95" width="497" height="32"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <state key="normal" title="Terms of Use"/>
+                                    <connections>
+                                        <action selector="handleTerms:" destination="JI3-gM-XBO" eventType="touchUpInside" id="vMA-YW-jc2"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ms0-El-zS4">
+                                    <rect key="frame" x="0.0" y="155" width="497" height="32"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <state key="normal" title="Privacy Policy"/>
+                                    <connections>
+                                        <action selector="handlePrivacy:" destination="JI3-gM-XBO" eventType="touchUpInside" id="yTg-Op-69x"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="K2g-HM-NTi" firstAttribute="centerX" secondItem="dp3-Ae-zep" secondAttribute="centerX" id="3XW-bd-e94"/>
+                        <constraint firstAttribute="trailing" secondItem="UxT-BU-s4l" secondAttribute="trailing" constant="12" id="4db-np-lKN"/>
+                        <constraint firstAttribute="trailing" secondItem="ISp-jo-cRd" secondAttribute="trailing" constant="8" id="5Oh-s7-0aZ"/>
+                        <constraint firstItem="RJH-Fp-YDa" firstAttribute="top" secondItem="Ncy-e6-di3" secondAttribute="bottom" constant="12" id="Bmo-tZ-pTg"/>
+                        <constraint firstItem="UxT-BU-s4l" firstAttribute="top" secondItem="ISp-jo-cRd" secondAttribute="bottom" constant="8" id="EGw-jB-shv"/>
+                        <constraint firstItem="UxT-BU-s4l" firstAttribute="top" secondItem="RJH-Fp-YDa" secondAttribute="bottom" constant="24" id="Gwa-fh-Jf1"/>
+                        <constraint firstAttribute="bottom" secondItem="UxT-BU-s4l" secondAttribute="bottom" constant="12" id="LwU-VT-r2l"/>
+                        <constraint firstItem="RJH-Fp-YDa" firstAttribute="leading" secondItem="dp3-Ae-zep" secondAttribute="leading" constant="16" id="OPq-4T-zhw"/>
+                        <constraint firstItem="Ncy-e6-di3" firstAttribute="top" secondItem="dp3-Ae-zep" secondAttribute="top" constant="16" id="SOO-yF-TdK"/>
+                        <constraint firstItem="ISp-jo-cRd" firstAttribute="leading" secondItem="dp3-Ae-zep" secondAttribute="leading" constant="8" id="UTu-Ov-y8k"/>
+                        <constraint firstAttribute="bottom" secondItem="K2g-HM-NTi" secondAttribute="bottom" id="bcn-hz-sFR"/>
+                        <constraint firstItem="UxT-BU-s4l" firstAttribute="leading" secondItem="dp3-Ae-zep" secondAttribute="leading" constant="12" id="brY-0g-6a6"/>
+                        <constraint firstItem="K2g-HM-NTi" firstAttribute="top" secondItem="ISp-jo-cRd" secondAttribute="bottom" id="d6P-ue-2Fm"/>
+                        <constraint firstAttribute="trailing" secondItem="RJH-Fp-YDa" secondAttribute="trailing" constant="16" id="dJi-po-g6O"/>
+                        <constraint firstItem="Ncy-e6-di3" firstAttribute="centerX" secondItem="dp3-Ae-zep" secondAttribute="centerX" id="rqN-3c-dCk"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="dp3-Ae-zep" secondAttribute="trailing" constant="32" id="gGP-zK-6VU"/>
+                <constraint firstItem="dp3-Ae-zep" firstAttribute="leading" secondItem="JI3-gM-XBO" secondAttribute="leadingMargin" constant="32" id="gyP-aD-uO3"/>
+                <constraint firstAttribute="bottom" secondItem="dp3-Ae-zep" secondAttribute="bottom" constant="8" id="le8-gK-lcY"/>
+                <constraint firstItem="dp3-Ae-zep" firstAttribute="top" secondItem="JI3-gM-XBO" secondAttribute="topMargin" constant="100" id="s15-z9-aHc"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="bounceAnimationOffset">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="number" keyPath="statusBarOffset">
+                    <real key="value" value="10"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="backgroundView" destination="dp3-Ae-zep" id="ZiK-GN-SXH"/>
+                <outlet property="bodyLabel" destination="gMT-Vh-S3z" id="BkZ-P0-0dh"/>
+                <outlet property="cardBackgroundView" destination="dp3-Ae-zep" id="Bpi-pD-QGA"/>
+            </connections>
+            <point key="canvasLocation" x="304.5" y="828"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ok_large" width="500" height="500"/>
+    </resources>
+</document>

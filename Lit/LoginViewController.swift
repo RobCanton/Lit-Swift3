@@ -11,7 +11,6 @@ import ReSwift
 import FBSDKCoreKit
 import FBSDKLoginKit
 import Firebase
-import ActiveLabel
 import AVFoundation
 
 class LoginViewController: UIViewController, StoreSubscriber {
@@ -20,7 +19,6 @@ class LoginViewController: UIViewController, StoreSubscriber {
 
     @IBOutlet weak var loginButton: UIButton!
     
-    @IBOutlet weak var legal: ActiveLabel!
     
     var dict:[String : AnyObject]!
     
@@ -48,51 +46,12 @@ class LoginViewController: UIViewController, StoreSubscriber {
         loginButton.layer.borderWidth = 2.0
         loginButton.layer.borderColor = UIColor.white.cgColor
         
-        let customType = ActiveType.custom(pattern: "\\sTerms of Use.") //Regex that looks for "with"
-        legal.enabledTypes = [customType]
-        legal.text = "By logging in you agree to the Terms of Use."
-        
-        legal.customColor[customType] = UIColor.white
-        legal.customSelectedColor[customType] = UIColor.lightGray
-        
-        legal.handleCustomTap(for: customType) { element in
-            print("Custom type tapped: \(element)")
-            self.performSegue(withIdentifier: "showTerms", sender: self)
-        }
-        
-        
         activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         activityIndicator.center = CGPoint(x: view.center.x, y: loginButton.center.y)
         self.view.addSubview(activityIndicator)
-        
-        if let user = FIRAuth.auth()?.currentUser {
-            print("user already authenticated.")
-            
-            checkUserAgainstDatabase({ success in
-                if !success {
-                    UserService.logout()
-                    
-                }
-                self.versionCheck()
-            })
-            
-        } else {
-            self.versionCheck()
-        }
-
 
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showTerms" {
-            let nav = segue.destination as! UINavigationController
-            let controller = nav.viewControllers[0] as! WebViewController
-            controller.urlString = "https://getlit.site/terms.html"
-            controller.title = "Terms of Use"
-            controller.addDoneButton()
-            
-        }
-    }
+
     
      func downloadSplashVideo(completion: @escaping (_ data:Data?)->()) {
         let videoRef = FIRStorage.storage().reference().child("brand/splashVideo.mp4")
@@ -141,39 +100,36 @@ class LoginViewController: UIViewController, StoreSubscriber {
     }
     
 
+    var shouldCheckUser = true
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mainStore.subscribe(self)
         
-        print("viewWillAppear")
-//        if !mainStore.state.supportedVersion {
-//            print("Not supported version")
-//            
-//            checkVersionSupport({ supported in
-//                print("Version: \(supported)")
-//                if supported {
-//                    mainStore.dispatch(SupportedVersion())
-//                    self.setupLoginScreen()
-//                } else {
-//                    self.showUpdateAlert()
-//                }
-//            })
-//        } else {
-//            
-//           self.setupLoginScreen()
-//        }
-//        
-        
-        
-        
-//        if playerLayer == nil {
-//            retrieveVideo(completion: { videoURL, fromFile in
-//                if videoURL != nil {
-//                    self.setupVideoBackground(videoURL: videoURL!)
-//                }
-//            })
-//        }
+        if shouldCheckUser {
+            if let user = FIRAuth.auth()?.currentUser {
+                print("user already authenticated.")
+                
+                checkUserAgainstDatabase({ success in
+                    if !success {
+                        UserService.logout()
+                        
+                    }
+                    self.versionCheck()
+                })
+                
+            } else {
+                self.versionCheck()
+            }
+        }
+
+        if playerLayer == nil {
+            retrieveVideo(completion: { videoURL, fromFile in
+                if videoURL != nil {
+                    self.setupVideoBackground(videoURL: videoURL!)
+                }
+            })
+        }
 
     }
     
@@ -245,20 +201,19 @@ class LoginViewController: UIViewController, StoreSubscriber {
     func activateLoginButton() {
         loginButton.isEnabled = true
         loginButton.isHidden = false
-        legal.isEnabled = true
-        legal.isHidden = false
     }
     
     func deactivateLoginButton() {
         loginButton.isEnabled = false
         loginButton.isHidden = true
-        legal.isEnabled = false
-        legal.isHidden = true
     }
+    
+    
 
     @IBAction func handleLoginButton(_ sender: Any) {
         loginButton.isEnabled = false
         
+        shouldCheckUser = false
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
         fbLoginManager.logIn(withReadPermissions: ["public_profile", "email", "user_friends"], from: self) { (result, error) in
             if (error == nil){
@@ -321,6 +276,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
             if error == nil && firUser != nil {
                 UserService.getUser(firUser!.uid, completion: { user in
                     print("fetched user: \(user)")
+                    self.shouldCheckUser = true
                     if user != nil {
                         UserService.login(user!)
                     } else {

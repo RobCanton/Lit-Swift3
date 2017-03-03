@@ -17,10 +17,10 @@ pod 'View2ViewTransition'
 pod 'NVActivityIndicatorView'
 pod 'Whisper'
 pod 'SwiftMessages', '3.1.4'
-pod 'ActiveLabel'
 pod 'ZoomTransitioning'
 pod 'GoogleMaps'
 pod 'GooglePlaces'
+
 
 end
 

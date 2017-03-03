@@ -48,6 +48,7 @@ PODS:
   - FirebaseStorage (1.0.5):
     - FirebaseAnalytics (~> 3.5)
     - GTMSessionFetcher/Core (~> 1.1)
+  - FRHyperLabel (1.0.3)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
   - GoogleMaps (2.1.1):
@@ -89,6 +90,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Messaging
   - Firebase/Storage
+  - FRHyperLabel
   - GoogleMaps
   - GooglePlaces
   - JSQMessagesViewController
@@ -110,6 +112,7 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
   FirebaseStorage: 5738284835edb57f0e81d4ae5832bb17c1e4b5fa
+  FRHyperLabel: 99d08d3667880b4c430071c9afbcb93aaaa34b37
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
@@ -125,6 +128,6 @@ SPEC CHECKSUMS:
   Whisper: 08be92623311f8e53201e62e17f6d7b9599a4714
   ZoomTransitioning: 42d9ad29c83d896f3fe28c324a4fe98ac821f0dd
 
-PODFILE CHECKSUM: 04240572bada02f535f2a96e964c9a46f1763126
+PODFILE CHECKSUM: 15485f4b384ae727dc3f29e7f6a9a202e1f0bde8
 
 COCOAPODS: 1.2.0

@@ -94,6 +94,8 @@
 		B0B043361E4159B800D50DA7 /* CameraTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B043351E4159B800D50DA7 /* CameraTransition.swift */; };
 		B0BD94911E53A3F500C45BE3 /* LocationStoriesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */; };
 		B0BD94931E5496DE00C45BE3 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BD94921E5496DE00C45BE3 /* NotificationService.swift */; };
+		B0CA06451E68A35C0095C991 /* TermsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CA06431E68A35C0095C991 /* TermsView.swift */; };
+		B0CA06461E68A35C0095C991 /* TermsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0CA06441E68A35C0095C991 /* TermsView.xib */; };
 		B0CC44E01E4316720078FFFE /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */; };
 		B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CC44E11E4318440078FFFE /* UserViewCell.swift */; };
 		B0CC44E41E4318440078FFFE /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0CC44E21E4318440078FFFE /* UserViewCell.xib */; };
@@ -224,6 +226,8 @@
 		B0B043351E4159B800D50DA7 /* CameraTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTransition.swift; sourceTree = "<group>"; };
 		B0BD94901E53A3F500C45BE3 /* LocationStoriesHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationStoriesHeader.xib; sourceTree = "<group>"; };
 		B0BD94921E5496DE00C45BE3 /* NotificationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		B0CA06431E68A35C0095C991 /* TermsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsView.swift; sourceTree = "<group>"; };
+		B0CA06441E68A35C0095C991 /* TermsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsView.xib; sourceTree = "<group>"; };
 		B0CC44DF1E4316720078FFFE /* UsersListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
 		B0CC44E11E4318440078FFFE /* UserViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
 		B0CC44E21E4318440078FFFE /* UserViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
@@ -501,6 +505,8 @@
 				B0B043251E40C60300D50DA7 /* MasterNavigationController.swift */,
 				B09405F11E4EE14200CE0068 /* TacoDialogView.swift */,
 				B09405F21E4EE14200CE0068 /* TacoDialogView.xib */,
+				B0CA06431E68A35C0095C991 /* TermsView.swift */,
+				B0CA06441E68A35C0095C991 /* TermsView.xib */,
 				B01EE5321E435CA40049BCBF /* Login */,
 				B0E59DF91E407640007B4762 /* Home */,
 				B0E59E001E409191007B4762 /* Location */,
@@ -659,6 +665,7 @@
 				B0828FF91E664E6F00F3EE2C /* LoadingTableViewCell.xib in Resources */,
 				B087C7861E41EE8600234715 /* ListHeaderView.xib in Resources */,
 				B087C77F1E41E6AE00234715 /* SendProfileViewCell.xib in Resources */,
+				B0CA06461E68A35C0095C991 /* TermsView.xib in Resources */,
 				B09405D61E460BF100CE0068 /* GoogleService-Info.plist in Resources */,
 				B087C75E1E41C27100234715 /* ProfileHeaderView.xib in Resources */,
 				B0D0DC421E43057400381AEE /* EditProfilePictureView.xib in Resources */,
@@ -804,6 +811,7 @@
 				B01EE5471E435D450049BCBF /* MinoruTextField.swift in Sources */,
 				B0B043241E40BE0000D50DA7 /* UploadService.swift in Sources */,
 				B01EE5461E435D450049BCBF /* MadokaTextField.swift in Sources */,
+				B0CA06451E68A35C0095C991 /* TermsView.swift in Sources */,
 				B0B043311E40DB0E00D50DA7 /* ChatViewController.swift in Sources */,
 				B0CC44E31E4318440078FFFE /* UserViewCell.swift in Sources */,
 				B09405DF1E4834FB00CE0068 /* WDCropBorderView.swift in Sources */,
