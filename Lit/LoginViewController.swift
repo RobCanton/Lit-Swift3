@@ -108,7 +108,7 @@ class LoginViewController: UIViewController, StoreSubscriber {
         
         if shouldCheckUser {
             if let user = FIRAuth.auth()?.currentUser {
-                print("user already authenticated.")
+
                 
                 checkUserAgainstDatabase({ success in
                     if !success {
@@ -135,10 +135,10 @@ class LoginViewController: UIViewController, StoreSubscriber {
     
     func versionCheck() {
         if !mainStore.state.supportedVersion {
-            print("Not supported version")
+
 
             checkVersionSupport({ supported in
-                print("Version: \(supported)")
+
                 if supported {
                     mainStore.dispatch(SupportedVersion())
                     self.setupLoginScreen()
@@ -315,13 +315,12 @@ class LoginViewController: UIViewController, StoreSubscriber {
         let currentVersion = Int(appId.replacingOccurrences(of: ".", with: ""))!
         
         let versionRef = UserService.ref.child("config/client/minimum_supported_version")
-        print("Observing current version")
+
         versionRef.observeSingleEvent(of: .value, with: { snapshot in
-            print("Wats going on")
+
             let versionString = snapshot.value as! String
             let minimum_supported_version = Int(versionString.replacingOccurrences(of: ".", with: ""))!
-            print("current_version: \(currentVersion) | minimum_supported_version: \(minimum_supported_version)")
-            self.activityIndicator.stopAnimating()
+                        self.activityIndicator.stopAnimating()
             completion(currentVersion >= minimum_supported_version)
         })
     }

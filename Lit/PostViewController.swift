@@ -23,6 +23,25 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     
     var shouldPlay = false
     
+    var flagLabel:UILabel?
+    
+    func addFlagLabel() {
+        flagLabel?.removeFromSuperview()
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+        
+        flagLabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 60))
+        flagLabel!.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular)
+        flagLabel!.textColor = UIColor.white
+        flagLabel!.text = "⚠️ Flagged as Inappropriate"
+        flagLabel!.textAlignment = .center
+        flagLabel!.center = CGPoint(x: width/2, y: height/2)
+        
+        contentView.addSubview(flagLabel!)
+        
+    }
+    
+    
     var storyItem:StoryItem! {
         didSet {
             storyItem.delegate = self
@@ -136,6 +155,18 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     func setItem() {
         guard let item = storyItem else { return }
 
+        flagLabel?.removeFromSuperview()
+        
+        if item.shouldBlock() {
+            addFlagLabel()
+            content.alpha = 0.0
+            videoContent.alpha = 0.0
+        } else {
+            content.alpha = 1.0
+            videoContent.alpha = 1.0
+        }
+        
+        
         if let image = storyItem.image {
             stopIndicator()
             self.content.image = image
@@ -238,7 +269,6 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
             let lastKey = lastItem.getKey()
             let ts = lastItem.getDate().timeIntervalSince1970 * 1000
             
-            print("LAST COMMENT: \(lastItem.getText())")
             commentsRef?.queryOrdered(byChild: "timestamp").queryStarting(atValue: ts).observe(.childAdded, with: { snapshot in
                 
                 let dict = snapshot.value as! [String:Any]
@@ -249,7 +279,6 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
                     let timestamp = dict["timestamp"] as! Double
                     
                     let comment = Comment(key: key, author: author, text: text, timestamp: timestamp)
-                    print("ADDING: \(text)")
                     self.storyItem.addComment(comment)
                     self.commentsView.setTableComments(comments: self.storyItem.comments, animated: true)
                 }
@@ -288,7 +317,11 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
     }
     
     func playVideo() {
-        self.playerLayer?.player?.play()
+        guard let item = self.storyItem else { return }
+        
+        if !item.shouldBlock() {
+            self.playerLayer?.player?.play()
+        }
     }
     
     func pauseVideo() {

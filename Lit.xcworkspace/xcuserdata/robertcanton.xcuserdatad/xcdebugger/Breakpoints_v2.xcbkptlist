@@ -554,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508713789.066499"
+            timestampString = "510197783.841377"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "StoryViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -570,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "508713789.066499"
+            timestampString = "510197783.841377"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "stateChange(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "510131455.330286"
+            timestampString = "510197783.841377"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "setForPlay()"
             landmarkType = "7">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "510131455.330286"
+            timestampString = "510197783.841377"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "prepareVideoContent(item:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryViewController.swift"
-            timestampString = "510131455.330286"
+            timestampString = "510197783.841377"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "616"
-            endingLineNumber = "616"
+            startingLineNumber = "651"
+            endingLineNumber = "651"
             landmarkName = "StoryViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/UserService.swift"
-            timestampString = "510045367.101445"
+            timestampString = "510197071.432403"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "uploadProfilePicture(largeImage:smallImage:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1002,11 +1002,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/PostViewController.swift"
-            timestampString = "508717231.574377"
+            timestampString = "510200644.254801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "272"
-            endingLineNumber = "272"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
             landmarkName = "loopVideo()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1066,11 +1066,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/SettingsViewController.swift"
-            timestampString = "509610510.062323"
+            timestampString = "510197275.335373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "makeSuggestion()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1434,11 +1434,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/StoryItem.swift"
-            timestampString = "508628591.565425"
+            timestampString = "510194953.247097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "needsDownload()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1674,11 +1674,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lit/LoginViewController.swift"
-            timestampString = "510190256.18245"
+            timestampString = "510194331.700778"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "setupVideoBackground(videoURL:)"
             landmarkType = "7">
          </BreakpointContent>

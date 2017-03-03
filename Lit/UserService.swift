@@ -17,16 +17,20 @@ class UserService {
     
     static let ref = FIRDatabase.database().reference()
     
+    static var allowContent = false
+    
     static func login(_ user:User) {
         mainStore.dispatch(UserIsAuthenticated(user: user))
         LocationService.getUserRadiusSetting()
         sendFCMToken()
+        fetchSettings()
         Listeners.startListeningToResponses()
         Listeners.startListeningToConversations()
         Listeners.startListeningToFollowers()
         Listeners.startListeningToFollowing()
         Listeners.startListeningToBlocked()
         Listeners.startListeningToBlockedBy()
+        
     }
     
     static func logout() {
@@ -52,6 +56,19 @@ class UserService {
                 fcmRef.setValue(token)
             }
         }
+    }
+    
+    static func fetchSettings() {
+        let uid = mainStore.state.userState.uid
+        let settingsRef = ref.child("users/settings/\(uid)/allow_inappropriate_content")
+        settingsRef.observeSingleEvent(of: .value, with: { snapshot in
+            if snapshot.exists() {
+                allowContent = snapshot.value as! Bool
+            } else {
+                allowContent = false
+            }
+        })
+        
     }
     
     static func getUser(_ uid:String, completion: @escaping (_ user:User?) -> Void) {

@@ -71,6 +71,7 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
         // Configure the view for the selected state
     }
     
+    var imageAlpha:CGFloat = 1.0
     
     func setUserStory(_ story:UserStory, useUsername:Bool) {
         self.userStory = story
@@ -98,15 +99,24 @@ class UserStoryTableViewCell: UITableViewCell, StoryProtocol {
                 UploadService.getUpload(key: story.getPostKeys().last!, completion: { item in
                     if item != nil {
                         
+                        if item!.shouldBlock() {
+                            self.imageAlpha = 0.0
+                            
+                        } else {
+                            self.imageAlpha = 1.0
+                            
+                        }
+                        self.contentImageView.alpha = self.imageAlpha
+                        
                         UploadService.retrieveImage(byKey: item!.getKey(), withUrl: item!.getDownloadUrl(), completion: { image, fromFile in
                             self.contentImageView.image = image
                             if !fromFile {
                                 self.contentImageView.alpha = 0.0
                                 UIView.animate(withDuration: 0.25, animations: {
-                                    self.contentImageView.alpha = 1.0
+                                    self.contentImageView.alpha = self.imageAlpha
                                 })
                             } else {
-                                self.contentImageView.alpha = 1.0
+                                self.contentImageView.alpha = self.imageAlpha
                             }
                         })
                     }

@@ -32,6 +32,8 @@ class StoryItem: NSObject, NSCoding {
     var dateCreated: Date
     var length: Double
     
+    var flagged:Bool
+    
     var toProfile:Bool
     var toStory:Bool
     var toLocation:Bool
@@ -47,7 +49,7 @@ class StoryItem: NSObject, NSCoding {
     dynamic var videoData:Data?
     
     init(key: String, authorId: String, caption:String, locationKey:String, downloadUrl: URL, videoURL:URL?, contentType: ContentType, dateCreated: Double, length: Double,
-         toProfile: Bool, toStory: Bool, toLocation:Bool, viewers:[String:Double], likes:[String:Double], comments: [Comment])
+         toProfile: Bool, toStory: Bool, toLocation:Bool, viewers:[String:Double], likes:[String:Double], comments: [Comment], flagged:Bool)
     {
         
         self.key          = key
@@ -65,6 +67,7 @@ class StoryItem: NSObject, NSCoding {
         self.viewers      = viewers
         self.likes        = likes
         self.comments     = comments
+        self.flagged      = flagged
 
     }
     
@@ -82,6 +85,7 @@ class StoryItem: NSObject, NSCoding {
         let toProfile   = decoder.decodeBool(forKey: "toProfile")
         let toStory     = decoder.decodeBool(forKey: "toStory")
         let toLocation  = decoder.decodeBool(forKey: "toLocation")
+        let flagged     = decoder.decodeObject(forKey: "flagged") as! Bool
         
         var viewers = [String:Double]()
         if let _viewers = decoder.decodeObject(forKey: "viewers") as? [String:Double] {
@@ -110,7 +114,7 @@ class StoryItem: NSObject, NSCoding {
             break
         }
         
-        self.init(key: key, authorId: authorId, caption: caption, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, likes: likes, comments: comments)
+        self.init(key: key, authorId: authorId, caption: caption, locationKey:locationKey, downloadUrl: downloadUrl, videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers, likes: likes, comments: comments, flagged: flagged)
     }
     
     
@@ -131,6 +135,7 @@ class StoryItem: NSObject, NSCoding {
         if videoURL != nil {
             coder.encode(videoURL!, forKey: "videoURL")
         }
+        coder.encode(flagged, forKey: "flagged")
     }
     
     func getKey() -> String {
@@ -270,6 +275,13 @@ class StoryItem: NSObject, NSCoding {
         if toStory { count += 1 }
         if toLocation { count += 1 }
         return count
+    }
+    
+    func shouldBlock() -> Bool{
+        if flagged && !UserService.allowContent && getAuthorId() != mainStore.state.userState.uid {
+            return true
+        }
+        return false
     }
     
 }

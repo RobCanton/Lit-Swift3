@@ -74,6 +74,24 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
     var shouldPlay = false
     
     var story:UserStory!
+    
+    var blinder:UILabel?
+    
+    func addBlinder() {
+        blinder?.removeFromSuperview()
+        let width: CGFloat = (UIScreen.main.bounds.size.width)
+        let height: CGFloat = (UIScreen.main.bounds.size.height)
+
+        blinder = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 60))
+        blinder!.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular)
+        blinder!.textColor = UIColor.white
+        blinder!.text = "⚠️ Flagged as Inappropriate"
+        blinder!.textAlignment = .center
+        blinder!.center = CGPoint(x: width/2, y: height/2)
+
+        contentView.addSubview(blinder!)
+        
+    }
 
     
     func prepareStory(withStory story:UserStory, atIndex index:Int?) {
@@ -198,6 +216,17 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         
         let item = items[viewIndex]
         self.item = item
+        
+        blinder?.removeFromSuperview()
+        
+        if item.shouldBlock() {
+            addBlinder()
+            content.alpha = 0.0
+            videoContent.alpha = 0.0
+        } else {
+            content.alpha = 1.0
+            videoContent.alpha = 1.0
+        }
         
         if !item.hasViewed() && item.authorId != uid{
             item.addView(uid)
@@ -432,8 +461,14 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         infoView.backgroundBlur.removeAnimation()
     }
     
+    var blockInappropriateContent = true
+    
     func playVideo() {
-        self.playerLayer?.player?.play()
+        guard let item = self.item else { return }
+        
+        if !item.shouldBlock() {
+            self.playerLayer?.player?.play()
+        }
     }
     
     func pauseVideo() {
@@ -691,6 +726,7 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         view.frame = CGRect(x: 0, y: height - 50.0, width: width, height: 50.0)
         return view
     }()
+    
 }
 extension StoryViewController: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {

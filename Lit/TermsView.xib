@@ -81,7 +81,7 @@
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EIH-o0-dl0">
                                     <rect key="frame" x="0.0" y="95" width="497" height="32"/>
-                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Terms of Use"/>
                                     <connections>
                                         <action selector="handleTerms:" destination="JI3-gM-XBO" eventType="touchUpInside" id="vMA-YW-jc2"/>
@@ -89,7 +89,7 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ms0-El-zS4">
                                     <rect key="frame" x="0.0" y="155" width="497" height="32"/>
-                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Privacy Policy"/>
                                     <connections>
                                         <action selector="handlePrivacy:" destination="JI3-gM-XBO" eventType="touchUpInside" id="yTg-Op-69x"/>

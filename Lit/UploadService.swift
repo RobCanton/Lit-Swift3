@@ -364,7 +364,13 @@ class UploadService {
                     
                     comments.sort(by: { return $0 < $1 })
                     
-                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers,likes:likes, comments: comments)
+                    var flagged = false
+                    if snapshot.hasChild("flagged") {
+                        flagged = true
+                    }
+                    
+                    
+                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers,likes:likes, comments: comments, flagged: flagged)
                     dataCache.setObject(item!, forKey: "upload-\(key)" as NSString)
                 }
             }
@@ -460,6 +466,11 @@ class UploadService {
         reportRef.setValue(value, withCompletionBlock: { error, ref in
             completion(error == nil )
         })
+        
+        if type == .Inappropriate {
+            let uploadRef = ref.child("uploads/\(item.getKey())/flagged")
+            uploadRef.setValue(true)
+        }
     }
     
     static func removeItemFromLocation(item:StoryItem, notify:Bool, completion:@escaping ((_ success:Bool)->())) {

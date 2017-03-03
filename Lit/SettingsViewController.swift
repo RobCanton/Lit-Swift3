@@ -24,9 +24,12 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var blockedUsers: UITableViewCell!
     @IBOutlet weak var logout: UITableViewCell!
     
+    @IBOutlet weak var allowInappropriateContent: UISwitch!
+    
     let maxRadius = 200
     
     var notificationsRef:FIRDatabaseReference?
+    var contentRef:FIRDatabaseReference?
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -60,6 +63,13 @@ class SettingsViewController: UITableViewController {
                 self.notificationsSwitch.setOn(true, animated: false)
             }
         })
+        
+        contentRef = UserService.ref.child("users/settings/\(uid)/allow_inappropriate_content")
+        if UserService.allowContent {
+            allowInappropriateContent.setOn(true, animated: false)
+        } else {
+            allowInappropriateContent.setOn(false, animated: false)
+        }
         
         let radius = LocationService.radius
         
@@ -136,20 +146,23 @@ class SettingsViewController: UITableViewController {
     
     @IBAction func toggleNotificationsSwitch(sender: UISwitch) {
         if sender.isOn {
-            print("TRUE")
             notificationsRef?.setValue(true)
         } else {
-            print("FALSE")
             notificationsRef?.setValue(false)
         }
     }
 
-    func showPrivacyPolicy() {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let controller = storyboard.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-//        controller.title = "Privacy Policy"
-//        navigationController?.pushViewController(controller, animated: true)
+    @IBAction func toggleContentSwitch(_ sender: UISwitch) {
+        
+        if sender.isOn {
+            contentRef?.setValue(true)
+            UserService.allowContent = true
+        } else {
+            contentRef?.setValue(false)
+            UserService.allowContent = false
+        }
     }
+    
     
     func makeSuggestion() {
         let subject = "Location suggestion"
