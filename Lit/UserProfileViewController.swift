@@ -436,7 +436,7 @@ class UserProfileViewController: UIViewController, StoreSubscriber, UICollection
         if user != nil {
             if let text = self.user!.bio {
                 if text != "" {
-                    var size =  UILabel.size(withText: text, forWidth: collectionView.frame.size.width, withFont: UIFont(name: "AvenirNext-Regular", size: 14.0)!)
+                    var size =  UILabel.size(withText: text, forWidth: collectionView.frame.size.width - 20.0, withFont: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular))
                     let height2 = size.height + staticHeight + 10  // +8 for some bio padding
                     size.height = height2
                     return size

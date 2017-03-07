@@ -134,25 +134,30 @@ class ActivityViewController: UITableViewController, UISearchBarDelegate {
         responseRef = UserService.ref.child("api/responses/activity/\(uid)")
         responseRef?.removeAllObservers()
         responseRef?.observe(.value, with: { snapshot in
+            
             var tempDictionary = [String:[String]]()
             var timestamps = [String:Double]()
-            for user in snapshot.children {
+            if snapshot.exists() {
                 
-                let userSnap = user as! FIRDataSnapshot
-                var postKeys = [String]()
-                var timestamp:Double!
-                
-                for post in userSnap.children {
-                    let postSnap = post as! FIRDataSnapshot
-                    postKeys.append(postSnap.key)
-                    timestamp = postSnap.value! as! Double
+                for user in snapshot.children {
+                    
+                    let userSnap = user as! FIRDataSnapshot
+                    var postKeys = [String]()
+                    var timestamp:Double!
+                    
+                    for post in userSnap.children {
+                        let postSnap = post as! FIRDataSnapshot
+                        postKeys.append(postSnap.key)
+                        timestamp = postSnap.value! as! Double
+                    }
+                    
+                    tempDictionary[userSnap.key] = postKeys
+                    timestamps[userSnap.key] = timestamp
                 }
                 
-                tempDictionary[userSnap.key] = postKeys
-                timestamps[userSnap.key] = timestamp
+                self.crossCheckStories(tempDictionary: tempDictionary, timestamps: timestamps)
+                self.responseRef?.removeValue()
             }
-            
-            self.crossCheckStories(tempDictionary: tempDictionary, timestamps: timestamps)
         })
     }
     

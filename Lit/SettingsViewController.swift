@@ -155,8 +155,18 @@ class SettingsViewController: UITableViewController {
     @IBAction func toggleContentSwitch(_ sender: UISwitch) {
         
         if sender.isOn {
-            contentRef?.setValue(true)
-            UserService.allowContent = true
+            let alert = UIAlertController(title: "Are you sure?", message: "Content that has been reported to be inappropriate will no longer be blocked.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                self.allowInappropriateContent.setOn(false, animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Allow", style: .destructive, handler: { _ in
+                self.contentRef?.setValue(true)
+                UserService.allowContent = true
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+            
         } else {
             contentRef?.setValue(false)
             UserService.allowContent = false

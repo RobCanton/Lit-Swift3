@@ -12,35 +12,43 @@ import FBSDKLoginKit
 
 class FacebookGraph {
 
-    static func requestFacebookFriendIds(completion:@escaping (_ fb_ids:[String])->()) {
+    static func requestFacebookFriendIds(completion:@escaping (_ success: Bool, _ fb_ids:[String])->()) {
         FBSDKGraphRequest(graphPath: "me/friends", parameters: nil).start {(connection, result, error) -> Void in
+            var fb_ids = [String]()
             if error != nil {
                 NSLog(error.debugDescription)
+                completion(false, fb_ids)
                 return
             }
             
             let r = result as! [String:Any]
-            var fb_ids = [String]()
+            
             let data = r["data"] as! [NSDictionary]
             for item in data {
                 if let id = item["id"] as? String {
                     fb_ids.append(id)
                 }
             }
-            completion(fb_ids)
+            completion(true, fb_ids)
         }
     }
     
     
-    static func getFacebookFriends(completion:@escaping (_ userIds:[String])->()) {
+    static func getFacebookFriends(completion:@escaping (_ success: Bool, _ userIds:[String])->()) {
         
         let ref = FIRDatabase.database().reference()
-        requestFacebookFriendIds(completion: { fb_ids in
+        requestFacebookFriendIds(completion: { success, fb_ids in
             var _users = [String]()
+            
+            if !success {
+                completion(false, _users)
+                return
+            }
             
             
             if fb_ids.count == 0 {
-                completion(_users)
+                completion(true, _users)
+                return
             }
             
             var count = 0
@@ -55,7 +63,8 @@ class FacebookGraph {
                     }
                     count += 1
                     if count >= fb_ids.count {
-                        completion(_users)
+                        completion(true, _users)
+                        return
                     }
                 })
             }

@@ -27,10 +27,12 @@ class FacebookFriendsListViewController: UsersListViewController {
             
             setFacebookFriends()
         } else {
-            FacebookGraph.getFacebookFriends(completion: { _userIds in
-                DispatchQueue.main.async {
-                    self.fbIds = _userIds
-                    self.setFacebookFriends()
+            FacebookGraph.getFacebookFriends(completion: { success, _userIds in
+                if success {
+                    DispatchQueue.main.async {
+                        self.fbIds = _userIds
+                        self.setFacebookFriends()
+                    }
                 }
             })
         }

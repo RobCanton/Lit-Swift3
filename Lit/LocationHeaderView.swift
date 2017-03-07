@@ -61,6 +61,12 @@ class LocationHeaderView: UIView {
         } else {
             imageView.loadImageAsync(location.getImageURL(), completion: nil)
         }
+        
+        if location.phone == nil && location.website == nil && location.email == nil {
+            contactButton.isHidden = true
+        } else {
+            contactButton.isHidden = false
+        }
     }
 
 }

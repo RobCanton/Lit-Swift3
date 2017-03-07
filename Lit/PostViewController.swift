@@ -30,12 +30,29 @@ public class PostViewController: UICollectionViewCell, ItemDelegate, StoryHeader
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
         
+        let str = "⚠️ Flagged as Inappropriate\n\nSelect 'Allow Flagged Content' in the settings menu to unblock."
         flagLabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 60))
-        flagLabel!.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular)
-        flagLabel!.textColor = UIColor.white
-        flagLabel!.text = "⚠️ Flagged as Inappropriate"
         flagLabel!.textAlignment = .center
         flagLabel!.center = CGPoint(x: width/2, y: height/2)
+        flagLabel!.numberOfLines = 0
+        
+        let font = UIFont.systemFont(ofSize: 11.0, weight: UIFontWeightRegular)
+        let attributes: [String: AnyObject] = [
+            NSFontAttributeName : font,
+            NSForegroundColorAttributeName : UIColor(white: 1.0, alpha: 0.65)
+        ]
+        let title = NSMutableAttributedString(string: str, attributes: attributes) //1
+        
+        if let range = str.range(of: "⚠️ Flagged as Inappropriate") {// .rangeOfString(countStr) {
+            let index = str.distance(from: str.startIndex, to: range.lowerBound)//str.startIndex.distance(fromt:range.lowerBound)
+            let a: [String: AnyObject] = [
+                NSFontAttributeName : UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular),//UIFont(name: "AvenirNext-Medium", size: 16)!,
+                NSForegroundColorAttributeName : UIColor.white
+            ]
+            title.addAttributes(a, range: NSRange(location: index, length: "⚠️ Flagged as Inappropriate".characters.count + 1))
+        }
+        
+        flagLabel!.attributedText = title
         
         contentView.addSubview(flagLabel!)
         

@@ -79,9 +79,9 @@ class UserService {
                 var user:User?
                 if snapshot.exists() {
                     let dict = snapshot.value as! [String:AnyObject]
-                    let name        = dict["name"] as! String
-                    let displayName = dict["username"] as! String
-                    let imageURL    = dict["profileImageURL"] as! String
+                    guard let name = dict["name"] as? String else { return completion(user) }
+                    guard let displayName = dict["username"] as? String else { return completion(user) }
+                    guard let imageURL = dict["profileImageURL"] as? String else { return completion(user) }
                     
                     var verified = false
                     if snapshot.hasChild("verified") {
@@ -104,9 +104,9 @@ class UserService {
                 var user:User?
                 if snapshot.exists() {
                     let dict = snapshot.value as! [String:AnyObject]
-                    let name        = dict["name"] as! String
-                    let displayName = dict["username"] as! String
-                    let imageURL    = dict["profileImageURL"] as! String
+                    guard let name = dict["name"] as? String else { return completion(user,check) }
+                    guard let displayName = dict["username"] as? String else { return completion(user,check) }
+                    guard let imageURL = dict["profileImageURL"] as? String else { return completion(user,check) }
                     
                     var verified = false
                     if snapshot.hasChild("verified") {

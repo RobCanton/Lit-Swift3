@@ -48,7 +48,6 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         self.hideKeyboardWhenTappedAround()
         
         doneButton = UIBarButtonItem(title: "Create", style: .done, target: self, action: #selector(showLegalPrompt))
-        
         navigationItem.rightBarButtonItem = doneButton
         deactivateCreateProfileButton()
         
@@ -220,20 +219,51 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
             UserService.getUser(user.uid, completion: { _user in
                 if _user != nil {
 
-                    FacebookGraph.getFacebookFriends(completion: { _userIds in
-                        UserService.login(_user!)
-                        if _userIds.count == 0 {
-                            self.performSegue(withIdentifier: "showLit", sender: self)
-                        } else {
-                            DispatchQueue.main.async {
-                                self.fbFriend_uids = _userIds
-                                self.performSegue(withIdentifier: "showFacebookFriends", sender: self)
+                    FacebookGraph.getFacebookFriends(completion: { success , _userIds in
+                        if success {
+                            UserService.login(_user!)
+                            if _userIds.count == 0 {
+                                self.performSegue(withIdentifier: "showLit", sender: self)
+                            } else {
+                                DispatchQueue.main.async {
+                                    self.fbFriend_uids = _userIds
+                                    self.performSegue(withIdentifier: "showFacebookFriends", sender: self)
+                                }
                             }
+                        } else {
+                            print("Failed to get facebook friends")
+                            self.resetAccountCreation()
                         }
+                        
                     })
+                } else {
+                    print("Failed to get user profile")
+                    self.resetAccountCreation()
                 }
             })
+        } else {
+            print("Failed to get FIR Auth User")
+            self.resetAccountCreation()
         }
+    }
+    
+    func resetAccountCreation() {
+        let alert = UIAlertController(title: "Sorry, we weren't able to create your account.", message: "Please try again.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        
+
+        activityIndicator?.stopAnimating()
+        
+        doneButton = UIBarButtonItem(title: "Create", style: .done, target: self, action: #selector(showLegalPrompt))
+        navigationItem.rightBarButtonItem = doneButton
+        
+        activateCreateProfileButton()
+        fullnameField.isEnabled = true
+        usernameField.isEnabled = true
+        cancelButton.isEnabled  = true
+        cancelButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white], for: .normal)
     }
     
     var fbFriend_uids:[String]?
@@ -316,18 +346,20 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
 
     }
     
-    
+    var activityIndicator:UIActivityIndicatorView?
     
     func processAccountCreation() {
+        
+        guard let user = FIRAuth.auth()?.currentUser else { return }
         
         if usernameField.text == nil || usernameField.text == "" { return }
         if smallProfileImage == nil || headerView.image == nil { return }
         
         
-        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        let barButton = UIBarButtonItem(customView: activityIndicator)
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let barButton = UIBarButtonItem(customView: activityIndicator!)
         self.navigationItem.setRightBarButton(barButton, animated: true)
-        activityIndicator.startAnimating()
+        activityIndicator?.startAnimating()
         
         
         deactivateCreateProfileButton()
@@ -342,45 +374,51 @@ class CreateProfileViewController: UIViewController,UIScrollViewDelegate ,UIText
         let name = fullnameField.text!
         let username = usernameField.text!
         
-        
-        
-        if let user = FIRAuth.auth()?.currentUser {
-            let largeImage = headerView.image!
-            let smallImage = smallProfileImage!
-            UserService.uploadProfilePicture(largeImage: largeImage, smallImage: smallImage, completionHandler: { success, largeImageURL, smallImageURL in
+        let largeImage = headerView.image!
+        let smallImage = smallProfileImage!
+        UserService.uploadProfilePicture(largeImage: largeImage, smallImage: smallImage, completionHandler: { success, largeImageURL, smallImageURL in
+            
+            if success {
                 
-                if success {
-                    let ref = UserService.ref.child("users/facebook/\(self.facebook_uid)")
-                    ref.setValue(user.uid)
-                    
-                    let publicRef = UserService.ref.child("users/profile/basic/\(user.uid)")
-                    publicRef.updateChildValues([
-                        "name": name,
-                        "username":username,
-                        "profileImageURL": smallImageURL!
-                        ], withCompletionBlock: {error, ref in
-                            if error != nil {
-                                print(error!.localizedDescription)
-                            }
-                            else {
-                                let fullProfileRef = UserService.ref.child("users/profile/full/\(user.uid)")
-                                let obj = [
-                                    "largeProfileImageURL": largeImageURL!
-                                ]
-                                
-                                fullProfileRef.setValue(obj, withCompletionBlock: {error, ref in
-                                    if error != nil {
-                                        print(error!.localizedDescription)
-                                    }
-                                    else {
-                                        self.getNewUser()
-                                    }
-                                })
-                            }
-                    })
-                }
-            })
-        }
+                
+                let ref = UserService.ref.child("users/facebook")
+                ref.setValue(user.uid)
+                
+                let publicRef = UserService.ref.child("users/profile/basic/\(user.uid)")
+                publicRef.updateChildValues([
+                    "name": name,
+                    "username":username,
+                    "profileImageURL": smallImageURL!
+                    ], withCompletionBlock: {error, ref in
+                        if error != nil {
+                            print("Failed to save profile")
+                            self.resetAccountCreation()
+                            print(error!.localizedDescription)
+                        }
+                        else {
+                            let fullProfileRef = UserService.ref.child("users/profile/full/\(user.uid)")
+                            let obj = [
+                                "largeProfileImageURL": largeImageURL!
+                            ]
+                            
+                            fullProfileRef.setValue(obj, withCompletionBlock: {error, ref in
+                                if error != nil {
+                                    print("Failed to uploadProfilePicture")
+                                    self.resetAccountCreation()
+                                    print(error!.localizedDescription)
+                                }
+                                else {
+                                    self.getNewUser()
+                                }
+                            })
+                        }
+                })
+            } else {
+                
+                print("Failed to uploadProfilePicture")
+                self.resetAccountCreation()
+            }
+        })
     }
     
     func checkUsernameAvailability() {

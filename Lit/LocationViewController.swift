@@ -353,15 +353,21 @@ class LocationViewController: UIViewController, UITableViewDelegate, UITableView
     func handleContact() {
         let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        sheet.addAction(UIAlertAction(title: "Call", style: .default, handler: { _ in
-            self.promptPhoneCall()
-        }))
-        sheet.addAction(UIAlertAction(title: "Email", style: .default, handler: { _ in
-            self.promptEmail()
-        }))
-        sheet.addAction(UIAlertAction(title: "Visit Website", style: .default, handler: { _ in
-            self.promptWebsite()
-        }))
+        if location.phone != nil {
+            sheet.addAction(UIAlertAction(title: "Call", style: .default, handler: { _ in
+                self.promptPhoneCall()
+            }))
+        }
+        if location.email != nil {
+            sheet.addAction(UIAlertAction(title: "Email", style: .default, handler: { _ in
+                self.promptEmail()
+            }))
+        }
+        if location.website != nil {
+            sheet.addAction(UIAlertAction(title: "Visit Website", style: .default, handler: { _ in
+                self.promptWebsite()
+            }))
+        }
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(sheet, animated: true, completion: nil)

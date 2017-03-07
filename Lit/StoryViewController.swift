@@ -75,21 +75,38 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
     
     var story:UserStory!
     
-    var blinder:UILabel?
+    var flagLabel:UILabel?
     
-    func addBlinder() {
-        blinder?.removeFromSuperview()
+    func addFlagLabel() {
+        flagLabel?.removeFromSuperview()
         let width: CGFloat = (UIScreen.main.bounds.size.width)
         let height: CGFloat = (UIScreen.main.bounds.size.height)
-
-        blinder = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 60))
-        blinder!.font = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular)
-        blinder!.textColor = UIColor.white
-        blinder!.text = "⚠️ Flagged as Inappropriate"
-        blinder!.textAlignment = .center
-        blinder!.center = CGPoint(x: width/2, y: height/2)
-
-        contentView.addSubview(blinder!)
+        
+        let str = "⚠️ Flagged as Inappropriate\n\nSelect 'Allow Flagged Content' in the settings menu to unblock."
+        flagLabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 60))
+        flagLabel!.textAlignment = .center
+        flagLabel!.center = CGPoint(x: width/2, y: height/2)
+        flagLabel!.numberOfLines = 0
+        
+        let font = UIFont.systemFont(ofSize: 11.0, weight: UIFontWeightRegular)
+        let attributes: [String: AnyObject] = [
+            NSFontAttributeName : font,
+            NSForegroundColorAttributeName : UIColor(white: 1.0, alpha: 0.65)
+        ]
+        let title = NSMutableAttributedString(string: str, attributes: attributes) //1
+        
+        if let range = str.range(of: "⚠️ Flagged as Inappropriate") {// .rangeOfString(countStr) {
+            let index = str.distance(from: str.startIndex, to: range.lowerBound)//str.startIndex.distance(fromt:range.lowerBound)
+            let a: [String: AnyObject] = [
+                NSFontAttributeName : UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular),//UIFont(name: "AvenirNext-Medium", size: 16)!,
+                NSForegroundColorAttributeName : UIColor.white
+            ]
+            title.addAttributes(a, range: NSRange(location: index, length: "⚠️ Flagged as Inappropriate".characters.count + 1))
+        }
+        
+        flagLabel!.attributedText = title
+        
+        contentView.addSubview(flagLabel!)
         
     }
 
@@ -217,10 +234,10 @@ public class StoryViewController: UICollectionViewCell, StoryProtocol, StoryHead
         let item = items[viewIndex]
         self.item = item
         
-        blinder?.removeFromSuperview()
+        flagLabel?.removeFromSuperview()
         
         if item.shouldBlock() {
-            addBlinder()
+            addFlagLabel()
             content.alpha = 0.0
             videoContent.alpha = 0.0
         } else {

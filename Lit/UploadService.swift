@@ -316,11 +316,13 @@ class UploadService {
                 
                 if meta["delete"] == nil {
                     let key = key
-                    let authorId = meta["author"] as! String
-                    let caption = meta["caption"] as! String
-                    let locationKey = meta["location"] as! String
-                    let downloadUrl = URL(string: meta["url"] as! String)!
-                    let contentTypeStr = meta["contentType"] as! String
+                    guard let authorId       = meta["author"] as? String else { return completion(item) }
+                    guard let caption        = meta["caption"] as? String else { return completion(item) }
+                    guard let locationKey    = meta["location"] as? String else { return completion(item) }
+                    guard let downloadUrl    = meta["url"] as? String else { return completion(item) }
+                    guard let url            = URL(string: downloadUrl) else { return completion(item) }
+                    guard let contentTypeStr = meta["contentType"] as? String else { return completion(item) }
+
                     var contentType = ContentType.invalid
                     var videoURL:URL?
                     if contentTypeStr == "image/jpg" {
@@ -332,12 +334,11 @@ class UploadService {
                         }
                     }
                     
-                    let toProfile = meta["toProfile"] as! Bool
-                    let toStory = meta["toStory"] as! Bool
-                    let toLocation = meta["toLocation"] as! Bool
-                    
-                    let dateCreated = meta["dateCreated"] as! Double
-                    let length = meta["length"] as! Double
+                    guard let toProfile  = meta["toProfile"] as? Bool else { return completion(item) }
+                    guard let toStory    = meta["toStory"] as? Bool else { return completion(item) }
+                    guard let toLocation = meta["toLocation"] as? Bool else { return completion(item) }
+                    guard let dateCreated = meta["dateCreated"] as? Double else { return completion(item) }
+                    guard let length      = meta["length"] as? Double else { return completion(item) }
                     
                     var viewers = [String:Double]()
                     if snapshot.hasChild("views") {
@@ -370,7 +371,8 @@ class UploadService {
                     }
                     
                     
-                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: downloadUrl,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers,likes:likes, comments: comments, flagged: flagged)
+                    
+                    item = StoryItem(key: key, authorId: authorId, caption: caption, locationKey: locationKey, downloadUrl: url,videoURL: videoURL, contentType: contentType, dateCreated: dateCreated, length: length, toProfile: toProfile, toStory: toStory, toLocation: toLocation, viewers: viewers,likes:likes, comments: comments, flagged: flagged)
                     dataCache.setObject(item!, forKey: "upload-\(key)" as NSString)
                 }
             }
